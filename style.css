@@ -6,35 +6,45 @@ body {
 #mainframe {
     position:relative;
     margin: auto;
-    background-color: red;
+    background-color: white;
 }
 @media (orientation: portrait) {
     #mainframe {
         width: 100vw;
         height: 100vw;
+        font-size: 2vw;
     }
 }
 @media (orientation: landscape) {
     #mainframe {
         width: 100vh;
         height: 100vh;
+        font-size: 2vh;
     }
 }
 
-.fieldbut {
-    width: 2%;
-    height: 2%;
+.mapframe {
+    background-color:azure;
+    width: 100%;
+    height: 100%;
+
+}
+
+.tile {
+    width: 2.439%;
+    height: 2.439%;
     float:left;
+    font-weight: bold;
     background-color: white;
-    opacity: 0.7;
     vertical-align: middle;
     text-align: center;
+    box-shadow: inset 0 0 0 0.25px;
 }
-.fieldbut:hover {
+.tile:hover {
     box-shadow: inset 0 0 0 1px black;
 }
-.fieldbut:focus {
-    box-shadow: inset 0 0 0 1px black;
+.tile:focus {
+    box-shadow: inset 0 0 0 2px black;
 }
 
 .menu {
@@ -43,11 +53,20 @@ body {
     height: 10%;
     background-color: blue;
 }
+.menu button {
+    width: 15%;
+    float:left;
+    height: 50%;
+}
+.menu button:hover {
+    background-color: yellow;
+}
 
 .infobox {
     width: 30%;
     height: 100%;
     background-color: green;   
+    float:left;
     text-align: center;
 }
 
@@ -58,4 +77,101 @@ body {
     margin: 0;
     padding: 0;
     width: 110%;
+}
+
+.sea {background-color:azure;color:transparent;opacity:1} /* Sea */
+.ccpl {background-color:red; color:white} /* Poland */
+.ccde {background-color:black;color:yellow;} /* Germany */
+.cces {background-color:orange;color:darkred;} /* Spain */
+.ccpt {background-color:darkgreen;color:yellow;} /* Portugal */
+.ccfr {background-color:blue;color:white;} /* France */
+.ccgb {background-color:violet;color:darkblue;} /* Great Britain */
+.ccir {background-color:green;color:lightcoral} /* Ireland */
+.ccit {background-color:lightgreen;color:darkblue;} /* Italy */
+.cccz {background-color:pink; color: blue;} /* Czech Republic */
+.ccsu {background-color:coral;color:darkred;} /* Switzerland */
+.ccau {background-color:darkred;color:white;} /* Austria */
+.ccsk {background-color:blueviolet;color:lightblue ;} /* Slovakia */
+.cclt {background-color:yellow;color:darkgreen;} /* Lithuania */
+.cclv {background-color:brown;color:white;} /* Latvia */
+.ccet {background-color:slateblue;color:lightblue;} /* Estonia */
+.ccse {background-color:lightblue;color:yellow;} /* Sweden */
+.ccno {background-color:chocolate;color:darkblue;} /* Norway */
+.ccfi {background-color:lightgray;color:darkblue} /* Finland */
+.ccdk {background-color:lightgray;color:darkred} /* Denmark */
+.ccnl {background-color:darkorange;color:darkblue;} /* Netherlands */
+.ccbe {background-color:darkgray;color:darkred;} /* Belgium */
+.cchu {background-color:mediumseagreen;color:coral;} /* Hungary */
+.ccbl {background-color:salmon;color:green;} /* Belarus */
+.ccua {background-color:aqua;color:yellow;} /* Ukraine */
+.ccru {background-color:pink;color:blue} /* Russia */
+.cctu {background-color:lightcoral;color:white} /* Turkey */
+.ccgr {background-color:lightblue;color:blue;} /* Greece */
+.ccml {background-color:beige;color:darkred} /* Moldova */
+.ccbg {background-color:greenyellow;color:darkgreen;} /* Bulgaria */
+.ccal {background-color:lightpink;color:darkred} /* Albania */
+.ccro {background-color:olive;color:lightblue} /* Romania */
+.ccsv {background-color:cadetblue;color:lightgreen} /* Slovenia */
+.cccr {background-color:navy;color:red} /* Croatia */
+.ccbs {background-color:darkturquoise;color:darkgreen} /* Bosnia */
+.ccsr {background-color:aquamarine;color:darkblue} /* Serbia */
+.ccko {background-color:cornflowerblue;color:white} /* Kosovo */
+
+@keyframes tilelight {
+   50% {
+        background-color: gold;
+        color: black;
+        box-shadow: inset 0 0 0 1px;
+   } 
+}
+
+.neighfocus {
+    animation-name: tilelight;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+.popup {
+    width: 90%;
+    height: 80%;
+    background-color: grey;
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    opacity: 0.8;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.popup h1 {
+    text-align: center;
+    margin: 0;
+    color: white
+}
+.popup h2 {
+    position:relative;
+    left: 40%;
+    text-align: center;
+    font-size: 80%;
+    width: 20%;
+    color:white;
+    margin: 0;
+}
+
+.popup .my {
+    background-color: red;
+}
+.exitbut {
+    font-size: 150%;
+    color: white;
+    font-family: monospace;
+    font-weight: bold;
+    width: 4%;
+    height: 4%;
+    text-align: center;
+    left: 96%;
+    border-color: yellow;
+    position:relative
+}
+.exitbut:hover {
+    color: red
 }
