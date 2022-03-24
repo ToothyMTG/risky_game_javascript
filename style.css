@@ -54,20 +54,58 @@ body {
     background-color: blue;
 }
 .menu button {
-    width: 15%;
+    width: 10%;
     float:left;
-    height: 50%;
+    height: 100%;
 }
 .menu button:hover {
     background-color: yellow;
 }
+.menu #taketurn {
+    background-color: black;
+    color:white
+}
 
 .infobox {
-    width: 30%;
+    width: 25%;
     height: 100%;
-    background-color: green;   
+    background-color: black;   
+    color: white;
     float:left;
     text-align: center;
+}
+
+.infobox p {
+    font-size: 70%;
+    margin: 0
+}
+.infobox p:hover {
+    color: orange
+}
+
+.statebox {
+    width: 25%;
+    height: 100%;
+    background-color: black;
+    color: white;
+    float:left;    
+    text-align: center
+}
+.statebox h1 {
+    font-size: 120%;
+    width: 100%;
+    margin: 0;
+    margin-top: 5%;
+}
+.statebox h2 {
+    font-size: 90%;
+    float:left;
+    width: 100%;
+}
+.statebox div {
+    height: 2%;
+    background-color: green;
+    float:left
 }
 
 .mapimage {
@@ -86,10 +124,10 @@ body {
 .ccpt {background-color:darkgreen;color:yellow;} /* Portugal */
 .ccfr {background-color:blue;color:white;} /* France */
 .ccgb {background-color:violet;color:darkblue;} /* Great Britain */
-.ccir {background-color:green;color:lightcoral} /* Ireland */
-.ccit {background-color:lightgreen;color:darkblue;} /* Italy */
-.cccz {background-color:pink; color: blue;} /* Czech Republic */
-.ccsu {background-color:coral;color:darkred;} /* Switzerland */
+.ccir {background-color:green;color:red} /* Ireland */
+.ccit {background-color:lightgreen;color:blue;} /* Italy */
+.cccz {background-color:pink; color: darkred;} /* Czech Republic */
+.ccsu {background-color:coral;color:grey;} /* Switzerland */
 .ccau {background-color:darkred;color:white;} /* Austria */
 .ccsk {background-color:blueviolet;color:lightblue ;} /* Slovakia */
 .cclt {background-color:yellow;color:darkgreen;} /* Lithuania */
@@ -98,7 +136,7 @@ body {
 .ccse {background-color:lightblue;color:yellow;} /* Sweden */
 .ccno {background-color:chocolate;color:darkblue;} /* Norway */
 .ccfi {background-color:lightgray;color:darkblue} /* Finland */
-.ccdk {background-color:lightgray;color:darkred} /* Denmark */
+.ccdk {background-color:lightgray;color:red} /* Denmark */
 .ccnl {background-color:darkorange;color:darkblue;} /* Netherlands */
 .ccbe {background-color:darkgray;color:darkred;} /* Belgium */
 .cchu {background-color:mediumseagreen;color:coral;} /* Hungary */
@@ -109,13 +147,14 @@ body {
 .ccgr {background-color:lightblue;color:blue;} /* Greece */
 .ccml {background-color:beige;color:darkred} /* Moldova */
 .ccbg {background-color:greenyellow;color:darkgreen;} /* Bulgaria */
-.ccal {background-color:lightpink;color:darkred} /* Albania */
+.ccal {background-color:lightpink;color:black} /* Albania */
 .ccro {background-color:olive;color:lightblue} /* Romania */
 .ccsv {background-color:cadetblue;color:lightgreen} /* Slovenia */
 .cccr {background-color:navy;color:red} /* Croatia */
 .ccbs {background-color:darkturquoise;color:darkgreen} /* Bosnia */
 .ccsr {background-color:aquamarine;color:darkblue} /* Serbia */
 .ccko {background-color:cornflowerblue;color:white} /* Kosovo */
+.land {color:grey;}
 
 @keyframes tilelight {
    50% {
@@ -174,4 +213,87 @@ body {
 }
 .exitbut:hover {
     color: red
+}
+
+.handbox {
+    background-color: transparent;
+    position: absolute;
+    left: 0%;
+    top: 10%;
+    width: 25%;
+    height: 20%;
+    opacity: 0.5;
+}
+.handbox h1 {
+    font-size: 100%;
+    text-align: center;
+    margin: 0;
+}
+.handbox h2 {
+    font-size: 80%;
+    margin: 0;
+    text-align: center;
+}
+
+@keyframes showaly {
+    50% {background-color: lime; color:black}
+}
+
+.showally {
+    animation-name: showaly;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+.welcomebox {
+    background-color: black;
+    opacity: 0.9;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+    text-align: center;
+    color: white;
+}
+.welcomebox button {
+    width: 40%;
+    height: 5%;
+    margin-left: 30%;
+    float:left;
+    margin-top: 5%;
+}
+.welcomebox div {
+    background-color: red;
+    height: 0%;
+    float:left;
+    width: 50%;
+    margin-left: 25%;
+}
+.welcomebox select {
+    width: 50%;
+    height: 5%;
+    text-align: center;
+}
+
+@keyframes rolldowndiv {
+    0% {height: 0}
+    100% {height: 50%;}
+}
+@keyframes rollupdiv {
+    0% {height: 50%}
+    100% {height: 0%;}
+}
+.rolldownanim {
+    animation-name: rolldowndiv;
+    animation-fill-mode: forwards;
+    /*animation-duration: 2s;*/
+}
+.rollupanim {
+    animation-name: rollupdiv;
+    animation-fill-mode: forwards;
+    animation-duration: 2s;
+}
+#startbut {
+    height: 10%;
+    margin-top: 20%;
 }

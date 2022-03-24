@@ -23,11 +23,27 @@ document.addEventListener('keydown', e => {
         var item = document.querySelector('.exitbut')
         if (item == null) {return}
         item.parentElement.remove()
+        focuscentral(ldb.mycnt[1])
     }
     if (e.key === '1') {
         renderteritoryranking ()
     }
     if (e.key === '2') {
         renderpowerranking ()
+    }
+    if (e.key === '3') {
+        renderpowerperteritory ()
+    }
+    if (e.key == 'a') {
+        var code = document.getElementById('field'+wherefocus).classList[1]
+        renderallies(code)
+    }
+    if (e.key == 'r') {
+        round()
+    }
+    if (e.code == 'Space') {
+        if (Turns > 0) {
+            act ()      
+        }
     }
 })
