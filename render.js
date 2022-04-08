@@ -474,3 +474,168 @@ function newgamediv () {
     startbut.onclick = () => {startgame ()}
     ngdiv.appendChild(startbut)
 }
+
+function generatefriendmap () {
+    Friends = {}
+    for (let i = 0; i < Country.length; i++) {
+        var code = Country[i].split(' ')[1]
+        Friends[code] = {}
+        for (let x = 0; x < Country.length; x++) {
+            var dode = Country[x].split(' ')[1]
+            Friends[code][dode] = 1
+        }
+    }
+}
+
+function inithistory () {
+    ldb.history = {}
+    for (let i = 0; i < Country.length; i++) {
+        var cnt = Country[i].split(' ')[1]
+        ldb.history[cnt] = []
+    }
+}
+
+function rendercountrystats () {
+    var existing = document.querySelector('.popup')
+    if (existing !== null) {
+        existing.remove()
+    }
+    var div = document.createElement('div')
+    div.classList.add('popup')
+    mainframe.appendChild(div)
+    var exit = document.createElement('div')
+    exit.innerHTML = "X"
+    exit.classList.add('exitbut')
+    exit.onclick = () => {
+        event.target.parentElement.remove()
+    }
+    div.appendChild(exit)
+    var title = document.createElement('h1')
+    title.innerHTML = "Team stats"
+    div.appendChild(title)
+    var typefield = document.createElement('input')
+    typefield.type = 'text'
+    typefield.placeholder = 'Start typing country name or code'
+    typefield.id = 'cntsearchfield'
+    typefield.onkeydown = e => {
+        event.stopPropagation ()
+        searchcountry ()
+        if (e.key == 'Escape') {    
+            var item = document.querySelector('.exitbut')
+            if (item == null) {return}
+            item.parentElement.remove()
+            focuscentral(ldb.mycnt[1])
+        }
+    }
+    div.appendChild(typefield)
+    var resultfield = document.createElement('h5')
+    resultfield.id = 'cntresultfield'
+    div.appendChild(resultfield)
+    var graphfield = document.createElement('div')
+    graphfield.id = 'cntgraph'
+    div.appendChild(graphfield)
+    var powfield = document.createElement('div')
+    powfield.id = 'powgraph'
+    div.appendChild(powfield)
+}
+
+function renderhistorygraph (c) {
+    var graph = document.getElementById('cntgraph')
+    var source = ldb.history[c]
+    var pilewidth = 100 / source.length
+    var pilemaxheight = 0
+    for (let i = 0; i < source.length; i++) {
+        if (source[i][1] > pilemaxheight) {
+            pilemaxheight = source[i][1]
+        } 
+    }
+    //var pilemaxheight = source[Math.floor(source.length/2)][1]
+    //if (pilemaxheight < source[source.length - 1][1]) {
+    //    pilemaxheight = source[source.length - 1][1]
+    //}
+    for (let i = 0; i < source.length; i++) {
+        var pile = document.createElement('div')
+        pile.style.backgroundColor = ''
+        pile.id = 'pile1'
+        pile.style.height = 100 - (source[i][1] / pilemaxheight) * 90 + '%'
+        pile.style.width = pilewidth + '%'
+        pile.style.float = 'left'
+        //pile.innerHTML = source[i][1]
+        graph.appendChild(pile) 
+    }
+    var graph2 = document.getElementById('powgraph')
+    pilemaxheight = 0
+    for (let i = 0; i < source.length; i++) {
+        if (source[i][2] > pilemaxheight) {
+            pilemaxheight = source[i][2]
+        } 
+    }
+    //var pilemaxheight = source[Math.floor(source.length/2)][2]
+    //if (pilemaxheight < source[source.length - 1][2]) {
+    //    pilemaxheight = source[source.length - 1][2]
+    //}
+    for (let i = 0; i < source.length; i++) {
+        var pile = document.createElement('div')
+        pile.style.backgroundColor = ''
+        pile.id = 'pile2'
+        pile.style.height = 100 - (source[i][2] / pilemaxheight) * 90 + '%'
+        pile.style.width = pilewidth + '%'
+        pile.style.float = 'left'
+        //pile.innerHTML = source[i][2]
+        graph2.appendChild(pile) 
+    }
+}
+
+function renderwhokilled () {
+    ldb.whokilled = {}
+    for (let i = 0; i < Country.length; i++) {
+        var code = Country[i].split(' ')[1] 
+        ldb.whokilled[code] = []
+    }
+}
+
+function mapgenerator () {
+    var tiles = document.getElementsByClassName('tile')
+    for (let i = 0; i < tiles.length; i++) {
+        tiles[i].className = 'tile sea'
+        tiles[i].innerHTML = '0' 
+    }
+    for (let i = 0; i < 8; i++) {
+        var randland = Math.floor(Math.random() * tiles.length)
+        tiles[randland].className = 'tile land' 
+    }
+    //var randhowmuch = Math.floor(Math.random() * 30) + 50
+    //var tilesLimit = Math.floor(tiles.length * (randhowmuch / 100))
+    var directions = [1,-1,41,-41]
+    for (let i = 0; i < (tiles.length * 6); i++) {
+        var tile = document.getElementsByClassName('land')
+        var randtile = Math.floor(Math.random() * tile.length)
+        var theTile = tile[randtile]
+        var randDirection = directions[Math.floor(Math.random() * 4)]
+        var oldid = Number(theTile.id.split('d')[1])
+        var newid = oldid + randDirection
+        if (newid < 1) {
+            continue
+        }
+        if (newid > 1353) {
+            continue
+        }
+        var newtile = document.getElementById('field' + newid)
+        newtile.className = 'tile land'
+    }
+    var sparetiles = []
+    var d = 0
+    for (let i = 0; i < 33; i++) {
+        sparetiles.push(d)
+        d += 41 
+    }
+    console.log(sparetiles)
+    for (let i = 0; i < sparetiles.length; i++) {
+        var value = sparetiles[i]
+        tiles[value].className = 'tile sea'
+    }
+    for (let i = sparetiles[sparetiles.length - 1]; i < (sparetiles[sparetiles.length - 1] + 41); i++) {
+        //console.log(i)
+        tiles[i].className = 'tile sea' 
+    }
+}

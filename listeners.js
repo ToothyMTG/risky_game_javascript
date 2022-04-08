@@ -34,6 +34,11 @@ document.addEventListener('keydown', e => {
     if (e.key === '3') {
         renderpowerperteritory ()
     }
+    if (e.key === '4') {
+        rendercountrystats ()
+        document.getElementById('cntsearchfield').focus()
+        document.getElementById('cntsearchfield').innerHTML = ''
+    }
     if (e.key == 'a') {
         var code = document.getElementById('field'+wherefocus).classList[1]
         renderallies(code)

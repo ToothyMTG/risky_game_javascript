@@ -156,6 +156,17 @@ body {
 .ccko {background-color:cornflowerblue;color:white} /* Kosovo */
 .land {color:grey;}
 
+.cc01 {background-color: black;color:red;}
+.cc02 {background-color: black;color:lightblue;}
+.cc03 {background-color: red;color:black;}
+.cc04 {background-color: red;color:yellow;}
+.cc05 {background-color: blue;color:black;}
+.cc06 {background-color: blue;color:green;}
+.cc07 {background-color: green;color:black;}
+.cc08 {background-color: yellow;color:grey;}
+.cc09 {background-color: orange;color:blue;}
+.cc00 {background-color: white;color:red;}
+
 @keyframes tilelight {
    50% {
         background-color: gold;
@@ -199,6 +210,46 @@ body {
 .popup .my {
     background-color: red;
 }
+.popup input {
+    width: 50%;
+    height: 5%;
+    margin-left: 25%;
+    padding: 0;
+    border: 0;
+    text-align: center;
+}
+.popup h5 {
+    text-align: center;
+    width: 100%;
+    color:white
+}
+.popup #cntgraph {
+    width: 90%;
+    margin: auto;
+    height: 35%;
+    margin-bottom: 1%;
+    background-color: black;
+}
+.popup #powgraph {
+    width: 90%;
+    margin: auto;
+    height: 35%;
+    background-color: black;
+}
+
+#pile1 {
+    border-bottom: 2px solid red;
+    color: white;
+    text-align: center;
+    vertical-align: bottom;
+}
+#pile2 {
+    border-bottom: 2px solid green;
+    color: white;
+    text-align: center;
+    vertical-align: bottom;
+}
+
 .exitbut {
     font-size: 150%;
     color: white;
