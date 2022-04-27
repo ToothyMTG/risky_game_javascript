@@ -31,7 +31,7 @@ function getfriends (c) {
     Targets = []
     for (let i = 0; i < Necon.length; i++) {
         var code = Necon[i]
-        var val = Friends[c][code]
+        var val = ldb.friends[c][code]
         if (code == 'land') {
             val = 1
         }
@@ -46,13 +46,13 @@ function escalate (one,two) {
     if ((one == 'land') || (two == 'land')) {
         return
     }
-    Friends[one][two] += 1
-    if ( Friends[one][two] > ldb.pow ) {
-        Friends[one][two] = ldb.pow
+    ldb.friends[one][two] += 1
+    if ( ldb.friends[one][two] > ldb.pow ) {
+        ldb.friends[one][two] = ldb.pow
     }
-    Friends[two][one] += 1
-    if (Friends[two][one] > ldb.pow) {
-        Friends[two][one] = ldb.pow
+    ldb.friends[two][one] += 1
+    if (ldb.friends[two][one] > ldb.pow) {
+        ldb.friends[two][one] = ldb.pow
     }
 }
 
@@ -61,9 +61,9 @@ function deescalate () {
         var code = Country[i].split(' ')[1]
         for (let x = 0; x < Country.length; x++) {
             var dode = Country[x].split(' ')[1]
-            Friends[code][dode] -= 2
-            if (Friends[code][dode] < 1) {
-                Friends[code][dode] = 1
+            ldb.friends[code][dode] -= 2
+            if (ldb.friends[code][dode] < 1) {
+                ldb.friends[code][dode] = 1
             }
         }
     }
@@ -94,7 +94,6 @@ function getenemies (c) {
         }
     }
 }
-Powur = 9
 function getpower (c) {
     var ters = document.getElementsByClassName(c)
     Power = 0
@@ -127,7 +126,7 @@ function applyforaliance (c) {
     //console.log(rand)
     if (rand >= pref) {
         assignaliance (c, d)
-        Allymap[Round].push([c,d])
+        Allymap[ldb.round].push([c,d])
         //console.log('Alliance signed')
     } else {
         //console.log('Aliance refused')
@@ -218,11 +217,11 @@ function turn (c) {
 
 
 function round () {
-    var who = Country[Next]
+    var who = Country[ldb.next]
     var name = who.split(' ')[0]
     //console.log(name)
     var code = who.split(' ')[1]
-    populatestatebox(name,Round)
+    populatestatebox(name,ldb.round)
     if (name == ldb.mycnt[0]) {
         document.getElementById('runturn').style.display = 'none'
         document.getElementById('taketurn').style.display = 'block'
@@ -235,20 +234,20 @@ function round () {
         return
     }
     turn(code)
-    Next++
-    if (Next >= Country.length) {
-        Next = 0 
-        Round++
-        //console.log(Round)
-        clearaliances(Round)
+    ldb.next++
+    if (ldb.next >= Country.length) {
+        ldb.next = 0 
+        ldb.round++
+        ldb.year += 0.25
+        //console.log(ldb.round)
+        //clearaliances(ldb.round)
         deescalate ()
         Country = Country.sort(() => 0.5 - Math.random())
-        Allymap[Round] = []
-        Allymap[Round - 3] = []
-        Powur++
+        Allymap[ldb.round] = []
+        Allymap[ldb.round - 3] = []
         populatehandbox ()
         populatehistory ()
-        var randifResistance = Math.floor(Math.random() * 10)
+        var randifResistance = Math.floor(Math.random() * 5)
         if (randifResistance == 0 ) {
             resistance ()
         }
@@ -256,7 +255,7 @@ function round () {
 }
 
 function clearaliances (n) {
-    var which = Round - 3
+    var which = ldb.round - 3
     if (which < 0) {return}
     var aliances = Allymap[which]
     for (let i = 0; i < aliances.length; i++) {
@@ -310,7 +309,7 @@ function populatestatebox (c,t) {
     var statebox = document.getElementById('statebox')
     statebox.innerHTML = ''
     var year = document.createElement('h1')
-    var whatyear = Year + (t / 4)
+    var whatyear = ldb.year
     year.innerHTML = Math.floor(whatyear)
     statebox.appendChild(year)   
     var yearprog = document.createElement('div')
@@ -357,16 +356,16 @@ function act () {
         document.getElementById('taketurn').style.display = 'none'
         document.getElementById('runturn').style.display = 'block'
         removeflash()
-        Next++
-        if (Next >= Country.length) {
-            Next = 0 
-            Round++
-            //console.log(Round)
-            clearaliances(Round)
+        ldb.next++
+        if (ldb.next >= Country.length) {
+            ldb.next = 0 
+            ldb.round++
+            ldb.year += 0.25
+            //console.log(ldb.round)
+            clearaliances(ldb.round)
             Country = Country.sort(() => 0.5 - Math.random())
-            Allymap[Round] = []
-            Allymap[Round - 3] = []
-            Powur++
+            Allymap[ldb.round] = []
+            Allymap[ldb.round - 3] = []
             populatehandbox ()
             populatehistory ()
         }
@@ -375,8 +374,8 @@ function act () {
 }
 
 function startgame () {
-    Next = 0
-    Round = 0
+    ldb.next = 0
+    ldb.round = 0
     Country = Country.sort(() => 0.5 - Math.random())
     document.getElementById('welcomebox').style.display = 'none'
     var teamval = document.getElementById('selcnt').value
@@ -391,29 +390,29 @@ function startgame () {
         //rendercapitals ()
         distributepower ()
         opacityhandler ()
-        Year = 2022
+        ldb.year = 2022
     }
     if (gmode == 1) { // Europe powered with capitals
         rendercapitals ()
         opacityhandler ()
-        Year = 1995
+        ldb.year = 1995
     }
     if (gmode == 2) { // Europe but single cities
         rendercapitals ()
         renderonlycapitalmode ()
         opacityhandler ()
-        Year = 1
+        ldb.year = 1
     }
     if (gmode == 3) { // Random spawn of cities
         randommode ()
         opacityhandler ()
-        Year = 1
+        ldb.year = 1
     }
     if (gmode == 4) {
         mapgenerator ()
         randommode ()
         opacityhandler ()
-        Year = 1
+        ldb.year = 1
     }
     var gpow = Number(document.getElementById('selpow').value)
     ldb.pow = gpow
@@ -469,7 +468,7 @@ function populatehistory () {
         for (let x = 0; x < tiles.length; x++) {
              power += Number(tiles[x].innerHTML)
         }
-        var vals = [Year,tiles.length,power]
+        var vals = [ldb.year,tiles.length,power]
         ldb.history[code].push(vals)
     }
 }

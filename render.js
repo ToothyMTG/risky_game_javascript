@@ -403,25 +403,32 @@ function renderwelcomescreen() {
     newgame.innerHTML = 'New Game'
     newgame.id = 'newgame'
     div.appendChild(newgame)
-    var ngdiv = document.createElement('div')
-    ngdiv.id = 'ngdiv'
-    div.appendChild(ngdiv)
     var loadgame = document.createElement('button')
     loadgame.innerHTML = 'Load Game'
     loadgame.id = 'loadgame'
     div.appendChild(loadgame)
+    var mapeditor = document.createElement('button')
+    mapeditor.innerHTML = 'Map Editor'
+    mapeditor.id = 'mapeditor'
+    div.appendChild(mapeditor)
+    var ngdiv = document.createElement('div')
+    ngdiv.id = 'ngdiv'
+    div.appendChild(ngdiv)
     var lgdiv = document.createElement('div')
     lgdiv.id = 'lgdiv'
     div.appendChild(lgdiv)
 
     newgame.onclick = () => {
         lgdiv.classList.remove('rolldownanim')
+        lgdiv.innerHTML = ''
         ngdiv.classList.add('rolldownanim')
         newgamediv()
     }
     loadgame.onclick = () => {
         ngdiv.classList.remove('rolldownanim')
+        ngdiv.innerHTML = ''
         lgdiv.classList.add('rolldownanim')
+        loadgamediv ()
     }
 }
 
@@ -471,18 +478,53 @@ function newgamediv () {
     var startbut = document.createElement('button')
     startbut.innerHTML = "Start Game"
     startbut.id = 'startbut'
+    startbut.style.marginLeft = '33.33%'
     startbut.onclick = () => {startgame ()}
     ngdiv.appendChild(startbut)
 }
 
+function loadgamediv () {
+    var lgdiv = document.getElementById('lgdiv')
+    var saves = JSON.parse(localStorage.saves)
+    for (let i = 0; i < 5; i++) {
+        var savedet = JSON.parse(localStorage[saves[i]]).savename.split('_')
+        console.log(savedet)
+        var div = document.createElement('span')
+        div.classList.add('lgdiv-div')
+        lgdiv.appendChild(div)
+        var teamtim = document.createElement('p')
+        teamtim.innerHTML = savedet[0]
+        teamtim.style.width = '40%'
+        div.appendChild(teamtim)
+        var year = document.createElement('p')
+        year.innerHTML = 'Year: ' + savedet[1]
+        year.style.width = '15%'
+        div.appendChild(year)
+        var pow = document.createElement('p')
+        pow.innerHTML = 'Power: ' + savedet[2]
+        pow.style.width = '20%'
+        div.appendChild(pow)
+        var startbut = document.createElement('button')
+        startbut.innerHTML = 'Start'
+        startbut.style.width = '25%'
+        startbut.value = saves[i]
+        startbut.onclick = () => {
+            document.getElementById('welcomebox').style.display = 'none'
+            renderhandbox ()
+            loadgame(event.target.value)
+        }
+        div.appendChild(startbut)
+    }
+}
+
 function generatefriendmap () {
-    Friends = {}
+    ldb.friends = {}
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1]
-        Friends[code] = {}
+        ldb.friends[code] = {}
         for (let x = 0; x < Country.length; x++) {
             var dode = Country[x].split(' ')[1]
-            Friends[code][dode] = 1
+            ldb.friends[code][dode] = 1
         }
     }
 }
@@ -600,7 +642,7 @@ function mapgenerator () {
         tiles[i].className = 'tile sea'
         tiles[i].innerHTML = '0' 
     }
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 20; i++) {
         var randland = Math.floor(Math.random() * tiles.length)
         tiles[randland].className = 'tile land' 
     }
