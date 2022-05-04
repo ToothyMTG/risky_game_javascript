@@ -231,27 +231,33 @@ function round () {
         document.getElementById('taketurn').innerHTML = "Take turn (Space) <br>" + Turns + ' turn(s)'
         getneigh(code)
         addflash()
+        stoploop ()
         return
     }
     turn(code)
     ldb.next++
     if (ldb.next >= Country.length) {
-        ldb.next = 0 
-        ldb.round++
-        ldb.year += 0.25
-        //console.log(ldb.round)
-        //clearaliances(ldb.round)
-        deescalate ()
-        Country = Country.sort(() => 0.5 - Math.random())
-        Allymap[ldb.round] = []
-        Allymap[ldb.round - 3] = []
-        populatehandbox ()
-        populatehistory ()
-        var randifResistance = Math.floor(Math.random() * 5)
-        if (randifResistance == 0 ) {
-            resistance ()
-        }
+        lastround ()
     }
+}
+
+function lastround () {
+    ldb.next = 0 
+    ldb.round++
+    ldb.year += 0.25
+    //console.log(ldb.round)
+    //clearaliances(ldb.round)
+    deescalate ()
+    Country = Country.sort(() => 0.5 - Math.random())
+    //Allymap[ldb.round] = []
+    //Allymap[ldb.round - 3] = []
+    populatehandbox ()
+    populatehistory ()
+    var randifResistance = Math.floor(Math.random() * 5)
+    if (randifResistance == 0 ) {
+        resistance ()
+    }
+
 }
 
 function clearaliances (n) {
@@ -292,7 +298,7 @@ function populatehandbox () {
         //table[i][0] = Math.floor((table[i][0] + terits.length) / 2)
     }
     table = table.sort((a,b) => {return b[0] - a[0]})
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 12; i++) {
         var pos = document.createElement('h2')
         if (table[i][1] == ldb.mycnt[0]) {
             pos.classList.add('my')
@@ -336,10 +342,16 @@ function act () {
         Turns--
     }
     if (ifneigh == tile) {
+        escalate(ldb.mycnt[1],tile.classList[1])
         var power = Number(tile.innerHTML)
         power--
         //console.log(power)
         if (power < 0) {
+            var countAgressorCode = document.getElementsByClassName(tile.classList[1]).length - 1
+            console.log(countAgressorCode)
+            if (countAgressorCode == 0) {
+                assignwhokilled(ldb.mycnt[1],tile.classList[1])
+            }
             tile.classList.remove(tile.classList[1])
             tile.classList.add(ldb.mycnt[1])
             power = 0
@@ -349,7 +361,6 @@ function act () {
         getneigh(ldb.mycnt[1])
         addflash()
         Turns--
-        escalate(ldb.mycnt[1],tile.classList[1])
     }
     opacityhandler ()
     if (Turns < 1) {
@@ -358,17 +369,9 @@ function act () {
         removeflash()
         ldb.next++
         if (ldb.next >= Country.length) {
-            ldb.next = 0 
-            ldb.round++
-            ldb.year += 0.25
-            //console.log(ldb.round)
-            clearaliances(ldb.round)
-            Country = Country.sort(() => 0.5 - Math.random())
-            Allymap[ldb.round] = []
-            Allymap[ldb.round - 3] = []
-            populatehandbox ()
-            populatehistory ()
+            lastround ()
         }
+        runloop ()
     }
     document.getElementById('taketurn').innerHTML = "Take turn (Space) <br>" + Turns + ' turn(s)'
 }
@@ -416,6 +419,7 @@ function startgame () {
     }
     var gpow = Number(document.getElementById('selpow').value)
     ldb.pow = gpow
+    runloop ()
     //console.log(teamval,gmode,gpow)
 }
 
@@ -494,6 +498,31 @@ function searchcountry() {
 }
 
 function assignwhokilled(a,b) {
+    if (b == 'land') {
+        return
+    }
     ldb.whokilled[a].push(b)
     console.log(a + ' anihilated ' + b)
+}
+
+function runloop () {
+    loop = setInterval(round, 20)
+    loopstate = 1
+}
+
+function stoploop () {
+    clearInterval(loop)
+    loopstate = 0
+}
+
+
+function runturnbut () {
+    if (loopstate == 0) {
+        runloop ()
+        return
+    }
+    if (loopstate == 1) {
+        stoploop ()
+        return
+    }
 }

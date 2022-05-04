@@ -44,7 +44,12 @@ document.addEventListener('keydown', e => {
         renderallies(code)
     }
     if (e.key == 'r') {
-        round()
+        if (document.getElementById('runturn').style.display != 'none') {
+            runturnbut()
+        }
+    }
+    if (e.key == 's') {
+        rendersavefield ()
     }
     if (e.code == 'Space') {
         if (Turns > 0) {

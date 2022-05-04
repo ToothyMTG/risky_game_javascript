@@ -94,7 +94,7 @@ function showinfo (t) {
     infobox.innerHTML += 'Belongs to ' + who + '<br>'
     infobox.innerHTML += 'Power is ' + tiletoshow.innerHTML + '<br>'
     var ally = document.createElement('p')
-    ally.innerHTML = "Click here or press A to show allies"
+    ally.innerHTML = "Click here or press A to show enemies"
     ally.onclick = () => {
         renderallies(tiletoshow.classList[1])
     }
@@ -292,12 +292,12 @@ function rendermenubuttons () {
     menu.appendChild(but_pt)
     var but_sc = document.createElement('button')
     but_sc.innerHTML = 'Show Country (4)'
-    but_sc.onclick = () => (rendercountryinfo ())
+    but_sc.onclick = () => (rendercountrystats ())
     menu.appendChild(but_sc)
     var but_rt = document.createElement('button')
     but_rt.id = 'runturn'
     but_rt.innerHTML = 'Run Turn (R)'
-    but_rt.onclick = () => {round()}
+    but_rt.onclick = () => {runturnbut()}
     menu.appendChild(but_rt)
     but_tt = document.createElement('button')
     but_tt.innerHTML = "Take turn (Space)"
@@ -323,11 +323,16 @@ function renderdiplomacy () {
 }
 
 function renderallies (c) {
-    var allies = Aliances[c]
-    for (let i = 0; i < allies.length; i++) {
-        var tiles = document.getElementsByClassName(allies[i]) 
+    var allies = ldb.friends[c]
+    for (let i = 0; i < Country.length; i++) {
+        var cnt = Country[i].split(' ')[1]
+        if (allies[cnt] > (ldb.pow / 2)) {
+            console.log(allies[cnt])
+            console.log('Enemy!' + cnt)
+        var tiles = document.getElementsByClassName(cnt) 
         for (let x = 0; x < tiles.length; x++) {
             tiles[x].classList.add('showally') 
+        }
         }
     }
     setTimeout(() => {
@@ -493,7 +498,7 @@ function loadgamediv () {
         div.classList.add('lgdiv-div')
         lgdiv.appendChild(div)
         var teamtim = document.createElement('p')
-        teamtim.innerHTML = savedet[0]
+        teamtim.innerHTML = savedet[0].split(',')[0]
         teamtim.style.width = '40%'
         div.appendChild(teamtim)
         var year = document.createElement('p')
@@ -570,6 +575,9 @@ function rendercountrystats () {
         }
     }
     div.appendChild(typefield)
+    setTimeout(() => {
+        document.getElementById('cntsearchfield').value = ''
+    },100)
     var resultfield = document.createElement('h5')
     resultfield.id = 'cntresultfield'
     div.appendChild(resultfield)
@@ -679,5 +687,60 @@ function mapgenerator () {
     for (let i = sparetiles[sparetiles.length - 1]; i < (sparetiles[sparetiles.length - 1] + 41); i++) {
         //console.log(i)
         tiles[i].className = 'tile sea' 
+    }
+}
+
+function savebutton () {
+    var button = document.createElement('button')
+    button.classList.add('savebutton')
+    button.innerHTML = 'Save Game (S)'
+    button.id = 'savebutton'
+    savebuttonswitch = 0
+    button.onclick = () => {
+        rendersavefield() 
+    }
+    mainframe.appendChild(button)
+}
+
+function rendersavefield () {
+    if (savebuttonswitch == 1) {
+        document.getElementById('savebox').remove()
+        savebuttonswitch = 0
+        return
+    }
+    savebuttonswitch = 1
+    console.log('works')
+    var div = document.createElement('div')
+    div.id = 'savebox'
+    div.classList.add('savebox')
+    mainframe.appendChild(div)
+    if (localStorage.saves == undefined) {
+        var savesSS = []
+        localStorage.saves = JSON.stringify(savesSS)
+    }
+    var saves = JSON.parse(localStorage.saves)
+    for (let i = 0; i < 5; i++) {
+        var slot = document.createElement('div')
+        slot.classList.add('saveboxslot')
+        var lookup = 'saveslot' + i
+        var lookupVal = saves.indexOf(lookup)
+        if (lookupVal == -1) {
+            slot.innerHTML = 'Empty'
+            slot.classList.add('saveboxslotempty')
+        } else {
+            var values = JSON.parse(localStorage[lookup])
+            var savename = values.savename.split('_')
+            slot.innerHTML = savename[0] + '<br> Year: ' + savename[1] + '<br> Power: ' + savename[2]
+        }
+        slot.id = 'saveslot_' + i
+        slot.onclick = () => {
+            var slotId = event.target.id.split('_')
+            console.log(slotId[1])
+            savegame(Number(slotId[1]))
+            event.target.innerHTML = "Game Saved!"
+            setTimeout(() => {div.remove()},1000)
+            savebuttonswitch = 0
+        }
+        div.appendChild(slot)
     }
 }

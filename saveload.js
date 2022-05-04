@@ -40,5 +40,6 @@ function loadgame (x) {
         tiles[i].innerHTML = ldb.tiles[i][0]
     }
     opacityhandler ()
+    loopstate = 0
 }
 
