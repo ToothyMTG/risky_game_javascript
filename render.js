@@ -327,8 +327,8 @@ function renderallies (c) {
     for (let i = 0; i < Country.length; i++) {
         var cnt = Country[i].split(' ')[1]
         if (allies[cnt] > (ldb.pow / 2)) {
-            console.log(allies[cnt])
-            console.log('Enemy!' + cnt)
+            //console.log(allies[cnt])
+            //console.log('Enemy!' + cnt)
         var tiles = document.getElementsByClassName(cnt) 
         for (let x = 0; x < tiles.length; x++) {
             tiles[x].classList.add('showally') 
@@ -493,7 +493,7 @@ function loadgamediv () {
     var saves = JSON.parse(localStorage.saves)
     for (let i = 0; i < 5; i++) {
         var savedet = JSON.parse(localStorage[saves[i]]).savename.split('_')
-        console.log(savedet)
+        //console.log(savedet)
         var div = document.createElement('span')
         div.classList.add('lgdiv-div')
         lgdiv.appendChild(div)
@@ -571,7 +571,11 @@ function rendercountrystats () {
             var item = document.querySelector('.exitbut')
             if (item == null) {return}
             item.parentElement.remove()
-            focuscentral(ldb.mycnt[1])
+            if (ldb.mycnt == 'noval') {
+                focuscentral('tile')
+            } else {
+                focuscentral(ldb.mycnt[1])
+            }
         }
     }
     div.appendChild(typefield)
@@ -679,7 +683,7 @@ function mapgenerator () {
         sparetiles.push(d)
         d += 41 
     }
-    console.log(sparetiles)
+    //console.log(sparetiles)
     for (let i = 0; i < sparetiles.length; i++) {
         var value = sparetiles[i]
         tiles[value].className = 'tile sea'
@@ -709,7 +713,7 @@ function rendersavefield () {
         return
     }
     savebuttonswitch = 1
-    console.log('works')
+    //console.log('works')
     var div = document.createElement('div')
     div.id = 'savebox'
     div.classList.add('savebox')
@@ -735,7 +739,7 @@ function rendersavefield () {
         slot.id = 'saveslot_' + i
         slot.onclick = () => {
             var slotId = event.target.id.split('_')
-            console.log(slotId[1])
+            //console.log(slotId[1])
             savegame(Number(slotId[1]))
             event.target.innerHTML = "Game Saved!"
             setTimeout(() => {div.remove()},1000)

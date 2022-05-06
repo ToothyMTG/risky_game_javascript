@@ -107,6 +107,9 @@ function getpower (c) {
 }
 
 function focuscentral (c) {
+    if (c == 'noval') {
+        c = 'tile'
+    }
     var tiles = document.getElementsByClassName(c)
     tiles[Math.floor(tiles.length/2)].focus()
 }
@@ -144,7 +147,7 @@ function attack (c) {
     var rand = Math.floor(Math.random() * lands.length)
     var target = lands[rand]
     if (target == undefined) { //DEBUG
-        console.log(target,randtarget,rand,lands,c,Neigh,Targets)
+        //console.log(target,randtarget,rand,lands,c,Neigh,Targets)
     }
     //console.log(target)
     var oldcode = target.classList[1]
@@ -348,7 +351,7 @@ function act () {
         //console.log(power)
         if (power < 0) {
             var countAgressorCode = document.getElementsByClassName(tile.classList[1]).length - 1
-            console.log(countAgressorCode)
+            //console.log(countAgressorCode)
             if (countAgressorCode == 0) {
                 assignwhokilled(ldb.mycnt[1],tile.classList[1])
             }
@@ -439,12 +442,12 @@ function resistance () {
         return
     }
     var randwhoResists = Math.floor(Math.random() * ldb.whokilled[sourceCode].length)
-    console.log(sourceCode,randwhoResists)
+    //console.log(sourceCode,randwhoResists)
     var whoResists = ldb.whokilled[sourceCode][randwhoResists]
     theTile.classList.remove(sourceCode)
     theTile.classList.add(whoResists)
     var powerRange = Math.floor(Math.random() * document.getElementsByClassName(sourceCode).length) * 3
-    console.log(powerRange)
+    //console.log(powerRange)
     for (let i = 0; i < powerRange; i++) {
         rand = Math.floor(Math.random() * 2)
         //console.log(Neigh.length,Own.length,rand,prefval,totopts, pref)
@@ -502,7 +505,7 @@ function assignwhokilled(a,b) {
         return
     }
     ldb.whokilled[a].push(b)
-    console.log(a + ' anihilated ' + b)
+    //console.log(a + ' anihilated ' + b)
 }
 
 function runloop () {

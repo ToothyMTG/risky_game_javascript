@@ -23,8 +23,12 @@ document.addEventListener('keydown', e => {
         var item = document.querySelector('.exitbut')
         if (item == null) {return}
         item.parentElement.remove()
-        focuscentral(ldb.mycnt[1])
-    }
+        if (ldb.mycnt == 'noval') {
+            focuscentral('tile')
+        } else {
+            focuscentral(ldb.mycnt[1])
+        }
+        }
     if (e.key === '1') {
         renderteritoryranking ()
     }

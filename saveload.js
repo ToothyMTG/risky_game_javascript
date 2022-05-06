@@ -21,7 +21,7 @@ function savegame (x) {
     }
     var saves = JSON.parse(localStorage.saves)
     var index = saves.indexOf(saveslot)
-    console.log(index)
+    //console.log(index)
     if (index >= 0) {
         saves[index] = saveslot
     } else {
