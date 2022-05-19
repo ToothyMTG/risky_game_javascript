@@ -260,6 +260,10 @@ function lastround () {
     if (randifResistance == 0 ) {
         resistance ()
     }
+    var rand_cw = Math.floor(Math.random() * 10)
+    if (rand_cw == 0) {
+    cw_runner ()
+    }
 
 }
 

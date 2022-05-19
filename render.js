@@ -490,6 +490,11 @@ function newgamediv () {
 
 function loadgamediv () {
     var lgdiv = document.getElementById('lgdiv')
+    if (localStorage.saves == undefined) {
+        var initsave = []
+        localStorage.saves = JSON.stringify(initsave)
+        return
+    }
     var saves = JSON.parse(localStorage.saves)
     for (let i = 0; i < 5; i++) {
         var savedet = JSON.parse(localStorage[saves[i]]).savename.split('_')

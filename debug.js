@@ -38,3 +38,17 @@ renderwhokilled ()
 //gettiles ()
 savebutton ()
 //document.getElementById('savebutton').click()
+
+function startgamedebug () {
+    document.getElementById('newgame').click()
+    startgame ()
+    stoploop ()
+}
+//startgamedebug ()
+
+function cw_debug () {
+    cw_render ()
+    //cw_runner ()
+}
+
+cw_debug()
