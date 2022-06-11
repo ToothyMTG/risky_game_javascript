@@ -44,11 +44,12 @@ function startgamedebug () {
     startgame ()
     stoploop ()
 }
-//startgamedebug ()
 
 function cw_debug () {
-    cw_render ()
+    cw_init ()
+    //cw_render ()
     //cw_runner ()
 }
 
 cw_debug()
+startgamedebug ()

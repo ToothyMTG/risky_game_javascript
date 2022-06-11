@@ -36,6 +36,10 @@ function getfriends (c) {
             val = 1
         }
         for (let x = 0; x < val; x++) {
+            //cw_boolalies(c,code)
+            //if (cw_check = 1) {
+            //   continue
+            //}
             Targets.push(code)
         }
     }
@@ -44,6 +48,10 @@ function getfriends (c) {
 
 function escalate (one,two) {
     if ((one == 'land') || (two == 'land')) {
+        return
+    }
+    cw_boolalies(one,two)
+    if (cw_check == 1) {
         return
     }
     ldb.friends[one][two] += 1
@@ -154,6 +162,10 @@ function attack (c) {
     escalate(c,oldcode)
     //console.log(target)
     var checkally = Aliances[c].indexOf(target.classList[1])
+    cw_boolalies(c,oldcode)
+    if (cw_check == 1) {
+        Power++
+        return}
     //console.log(checkally)
     if (checkally >= 0) {return}
     var val = Number(target.innerHTML)
@@ -202,6 +214,10 @@ function turn (c) {
     }
     getpower(c)
     for (let i = 0; i < Power; i++) {
+        cw_getoptions(c)
+        if (cw_options == 0) {
+            return
+        }
         var type
         rand = Math.floor(Math.random() * totopts)
         //console.log(Neigh.length,Own.length,rand,prefval,totopts, pref)
@@ -260,10 +276,11 @@ function lastround () {
     if (randifResistance == 0 ) {
         resistance ()
     }
-    var rand_cw = Math.floor(Math.random() * 20)
+    var rand_cw = Math.floor(Math.random() * 10)
     if (rand_cw == 0) {
-    cw_runner ()
+    cw_action ()
     }
+    cw_managerstr ()
 
 }
 

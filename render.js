@@ -107,6 +107,7 @@ function opacityhandler () {
         var opa = (Number(tiles[i].innerHTML)) * 0.05 + 0.55
         tiles[i].style.opacity = opa
     }
+    cw_render ()
 }
 
 function removeflash () {
