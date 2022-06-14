@@ -120,6 +120,11 @@ function removeflash () {
 
 function addflash () {
     for (let i = 0; i < Neigh.length; i++) {
+        cw_boolalies(ldb.mycnt[1],Neigh[i].classList[1])
+        //console.log(cw_cindex,cw_dindex)
+        if ((cw_cindex == cw_dindex) && (cw_cindex > -1)) {
+            continue
+        }
         if (Neigh[i].classList[1] == 'sea') {continue}
         Neigh[i].classList.add('neighfocus')
     }

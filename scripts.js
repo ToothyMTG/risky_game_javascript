@@ -242,6 +242,14 @@ function round () {
     var code = who.split(' ')[1]
     populatestatebox(name,ldb.round)
     if (name == ldb.mycnt[0]) {
+        cw_getoptions(ldb.mycnt[1])
+        if (cw_options == 0) {
+            ldb.next++
+            if (ldb.next >= Country.length) {
+                lastround ()
+            }
+            return
+        }
         document.getElementById('runturn').style.display = 'none'
         document.getElementById('taketurn').style.display = 'block'
         focuscentral(code)
@@ -366,6 +374,10 @@ function act () {
         Turns--
     }
     if (ifneigh == tile) {
+        cw_boolalies(ldb.mycnt[1],tile.classList[1])
+        if ((cw_cindex == cw_dindex) && (cw_cindex > -1)) {
+            return
+        }
         escalate(ldb.mycnt[1],tile.classList[1])
         var power = Number(tile.innerHTML)
         power--
@@ -387,7 +399,8 @@ function act () {
         Turns--
     }
     opacityhandler ()
-    if (Turns < 1) {
+    cw_getoptions(ldb.mycnt[1])
+    if ((Turns < 1) || (cw_options == 0)) {
         document.getElementById('taketurn').style.display = 'none'
         document.getElementById('runturn').style.display = 'block'
         removeflash()

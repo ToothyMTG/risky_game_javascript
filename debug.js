@@ -43,6 +43,8 @@ function startgamedebug () {
     document.getElementById('newgame').click()
     startgame ()
     stoploop ()
+    ldb.cw[0].countries = ['ccir','ccgb']
+    ldb.mycnt = ['Ireland','ccir','1']
 }
 
 function cw_debug () {
@@ -52,4 +54,4 @@ function cw_debug () {
 }
 
 cw_debug()
-startgamedebug ()
+//startgamedebug ()
