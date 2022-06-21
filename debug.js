@@ -38,3 +38,20 @@ renderwhokilled ()
 //gettiles ()
 savebutton ()
 //document.getElementById('savebutton').click()
+
+function startgamedebug () {
+    document.getElementById('newgame').click()
+    startgame ()
+    stoploop ()
+    ldb.cw[0].countries = ['ccir','ccgb']
+    ldb.mycnt = ['Ireland','ccir','1']
+}
+
+function cw_debug () {
+    cw_init ()
+    //cw_render ()
+    //cw_runner ()
+}
+
+cw_debug()
+//startgamedebug ()

@@ -107,6 +107,7 @@ function opacityhandler () {
         var opa = (Number(tiles[i].innerHTML)) * 0.05 + 0.55
         tiles[i].style.opacity = opa
     }
+    cw_render ()
 }
 
 function removeflash () {
@@ -119,6 +120,11 @@ function removeflash () {
 
 function addflash () {
     for (let i = 0; i < Neigh.length; i++) {
+        cw_boolalies(ldb.mycnt[1],Neigh[i].classList[1])
+        //console.log(cw_cindex,cw_dindex)
+        if ((cw_cindex == cw_dindex) && (cw_cindex > -1)) {
+            continue
+        }
         if (Neigh[i].classList[1] == 'sea') {continue}
         Neigh[i].classList.add('neighfocus')
     }
@@ -490,6 +496,11 @@ function newgamediv () {
 
 function loadgamediv () {
     var lgdiv = document.getElementById('lgdiv')
+    if (localStorage.saves == undefined) {
+        var initsave = []
+        localStorage.saves = JSON.stringify(initsave)
+        return
+    }
     var saves = JSON.parse(localStorage.saves)
     for (let i = 0; i < 5; i++) {
         var savedet = JSON.parse(localStorage[saves[i]]).savename.split('_')

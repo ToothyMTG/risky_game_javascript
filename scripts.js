@@ -36,6 +36,10 @@ function getfriends (c) {
             val = 1
         }
         for (let x = 0; x < val; x++) {
+            //cw_boolalies(c,code)
+            //if (cw_check = 1) {
+            //   continue
+            //}
             Targets.push(code)
         }
     }
@@ -44,6 +48,10 @@ function getfriends (c) {
 
 function escalate (one,two) {
     if ((one == 'land') || (two == 'land')) {
+        return
+    }
+    cw_boolalies(one,two)
+    if (cw_check == 1) {
         return
     }
     ldb.friends[one][two] += 1
@@ -154,6 +162,10 @@ function attack (c) {
     escalate(c,oldcode)
     //console.log(target)
     var checkally = Aliances[c].indexOf(target.classList[1])
+    cw_boolalies(c,oldcode)
+    if (cw_check == 1) {
+        Power++
+        return}
     //console.log(checkally)
     if (checkally >= 0) {return}
     var val = Number(target.innerHTML)
@@ -202,6 +214,10 @@ function turn (c) {
     }
     getpower(c)
     for (let i = 0; i < Power; i++) {
+        cw_getoptions(c)
+        if (cw_options == 0) {
+            return
+        }
         var type
         rand = Math.floor(Math.random() * totopts)
         //console.log(Neigh.length,Own.length,rand,prefval,totopts, pref)
@@ -226,6 +242,14 @@ function round () {
     var code = who.split(' ')[1]
     populatestatebox(name,ldb.round)
     if (name == ldb.mycnt[0]) {
+        cw_getoptions(ldb.mycnt[1])
+        if (cw_options == 0) {
+            ldb.next++
+            if (ldb.next >= Country.length) {
+                lastround ()
+            }
+            return
+        }
         document.getElementById('runturn').style.display = 'none'
         document.getElementById('taketurn').style.display = 'block'
         focuscentral(code)
@@ -260,6 +284,11 @@ function lastround () {
     if (randifResistance == 0 ) {
         resistance ()
     }
+    var rand_cw = Math.floor(Math.random() * 10)
+    if (rand_cw == 0) {
+    cw_action ()
+    }
+    cw_managerstr ()
 
 }
 
@@ -345,6 +374,10 @@ function act () {
         Turns--
     }
     if (ifneigh == tile) {
+        cw_boolalies(ldb.mycnt[1],tile.classList[1])
+        if ((cw_cindex == cw_dindex) && (cw_cindex > -1)) {
+            return
+        }
         escalate(ldb.mycnt[1],tile.classList[1])
         var power = Number(tile.innerHTML)
         power--
@@ -366,7 +399,8 @@ function act () {
         Turns--
     }
     opacityhandler ()
-    if (Turns < 1) {
+    cw_getoptions(ldb.mycnt[1])
+    if ((Turns < 1) || (cw_options == 0)) {
         document.getElementById('taketurn').style.display = 'none'
         document.getElementById('runturn').style.display = 'block'
         removeflash()
