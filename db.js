@@ -42,7 +42,7 @@ Gamemodes = [
     "Europe powered with capitals",
     "Europe but Single cities",
     "Random spawn of cities",
-    "Randon map"
+    "Random map"
 ]
 
 Maxpowers = [

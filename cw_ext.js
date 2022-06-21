@@ -1,6 +1,6 @@
 function cw_init () {
     ldb.cw = []
-    var cw_colors = ['darkblue','darkorange','gold','springgreen','magenta','cyan']
+    var cw_colors = ['#BC6AFF','#49A6E0','#FA8375','#E0BE61','#7CFF6A','white']
     for (let i = 0; i < cw_colors.length; i++) {
         ldb.cw[i] = {}
         ldb.cw[i].styling = 'inset 0 0 0 2px ' + cw_colors[i]
