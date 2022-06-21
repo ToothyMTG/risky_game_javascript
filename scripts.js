@@ -496,6 +496,9 @@ function resistance () {
     //console.log(Power)
     }
     ldb.whokilled[sourceCode].splice(randwhoResists, 1)
+    c_name = Country.filter(x => x.includes(whoResists))[0].split(' ')[0]
+    nb_msg = c_name + ' has a resistance!'
+    nb_push(nb_msg,0)
 }
 
 function populatehistory () {
@@ -539,6 +542,10 @@ function assignwhokilled(a,b) {
         return
     }
     ldb.whokilled[a].push(b)
+    a_name = Country.filter(x => x.includes(a))[0].split(' ')[0]
+    b_name = Country.filter(x => x.includes(b))[0].split(' ')[0]
+    nb_msg = a_name + ' defeated ' + b_name
+    nb_push(nb_msg,1)
     //console.log(a + ' anihilated ' + b)
 }
 

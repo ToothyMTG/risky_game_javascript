@@ -43,8 +43,6 @@ function startgamedebug () {
     document.getElementById('newgame').click()
     startgame ()
     stoploop ()
-    ldb.cw[0].countries = ['ccir','ccgb']
-    ldb.mycnt = ['Ireland','ccir','1']
 }
 
 function cw_debug () {
@@ -53,5 +51,17 @@ function cw_debug () {
     //cw_runner ()
 }
 
+function nb_debug () {
+    nb_render ()    
+}
+
 cw_debug()
-//startgamedebug ()
+startgamedebug ()
+nb_debug ()
+nb_push('Message')
+nb_push('Another message')
+nb_push('Another message')
+nb_push('Another message')
+nb_push('Another message')
+nb_push('Another message')
+nb_push('Another message')
