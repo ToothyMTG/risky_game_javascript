@@ -56,12 +56,5 @@ function nb_debug () {
 }
 
 cw_debug()
-startgamedebug ()
+//startgamedebug ()
 nb_debug ()
-nb_push('Message')
-nb_push('Another message')
-nb_push('Another message')
-nb_push('Another message')
-nb_push('Another message')
-nb_push('Another message')
-nb_push('Another message')

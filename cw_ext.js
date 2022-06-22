@@ -126,9 +126,6 @@ function cw_findcw(c,d) {
 function cw_emptycw () {
     for (let i = 0; i < ldb.cw.length; i++) {
         if (ldb.cw[i].countries.length == 1) {
-            var c_name = Countries.filter(x => x.includes(ldb.cw[i].countries[0]))[0].split(' ')[0]
-            nb_msg = c_name + "'s Commonwealth is no more!"
-            nb_push(nb_msg, 0)
             ldb.cw[i].countries = []
         } 
     }
@@ -161,8 +158,6 @@ function cw_action (c, d) {
     cw_getallies(c)
     cw_electfriend()
     d = cw_friend
-    var c_name = Country.filter(x => x.includes(c))[0].split(' ')[0]
-    var d_name = Country.filter(x => x.includes(d))[0].split(' ')[0]
     var bool = 0
     var boolfr = 0
     for (let i = 0; i < ldb.cw.length; i++) {
@@ -185,28 +180,34 @@ function cw_action (c, d) {
             return
         }
         cw_createcw(cw_freecw,c,d)
-        var nb_msg = c_name + ' and ' + d_name + ' signed a Commonwealth!'
+        var c_name = Country.filter(x => x.includes(c))[0].split(' ')[0]
+        var d_name = Country.filter(x => x.includes(d))[0].split(' ')[0]
+        var nb_msg = c_name + ' and ' + d_name + ' signed an alliance !'
         nb_push(nb_msg, 2)
     }
     if (bool == 1) {
-         cw_findcw(c,d)
-         if (cw_cindex == cw_dindex) {
-             return
-         }
-         ldb.cw[cw_cindex].countries.push(d)
-         var nb_msg = d_name + ' joined ' + c_name + "'s Commonwealth!"
-         nb_push(nb_msg, 2)
-         if (cw_dindex != -1) {
+        cw_findcw(c,d)
+        if (cw_cindex == cw_dindex) {
+            return
+        }
+        ldb.cw[cw_cindex].countries.push(d)
+        var c_name = Country.filter(x => x.includes(c))[0].split(' ')[0]
+        var d_name = Country.filter(x => x.includes(d))[0].split(' ')[0]
+         var nb_msg = d_name + ' joined ' + c_name + "'s alliance!"
+        nb_push(nb_msg, 2)
+        if (cw_dindex != -1) {
             var dindex = ldb.cw[cw_dindex].countries.indexOf(d)
             ldb.cw[cw_dindex].countries.splice(dindex,1)
             //console.log('done')
-         }
+        }
     }
     if (bool == 0) {
         cw_findcw(c,d)
         if (boolfr == 1) {
             ldb.cw[cw_dindex].countries.push(c)
-            var nb_msg = c_name + ' joined ' + d_name + "'s Commonwealth!"
+            var c_name = Country.filter(x => x.includes(c))[0].split(' ')[0]
+            var d_name = Country.filter(x => x.includes(d))[0].split(' ')[0]
+            var nb_msg = c_name + ' joined ' + d_name + "'s alliance!"
             nb_push(nb_msg, 2)
         }
     }
