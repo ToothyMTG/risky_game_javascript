@@ -236,10 +236,12 @@ function turn (c) {
 
 
 function round () {
+    var country_id = ldb.countries[ldb.next]
+    ix_country(country_id)
     var who = Country[ldb.next]
-    var name = who.split(' ')[0]
+    var name = cix.name
     //console.log(name)
-    var code = who.split(' ')[1]
+    var code = cix.code
     populatestatebox(name,ldb.round)
     if (name == ldb.mycnt[0]) {
         cw_getoptions(ldb.mycnt[1])
@@ -263,7 +265,7 @@ function round () {
     }
     turn(code)
     ldb.next++
-    if (ldb.next >= Country.length) {
+    if (ldb.next >= ldb.countries.length) {
         lastround ()
     }
 }
@@ -275,7 +277,7 @@ function lastround () {
     //console.log(ldb.round)
     //clearaliances(ldb.round)
     deescalate ()
-    Country = Country.sort(() => 0.5 - Math.random())
+    //Country = Country.sort(() => 0.5 - Math.random())
     //Allymap[ldb.round] = []
     //Allymap[ldb.round - 3] = []
     populatehandbox ()
@@ -416,7 +418,7 @@ function act () {
 function startgame () {
     ldb.next = 0
     ldb.round = 0
-    Country = Country.sort(() => 0.5 - Math.random())
+    //Country = Country.sort(() => 0.5 - Math.random())
     document.getElementById('welcomebox').style.display = 'none'
     var teamval = document.getElementById('selcnt').value
     if (teamval == 'noval') {
@@ -426,7 +428,20 @@ function startgame () {
     }
     renderhandbox ()
     var gmode = document.getElementById('selgmo').value
-    if (gmode == 0) { // Europe as of 2022
+    var gamemode = New_GameModes[gmode]
+    ldb.countries = gamemode.countries.sort(() => 0.5 - Math.random())
+    ldb.year = gamemode.year
+    for (let i = 0; i < gamemode.startup.length; i++) {
+        var command = gamemode.startup[i]
+        if (command == 'rendercapitals') {rendercapitals()}
+        if (command == 'distributepower') {distributepower()}
+        if (command == 'renderonlycapitals') {renderonlycapitalmode ()}
+        if (command == 'randommode') {randommode ()}
+        if (command == 'mapgenerator') {mapgenerator ()}
+    }
+    opacityhandler ()
+    console.log(gamemode)
+    /*if (gmode == 0) { // Europe as of 2022
         //rendercapitals ()
         distributepower ()
         opacityhandler ()
@@ -453,7 +468,7 @@ function startgame () {
         randommode ()
         opacityhandler ()
         ldb.year = 1
-    }
+    }*/
     var gpow = Number(document.getElementById('selpow').value)
     ldb.pow = gpow
     runloop ()

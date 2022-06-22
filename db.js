@@ -45,6 +45,40 @@ Gamemodes = [
     "Random map"
 ]
 
+New_GameModes = [
+    {
+        "name":"Europe as of 2022",
+        "countries":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
+        "year":2022,
+        "startup":['distributepower']
+    },
+    {
+        "name":"Europe powered with capitals",
+        "countries":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
+        "year":1995,
+        "startup":['rendercapitals']
+    },
+    {
+        "name":"Europe but single cities",
+        "countries":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
+        "year":1,
+        "startup":['rendercapitals','renderonlycapitals']
+    },
+    {
+        "name":"Random spawn of cities",
+        "countries":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
+        "year":1,
+        "startup":['randommode']
+    },
+    {
+        "name":"Random map",
+        "countries":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
+        "year":1,
+        "startup":['mapgenerator','randommode']
+    },
+]
+
+
 Maxpowers = [
     10,
     20,
