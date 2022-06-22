@@ -397,3 +397,19 @@ body {
 .saveboxslotempty {
     background-color: grey;
 }
+
+.nb_box {
+    background-color: transparent;
+    width: 30%;
+    height: 10%;
+    position: absolute;
+    left: 60%;
+    top: 90%;
+    color: black;
+    overflow: hidden;
+}
+
+.nb_msg {
+    margin: 0;
+    font-size: 70%;
+}
