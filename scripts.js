@@ -289,7 +289,7 @@ function lastround () {
     //console.log(ldb.round)
     //clearaliances(ldb.round)
     deescalate ()
-    //Country = Country.sort(() => 0.5 - Math.random())
+    //ldb.countries = ldb.countries.sort(() => 0.5 - Math.random())
     //Allymap[ldb.round] = []
     //Allymap[ldb.round - 3] = []
     populatehandbox ()
@@ -509,7 +509,7 @@ function resistance () {
     var whoResists = ldb.whokilled[a.ix][randwhoResists]
     ix_country(whoResists)
     var b = cix
-    theTile.classList.remove(a.bode)
+    theTile.classList.remove(a.code)
     theTile.classList.add(b.code)
     var powerRange = Math.floor(Math.random() * document.getElementsByClassName(a.code).length) * 3
     //console.log(powerRange)

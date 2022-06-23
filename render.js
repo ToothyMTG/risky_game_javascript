@@ -131,8 +131,9 @@ function addflash () {
 }
 
 function rendercapitals () {
-    for (let i = 0; i < Country.length; i++) {
-        var code = Country[i].split(' ')[1]
+    for (let i = 0; i < ldb.countries.length; i++) {
+        ix_country(ldb.countries[i])
+        var code = cix.code
         var terits = document.getElementsByClassName(code)
         var rand = Math.floor(Math.random() * terits.length)
         terits[rand].innerHTML = 9
@@ -140,9 +141,10 @@ function rendercapitals () {
 }
 
 function distributepower () {
-    for (let i = 0; i < Country.length; i++) {
-        var who = Country[i].split(' ')[1]
-        var power = Country[i].split(' ')[2]
+    for (let i = 0; i < ldb.countries.length; i++) {
+        ix_country(ldb.countries[i])
+        var who = cix.code
+        var power = cix.initstr
         for (let x = 0; x < (power * 2); x++) {
             var ters = document.getElementsByClassName(who)
             var rand = Math.floor(Math.random() * ters.length)
