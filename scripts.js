@@ -29,9 +29,13 @@ function getneigh (c) {
 
 function getfriends (c) {
     Targets = []
+    ix_t_code(c)
+    var a = cix.ix
     for (let i = 0; i < Necon.length; i++) {
         var code = Necon[i]
-        var val = ldb.friends[c][code]
+        ix_t_code(code)
+        var b = cix.ix
+        var val = ldb.friends[a][b]
         if (code == 'land') {
             val = 1
         }
@@ -50,28 +54,36 @@ function escalate (one,two) {
     if ((one == 'land') || (two == 'land')) {
         return
     }
+    ix_t_code(one)
+    var a = cix.ix
+    ix_t_code(two)
+    var b = cix.ix
     cw_boolalies(one,two)
     if (cw_check == 1) {
         return
     }
-    ldb.friends[one][two] += 1
-    if ( ldb.friends[one][two] > ldb.pow ) {
-        ldb.friends[one][two] = ldb.pow
+    ldb.friends[a][b] += 1
+    if ( ldb.friends[a][b] > ldb.pow ) {
+        ldb.friends[a][b] = ldb.pow
     }
-    ldb.friends[two][one] += 1
-    if (ldb.friends[two][one] > ldb.pow) {
-        ldb.friends[two][one] = ldb.pow
+    ldb.friends[b][a] += 1
+    if (ldb.friends[b][a] > ldb.pow) {
+        ldb.friends[b][a] = ldb.pow
     }
 }
 
 function deescalate () {
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1]
+        ix_t_code(code)
+        var a = cix.ix
         for (let x = 0; x < Country.length; x++) {
             var dode = Country[x].split(' ')[1]
-            ldb.friends[code][dode] -= 2
-            if (ldb.friends[code][dode] < 1) {
-                ldb.friends[code][dode] = 1
+            ix_t_code(dode)
+            var b = cix.ix
+            ldb.friends[a][b] -= 2
+            if (ldb.friends[a][b] < 1) {
+                ldb.friends[a][b] = 1
             }
         }
     }
@@ -487,32 +499,36 @@ function resistance () {
     var randtile = Math.floor(Math.random() * isnotsea.length)
     var theTile = isnotsea[randtile]
     var sourceCode = theTile.classList[1]
-    if (ldb.whokilled[sourceCode].length == 0) {
+    ix_t_code(sourceCode)
+    var a = cix
+    if (ldb.whokilled[a.ix].length == 0) {
         return
     }
-    var randwhoResists = Math.floor(Math.random() * ldb.whokilled[sourceCode].length)
+    var randwhoResists = Math.floor(Math.random() * ldb.whokilled[a.ix].length)
     //console.log(sourceCode,randwhoResists)
-    var whoResists = ldb.whokilled[sourceCode][randwhoResists]
-    theTile.classList.remove(sourceCode)
-    theTile.classList.add(whoResists)
-    var powerRange = Math.floor(Math.random() * document.getElementsByClassName(sourceCode).length) * 3
+    var whoResists = ldb.whokilled[a.ix][randwhoResists]
+    ix_country(whoResists)
+    var b = cix
+    theTile.classList.remove(a.bode)
+    theTile.classList.add(b.code)
+    var powerRange = Math.floor(Math.random() * document.getElementsByClassName(a.code).length) * 3
     //console.log(powerRange)
     for (let i = 0; i < powerRange; i++) {
         rand = Math.floor(Math.random() * 2)
         //console.log(Neigh.length,Own.length,rand,prefval,totopts, pref)
         if (rand == 0) {
-            build(whoResists)
+            build(b.code)
             //console.log('built')
         } 
         if (rand == 1) {
-            attack(whoResists)
+            attack(b.code)
             //console.log('attacked')
         }  
     //console.log(Power)
     }
-    ldb.whokilled[sourceCode].splice(randwhoResists, 1)
-    c_name = Country.filter(x => x.includes(whoResists))[0].split(' ')[0]
-    nb_msg = c_name + ' has a resistance!'
+    ldb.whokilled[a.ix].splice(randwhoResists, 1)
+    c_name = Country.filter(x => x.includes(b.code))[0].split(' ')[0]
+    nb_msg = b.name + ' has a resistance!'
     nb_push(nb_msg,0)
 }
 
@@ -556,10 +572,14 @@ function assignwhokilled(a,b) {
     if (b == 'land') {
         return
     }
-    ldb.whokilled[a].push(b)
-    a_name = Country.filter(x => x.includes(a))[0].split(' ')[0]
-    b_name = Country.filter(x => x.includes(b))[0].split(' ')[0]
-    nb_msg = a_name + ' defeated ' + b_name
+    ix_t_code(a)
+    var A = cix
+    ix_t_code(b)
+    var B = cix
+    ldb.whokilled[A.ix].push(B.ix)
+    //a_name = Country.filter(x => x.includes(a))[0].split(' ')[0]
+    //b_name = Country.filter(x => x.includes(b))[0].split(' ')[0]
+    nb_msg = A.name + ' defeated ' + B.name
     nb_push(nb_msg,1)
     //console.log(a + ' anihilated ' + b)
 }

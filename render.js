@@ -329,10 +329,11 @@ function renderdiplomacy () {
 }
 
 function renderallies (c) {
-    var allies = ldb.friends[c]
+    ix_t_code(c)
+    var allies = ldb.friends[cix.ix]
     for (let i = 0; i < Country.length; i++) {
         var cnt = Country[i].split(' ')[1]
-        if (allies[cnt] > (ldb.pow / 2)) {
+        if (allies[i] > (ldb.pow / 2)) {
             //console.log(allies[cnt])
             //console.log('Enemy!' + cnt)
         var tiles = document.getElementsByClassName(cnt) 
@@ -385,12 +386,13 @@ function randommode () {
          tiles[i].classList.add('land')
          tiles[i].innerHTML = 0
     }
-    for (let i = 0; i < Country.length; i++) {
+    for (let i = 0; i < ldb.countries.length; i++) {
         var available = document.getElementsByClassName('land')
         var taken = Math.floor(Math.random() * available.length)
         var thetile = available[taken]
         thetile.classList.remove('land')
-        thetile.classList.add(Country[i].split(' ')[1])
+        ix_country(ldb.countries[i])
+        thetile.classList.add(cix.code)
         thetile.innerHTML = 9
     }
 }
@@ -537,10 +539,10 @@ function generatefriendmap () {
     ldb.friends = {}
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1]
-        ldb.friends[code] = {}
+        ldb.friends[i] = {}
         for (let x = 0; x < Country.length; x++) {
             var dode = Country[x].split(' ')[1]
-            ldb.friends[code][dode] = 1
+            ldb.friends[i][x] = 1
         }
     }
 }
@@ -655,7 +657,8 @@ function renderwhokilled () {
     ldb.whokilled = {}
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1] 
-        ldb.whokilled[code] = []
+        ix_t_code(code)
+        ldb.whokilled[cix.ix] = []
     }
 }
 
