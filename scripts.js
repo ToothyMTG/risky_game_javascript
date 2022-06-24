@@ -430,17 +430,23 @@ function act () {
 function startgame () {
     ldb.next = 0
     ldb.round = 0
+    var gmode = document.getElementById('selgmo').value
+    var gamemode = New_GameModes[gmode]
     //Country = Country.sort(() => 0.5 - Math.random())
     document.getElementById('welcomebox').style.display = 'none'
     var teamval = document.getElementById('selcnt').value
     if (teamval == 'noval') {
-        ldb.mycnt = 'noval'
+        ldb.mycnt = 'spectator 0 0'
     } else {
-        ldb.mycnt = Country.filter(x => x.includes(teamval))[0].split(' ')
+        if (teamval == 'rand') {
+            var randteam = Math.floor(Math.random() * gamemode.countries.length)  
+            var randchosen = gamemode.countries[randteam]
+            ldb.mycnt = Country[randchosen].split(' ')
+        } else {
+            ldb.mycnt = Country.filter(x => x.includes(teamval))[0].split(' ')
+        }
     }
     renderhandbox ()
-    var gmode = document.getElementById('selgmo').value
-    var gamemode = New_GameModes[gmode]
     ldb.countries = gamemode.countries.sort(() => 0.5 - Math.random())
     ldb.year = gamemode.year
     for (let i = 0; i < gamemode.startup.length; i++) {

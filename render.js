@@ -450,34 +450,28 @@ function renderwelcomescreen() {
 function newgamediv () {
     var ngdiv = document.getElementById('ngdiv')
     ngdiv.innerHTML = ''
-    var titcnt = document.createElement('h3')
-    titcnt.innerHTML = 'Please select your country'
-    ngdiv.appendChild(titcnt)
-    var selcnt = document.createElement('select')
-    selcnt.id = 'selcnt'
-    ngdiv.appendChild(selcnt)
-    var blankopt = document.createElement('option')
-    blankopt.innerHTML = 'Spectate'
-    blankopt.value = 'noval'
-    selcnt.appendChild(blankopt)
-    for (let i = 0; i < Country.length; i++) {
-        var opt = document.createElement('option')
-        opt.innerHTML = Country[i].split(' ')[0]
-        opt.value = Country[i].split(' ')[1]
-        selcnt.appendChild(opt)
-    }
     var titgmo = document.createElement('h3')
     titgmo.innerHTML = 'Please select game mode'
     ngdiv.appendChild(titgmo)
     var selgmo = document.createElement('select')
     selgmo.id = 'selgmo'
     ngdiv.appendChild(selgmo)
+    var blank = document.createElement('option')
+    blank.innerHTML = ''
+    blank.value = 'noval'
+    selgmo.appendChild(blank)
     for (let i = 0; i < Gamemodes.length; i++) {
         var opt = document.createElement('option')
         opt.innerHTML = Gamemodes[i]
         opt.value = i
         selgmo.appendChild(opt)
     }
+    var titcnt = document.createElement('h3')
+    titcnt.innerHTML = 'Please select your country'
+    ngdiv.appendChild(titcnt)
+    var selcnt = document.createElement('select')
+    selcnt.id = 'selcnt'
+    ngdiv.appendChild(selcnt)
     var titpow = document.createElement('h3')
     titpow.innerHTML = 'Please select max power'
     ngdiv.appendChild(titpow)
@@ -496,6 +490,28 @@ function newgamediv () {
     startbut.style.marginLeft = '33.33%'
     startbut.onclick = () => {startgame ()}
     ngdiv.appendChild(startbut)
+
+    selgmo.onchange = () => {
+        console.log(selgmo.value)
+        var mode = New_GameModes[selgmo.value]
+        selcnt.innerHTML = ''       
+        var blankopt = document.createElement('option')
+        blankopt.innerHTML = 'Spectate'
+        blankopt.value = 'noval'
+        selcnt.appendChild(blankopt)
+        for (let i = 0; i < mode.countries.length; i++) {
+            var a = mode.countries[i]
+            ix_country(a)
+            var opt = document.createElement('option')
+            opt.innerHTML = cix.name   
+            opt.value = cix.code
+            selcnt.appendChild(opt)
+        }
+        var randomopt = document.createElement('option')
+        randomopt.innerHTML = 'Random'
+        randomopt.value = 'rand'
+        selcnt.appendChild(randomopt)
+    }
 }
 
 function loadgamediv () {
