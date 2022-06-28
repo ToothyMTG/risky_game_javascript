@@ -35,6 +35,18 @@ Country = [
     "Lithuania cclt 1",
     "Latvia cclv 1",
     "Estonia ccet 1",
+    "Gapord dd01 1",
+    "Elafunt dd02 1",
+    "Tager dd03 1",
+    "Sneka dd04 1",
+    "Mynkoy dd05 1",
+    "Laon dd06 1",
+    "Saeherse dd07 1",
+    "Augle dd08 1",
+    "Pondo dd09 1",
+    "Saegol dd10 1",
+    'Sea sea 0',
+    'Land land 0'
     ]
 
 Gamemodes = [
@@ -44,6 +56,40 @@ Gamemodes = [
     "Random spawn of cities",
     "Random map"
 ]
+
+New_GameModes = [
+    {
+        "name":"Europe as of 2022",
+        "countries":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
+        "year":2022,
+        "startup":['distributepower']
+    },
+    {
+        "name":"Europe powered with capitals",
+        "countries":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
+        "year":1995,
+        "startup":['rendercapitals']
+    },
+    {
+        "name":"Europe but single cities",
+        "countries":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
+        "year":1,
+        "startup":['rendercapitals','renderonlycapitals']
+    },
+    {
+        "name":"Random spawn of cities",
+        "countries":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
+        "year":1,
+        "startup":['randommode']
+    },
+    {
+        "name":"Random map",
+        "countries":[36,37,38,39,40,41,42,43,44,45],
+        "year":1,
+        "startup":['mapgenerator','randommode']
+    },
+]
+
 
 Maxpowers = [
     10,

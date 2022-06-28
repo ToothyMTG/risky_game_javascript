@@ -59,12 +59,16 @@ function cw_teamelection () {
 function cw_getallies (c) {
     cw_friends = []
     getneigh(c)
+    ix_t_code(c)
+    var a = cix.ix
     for (let i = 0; i < Neigh.length; i++) {
         var cnt = Neigh[i].classList[1]
         if (cnt == 'land') {
             continue
         }
-        var enemval = ldb.friends[c][cnt]
+        ix_t_code(cnt)
+        var b = cix.ix
+        var enemval = ldb.friends[a][b]
         if (enemval <= ldb.pow / 5) {
             cw_friends.push(cnt)
         }

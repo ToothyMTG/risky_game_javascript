@@ -131,8 +131,9 @@ function addflash () {
 }
 
 function rendercapitals () {
-    for (let i = 0; i < Country.length; i++) {
-        var code = Country[i].split(' ')[1]
+    for (let i = 0; i < ldb.countries.length; i++) {
+        ix_country(ldb.countries[i])
+        var code = cix.code
         var terits = document.getElementsByClassName(code)
         var rand = Math.floor(Math.random() * terits.length)
         terits[rand].innerHTML = 9
@@ -140,9 +141,10 @@ function rendercapitals () {
 }
 
 function distributepower () {
-    for (let i = 0; i < Country.length; i++) {
-        var who = Country[i].split(' ')[1]
-        var power = Country[i].split(' ')[2]
+    for (let i = 0; i < ldb.countries.length; i++) {
+        ix_country(ldb.countries[i])
+        var who = cix.code
+        var power = cix.initstr
         for (let x = 0; x < (power * 2); x++) {
             var ters = document.getElementsByClassName(who)
             var rand = Math.floor(Math.random() * ters.length)
@@ -329,10 +331,11 @@ function renderdiplomacy () {
 }
 
 function renderallies (c) {
-    var allies = ldb.friends[c]
+    ix_t_code(c)
+    var allies = ldb.friends[cix.ix]
     for (let i = 0; i < Country.length; i++) {
         var cnt = Country[i].split(' ')[1]
-        if (allies[cnt] > (ldb.pow / 2)) {
+        if (allies[i] > (ldb.pow / 2)) {
             //console.log(allies[cnt])
             //console.log('Enemy!' + cnt)
         var tiles = document.getElementsByClassName(cnt) 
@@ -385,12 +388,13 @@ function randommode () {
          tiles[i].classList.add('land')
          tiles[i].innerHTML = 0
     }
-    for (let i = 0; i < Country.length; i++) {
+    for (let i = 0; i < ldb.countries.length; i++) {
         var available = document.getElementsByClassName('land')
         var taken = Math.floor(Math.random() * available.length)
         var thetile = available[taken]
         thetile.classList.remove('land')
-        thetile.classList.add(Country[i].split(' ')[1])
+        ix_country(ldb.countries[i])
+        thetile.classList.add(cix.code)
         thetile.innerHTML = 9
     }
 }
@@ -446,34 +450,28 @@ function renderwelcomescreen() {
 function newgamediv () {
     var ngdiv = document.getElementById('ngdiv')
     ngdiv.innerHTML = ''
-    var titcnt = document.createElement('h3')
-    titcnt.innerHTML = 'Please select your country'
-    ngdiv.appendChild(titcnt)
-    var selcnt = document.createElement('select')
-    selcnt.id = 'selcnt'
-    ngdiv.appendChild(selcnt)
-    var blankopt = document.createElement('option')
-    blankopt.innerHTML = 'Spectate'
-    blankopt.value = 'noval'
-    selcnt.appendChild(blankopt)
-    for (let i = 0; i < Country.length; i++) {
-        var opt = document.createElement('option')
-        opt.innerHTML = Country[i].split(' ')[0]
-        opt.value = Country[i].split(' ')[1]
-        selcnt.appendChild(opt)
-    }
     var titgmo = document.createElement('h3')
     titgmo.innerHTML = 'Please select game mode'
     ngdiv.appendChild(titgmo)
     var selgmo = document.createElement('select')
     selgmo.id = 'selgmo'
     ngdiv.appendChild(selgmo)
+    var blank = document.createElement('option')
+    blank.innerHTML = ''
+    blank.value = 'noval'
+    selgmo.appendChild(blank)
     for (let i = 0; i < Gamemodes.length; i++) {
         var opt = document.createElement('option')
         opt.innerHTML = Gamemodes[i]
         opt.value = i
         selgmo.appendChild(opt)
     }
+    var titcnt = document.createElement('h3')
+    titcnt.innerHTML = 'Please select your country'
+    ngdiv.appendChild(titcnt)
+    var selcnt = document.createElement('select')
+    selcnt.id = 'selcnt'
+    ngdiv.appendChild(selcnt)
     var titpow = document.createElement('h3')
     titpow.innerHTML = 'Please select max power'
     ngdiv.appendChild(titpow)
@@ -492,6 +490,28 @@ function newgamediv () {
     startbut.style.marginLeft = '33.33%'
     startbut.onclick = () => {startgame ()}
     ngdiv.appendChild(startbut)
+
+    selgmo.onchange = () => {
+        console.log(selgmo.value)
+        var mode = New_GameModes[selgmo.value]
+        selcnt.innerHTML = ''       
+        var blankopt = document.createElement('option')
+        blankopt.innerHTML = 'Spectate'
+        blankopt.value = 'noval'
+        selcnt.appendChild(blankopt)
+        for (let i = 0; i < mode.countries.length; i++) {
+            var a = mode.countries[i]
+            ix_country(a)
+            var opt = document.createElement('option')
+            opt.innerHTML = cix.name   
+            opt.value = cix.code
+            selcnt.appendChild(opt)
+        }
+        var randomopt = document.createElement('option')
+        randomopt.innerHTML = 'Random'
+        randomopt.value = 'rand'
+        selcnt.appendChild(randomopt)
+    }
 }
 
 function loadgamediv () {
@@ -537,10 +557,10 @@ function generatefriendmap () {
     ldb.friends = {}
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1]
-        ldb.friends[code] = {}
+        ldb.friends[i] = {}
         for (let x = 0; x < Country.length; x++) {
             var dode = Country[x].split(' ')[1]
-            ldb.friends[code][dode] = 1
+            ldb.friends[i][x] = 1
         }
     }
 }
@@ -549,7 +569,7 @@ function inithistory () {
     ldb.history = {}
     for (let i = 0; i < Country.length; i++) {
         var cnt = Country[i].split(' ')[1]
-        ldb.history[cnt] = []
+        ldb.history[i] = []
     }
 }
 
@@ -606,7 +626,8 @@ function rendercountrystats () {
 
 function renderhistorygraph (c) {
     var graph = document.getElementById('cntgraph')
-    var source = ldb.history[c]
+    ix_t_code(c)
+    var source = ldb.history[cix.ix]
     var pilewidth = 100 / source.length
     var pilemaxheight = 0
     for (let i = 0; i < source.length; i++) {
@@ -655,7 +676,8 @@ function renderwhokilled () {
     ldb.whokilled = {}
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1] 
-        ldb.whokilled[code] = []
+        ix_t_code(code)
+        ldb.whokilled[cix.ix] = []
     }
 }
 

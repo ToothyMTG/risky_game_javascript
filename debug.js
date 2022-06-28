@@ -41,7 +41,10 @@ savebutton ()
 
 function startgamedebug () {
     document.getElementById('newgame').click()
+    document.getElementById('selgmo').value = 0
+    document.getElementById('selcnt').value = 'noval'
     startgame ()
+    ldb.mycnt = 'specator 0 0'
     stoploop ()
 }
 
@@ -55,6 +58,10 @@ function nb_debug () {
     nb_render ()    
 }
 
+function ix_debug () {
+    ix_tiles ()
+}
 cw_debug()
 //startgamedebug ()
 nb_debug ()
+ix_debug ()
