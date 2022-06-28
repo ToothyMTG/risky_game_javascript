@@ -424,3 +424,12 @@ body {
     margin: 0;
     font-size: 70%;
 }
+
+.th_box {
+    width: 2.439%;
+    background-color: white;
+    height: 80%;
+    position:absolute;
+    left: 0;
+    top: 10%;
+}

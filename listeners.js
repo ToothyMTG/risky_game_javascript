@@ -52,6 +52,9 @@ document.addEventListener('keydown', e => {
             runturnbut()
         }
     }
+    if (e.key == 't') {
+        th_maker ()
+    }
     if (e.key == 's') {
         rendersavefield ()
     }
