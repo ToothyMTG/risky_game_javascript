@@ -21,10 +21,11 @@ function gameinit () {
 }
 function startgamedebug () {
     document.getElementById('newgame').click()
-    document.getElementById('selgmo').value = 0
-    document.getElementById('selcnt').value = 'random'
+    document.getElementById('selgmo').value = 4
+    document.getElementById('selcnt').value = 'noval'
     startgame ()
-    //ldb.mycnt = Cou
+    ldb.mycnt = 'spectator 0 0'
+    ldb.pow = 100
     stoploop ()
 }
 function cw_debug () {
