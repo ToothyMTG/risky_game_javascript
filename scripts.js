@@ -550,7 +550,7 @@ function populatehistory () {
              power += Number(tiles[x].innerHTML)
         }
         var vals = [ldb.year,tiles.length,power]
-        ldb.history[code].push(vals)
+        ldb.history[i].push(vals)
     }
 }
 

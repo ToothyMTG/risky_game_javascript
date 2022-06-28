@@ -29,3 +29,13 @@ function ix_country (n) {
     cix.initstr = source[2]
     cix.ix = n
 } 
+
+function ix_rendertiles () {
+    var src = ldb.tix
+    var tiles = document.getElementsByClassName('tile')
+    for (let i = 0; i < tiles.length; i++) {
+        ix_country(src[i][0]) 
+        tiles[i].className = 'tile ' + cix.code
+        tiles[i].innerHTML = src[i][1]
+    }
+}

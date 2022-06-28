@@ -569,7 +569,7 @@ function inithistory () {
     ldb.history = {}
     for (let i = 0; i < Country.length; i++) {
         var cnt = Country[i].split(' ')[1]
-        ldb.history[cnt] = []
+        ldb.history[i] = []
     }
 }
 
@@ -626,7 +626,8 @@ function rendercountrystats () {
 
 function renderhistorygraph (c) {
     var graph = document.getElementById('cntgraph')
-    var source = ldb.history[c]
+    ix_t_code(c)
+    var source = ldb.history[cix.ix]
     var pilewidth = 100 / source.length
     var pilemaxheight = 0
     for (let i = 0; i < source.length; i++) {

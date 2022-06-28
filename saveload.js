@@ -10,7 +10,7 @@ function gettiles() {
 }
 
 function savegame (x) {
-    gettiles ()
+    ix_tiles ()
     var val = ldb.mycnt + '_' + Math.floor(ldb.year) + '_' + ldb.pow
     ldb.savename = val
     var saveslot = 'saveslot' + x
@@ -32,13 +32,14 @@ function savegame (x) {
 
 function loadgame (x) {
     ldb = JSON.parse(localStorage[x])
-    var tiles = document.getElementsByClassName('tile')
+    /*var tiles = document.getElementsByClassName('tile')
     for (let i = 0; i < tiles.length; i++) { 
         var classRem = tiles[i].classList[1]
         tiles[i].classList.remove(classRem)
         tiles[i].classList.add(ldb.tiles[i][1])
         tiles[i].innerHTML = ldb.tiles[i][0]
-    }
+    }*/
+    ix_rendertiles ()
     opacityhandler ()
     loopstate = 0
 }

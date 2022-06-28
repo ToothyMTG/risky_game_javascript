@@ -45,6 +45,8 @@ Country = [
     "Augle dd08 1",
     "Pondo dd09 1",
     "Saegol dd10 1",
+    'Sea sea 0',
+    'Land land 0'
     ]
 
 Gamemodes = [
