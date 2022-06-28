@@ -4,7 +4,7 @@ function ix_tiles () {
     for (let i = 0; i < tiles.length; i++) {
         ldb.tix[i] = []
         var code = tiles[i].classList[1]
-        var lookup = Country.filter(x => x.includes(code))[0]
+        var lookup = Country.filter(x => x.includes(' ' + code))[0]
         var cix = Country.indexOf(lookup)
         ldb.tix[i].push(cix)
         var str = Number(tiles[i].innerHTML)
@@ -13,7 +13,7 @@ function ix_tiles () {
 }
 
 function ix_t_code (c) {
-    var lookup = Country.filter(x => x.includes(c))[0]
+    var lookup = Country.filter(x => x.includes(' ' + c))[0]
     var index = Country.indexOf(lookup)
     if (index == -1) {
         return

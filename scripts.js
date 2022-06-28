@@ -303,7 +303,7 @@ function lastround () {
     cw_action ()
     }
     cw_managerstr ()
-
+    th_populate ()
 }
 
 function clearaliances (n) {
@@ -374,6 +374,7 @@ function populatestatebox (c,t) {
 }
 
 function act () {
+    th_remover ()
     var tile = event.target
     var ifneigh = Neigh.filter(x => x.id.includes(tile.id))[0]
     //console.log(ifneigh)
@@ -458,6 +459,7 @@ function startgame () {
         if (command == 'mapgenerator') {mapgenerator ()}
     }
     opacityhandler ()
+    th_populate ()
     console.log(gamemode)
     /*if (gmode == 0) { // Europe as of 2022
         //rendercapitals ()
@@ -591,6 +593,7 @@ function assignwhokilled(a,b) {
 }
 
 function runloop () {
+    th_remover ()
     loop = setInterval(round, 20)
     loopstate = 1
 }
