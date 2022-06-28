@@ -192,7 +192,7 @@ function attack (c) {
     }
     var countAgressorCode = document.getElementsByClassName(oldcode).length
     if (countAgressorCode == 0) {
-        assignwhokilled(c,oldcode)
+        assignwhokilled(c,oldcode,target.id)
     }
     //console.log(target)
 }
@@ -401,7 +401,7 @@ function act () {
             var countAgressorCode = document.getElementsByClassName(tile.classList[1]).length - 1
             //console.log(countAgressorCode)
             if (countAgressorCode == 0) {
-                assignwhokilled(ldb.mycnt[1],tile.classList[1])
+                assignwhokilled(ldb.mycnt[1],tile.classList[1],tile.id)
             }
             tile.classList.remove(tile.classList[1])
             tile.classList.add(ldb.mycnt[1])
@@ -515,10 +515,11 @@ function resistance () {
     var randwhoResists = Math.floor(Math.random() * ldb.whokilled[a.ix].length)
     //console.log(sourceCode,randwhoResists)
     var whoResists = ldb.whokilled[a.ix][randwhoResists]
-    ix_country(whoResists)
+    //console.log(whoResists)
+    ix_country(whoResists[0])
     var b = cix
-    theTile.classList.remove(a.code)
-    theTile.classList.add(b.code)
+    var c = document.getElementById(whoResists[1])
+    c.className = 'tile ' + b.code
     var powerRange = Math.floor(Math.random() * document.getElementsByClassName(a.code).length) * 3
     //console.log(powerRange)
     for (let i = 0; i < powerRange; i++) {
@@ -576,7 +577,7 @@ function searchcountry() {
     }
 }
 
-function assignwhokilled(a,b) {
+function assignwhokilled(a,b,c) {
     if (b == 'land') {
         return
     }
@@ -584,7 +585,7 @@ function assignwhokilled(a,b) {
     var A = cix
     ix_t_code(b)
     var B = cix
-    ldb.whokilled[A.ix].push(B.ix)
+    ldb.whokilled[A.ix].push([B.ix,c])
     //a_name = Country.filter(x => x.includes(a))[0].split(' ')[0]
     //b_name = Country.filter(x => x.includes(b))[0].split(' ')[0]
     nb_msg = A.name + ' defeated ' + B.name

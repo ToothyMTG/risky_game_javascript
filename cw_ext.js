@@ -42,6 +42,9 @@ function cw_getaliveteams () {
     cw_aliveteams = []
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1]
+        if ((code == 'land') || (code == 'sea')) {
+            continue
+        }
         var onmap = document.getElementsByClassName(code)
         if (onmap.length == 0 ) {
             continue
