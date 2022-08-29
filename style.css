@@ -409,6 +409,15 @@ body {
     background-color: grey;
 }
 
+.saveboxbutton {
+    width: 40%;
+    height: 10%;
+}
+.saveboxbutton:hover {
+    background-color: red;
+    color: white;
+}
+
 .nb_box {
     background-color: transparent;
     width: 30%;
@@ -432,4 +441,8 @@ body {
     position:absolute;
     left: 0;
     top: 10%;
+}
+
+.du-renderupload {
+    
 }

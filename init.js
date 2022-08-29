@@ -27,6 +27,7 @@ function startgamedebug () {
     ldb.mycnt = 'spectator 0 0'
     ldb.pow = 100
     stoploop ()
+    //document.getElementById('savebutton').click()
 }
 function cw_debug () {
     cw_init ()
@@ -52,6 +53,7 @@ gameinit ()
 //cw_debug()
 //startgamedebug ()
 //th_debug ()
-
+//document.getElementById('loadgame').click()
 //nb_debug ()
 //ix_debug ()
+//du_renderupload ()

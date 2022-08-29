@@ -89,7 +89,7 @@ function showinfo (t) {
     if (tiletoshow.classList[1] == 'sea') {
         who = 'noone (sea)'
     } else (
-        who = Country.filter(x => x.includes(tiletoshow.classList[1]))[0].split(' ')[0]
+        who = Country.filter(x => x.includes(' '+tiletoshow.classList[1]))[0].split(' ')[0]
     )
     infobox.innerHTML += 'Belongs to ' + who + '<br>'
     infobox.innerHTML += 'Power is ' + tiletoshow.innerHTML + '<br>'
@@ -551,6 +551,7 @@ function loadgamediv () {
         }
         div.appendChild(startbut)
     }
+    du_renderupload ()
 }
 
 function generatefriendmap () {
@@ -780,4 +781,11 @@ function rendersavefield () {
         }
         div.appendChild(slot)
     }
+    var button = document.createElement('button')
+    button.innerHTML = 'Save to file'
+    button.classList.add('saveboxbutton')
+    button.onclick = () => {
+        du_download ()
+    }
+    div.appendChild(button)
 }
