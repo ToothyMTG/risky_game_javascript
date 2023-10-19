@@ -49,7 +49,12 @@ function th_debug () {
     //th_render (700)
 }
 
+function me_debug () {
+    document.getElementById('mapeditor').click()
+}
+
 gameinit ()
+me_debug ()
 //cw_debug()
 //startgamedebug ()
 //th_debug ()

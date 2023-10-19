@@ -445,6 +445,9 @@ function renderwelcomescreen() {
         lgdiv.classList.add('rolldownanim')
         loadgamediv ()
     }
+    mapeditor.onclick = () => {
+        me_render ()
+    }
 }
 
 function newgamediv () {
