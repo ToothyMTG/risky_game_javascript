@@ -27,10 +27,11 @@ body {
     background-color:azure;
     width: 100%;
     height: 100%;
-
+    overflow:hidden;
 }
 
 .tile {
+    /* width: 2.439%; */
     width: 2.439%;
     height: 2.439%;
     float:left;

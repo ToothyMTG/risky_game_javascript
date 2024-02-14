@@ -51,7 +51,7 @@ function th_debug () {
 
 gameinit ()
 //cw_debug()
-//startgamedebug ()
+startgamedebug ()
 //th_debug ()
 //document.getElementById('loadgame').click()
 //nb_debug ()

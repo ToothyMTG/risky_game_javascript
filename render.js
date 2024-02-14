@@ -13,6 +13,7 @@ function rendermap () {
     var x = 1
     var y = 1
     var id = 1
+    var mapframe = document.getElementById('mapframe')
     for (let i = 0; i < (50*45); i++) {
         var but = document.createElement('div')
         but.classList.add('fieldbut')
@@ -32,7 +33,7 @@ function rendermap () {
         but.onclick = () => {
             event.target.focus()
         }
-        mainframe.appendChild(but)
+        mapframe.appendChild(but)
         id++
     }
 }
@@ -788,4 +789,8 @@ function rendersavefield () {
         du_download ()
     }
     div.appendChild(button)
+}
+
+function zoom_in() {
+    
 }
