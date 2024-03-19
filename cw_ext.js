@@ -190,7 +190,6 @@ function cw_action (c, d) {
         var c_name = Country.filter(x => x.includes(c))[0].split(' ')[0]
         var d_name = Country.filter(x => x.includes(d))[0].split(' ')[0]
         var nb_msg = c_name + ' and ' + d_name + ' signed an alliance !'
-        nb_push(nb_msg, 2)
     }
     if (bool == 1) {
         cw_findcw(c,d)
@@ -201,7 +200,6 @@ function cw_action (c, d) {
         var c_name = Country.filter(x => x.includes(c))[0].split(' ')[0]
         var d_name = Country.filter(x => x.includes(d))[0].split(' ')[0]
          var nb_msg = d_name + ' joined ' + c_name + "'s alliance!"
-        nb_push(nb_msg, 2)
         if (cw_dindex != -1) {
             var dindex = ldb.cw[cw_dindex].countries.indexOf(d)
             ldb.cw[cw_dindex].countries.splice(dindex,1)
@@ -215,7 +213,6 @@ function cw_action (c, d) {
             var c_name = Country.filter(x => x.includes(c))[0].split(' ')[0]
             var d_name = Country.filter(x => x.includes(d))[0].split(' ')[0]
             var nb_msg = c_name + ' joined ' + d_name + "'s alliance!"
-            nb_push(nb_msg, 2)
         }
     }
     cw_emptycw ()

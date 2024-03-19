@@ -1,11 +1,12 @@
 function gameinit () {
     renderwelcomescreen ()
     ldb = {}
-    rendermenu ()
-    renderinfobox ()
-    rendermenubuttons ()
-    renderstatebox ()
+    // rendermenu ()
+    // renderinfobox ()
+    // rendermenubuttons ()
+    // renderstatebox ()
     rendermapframe ()
+    centerDiv()
     rendermap ()
     populatemap ()
     renderdiplomacy ()
@@ -14,9 +15,9 @@ function gameinit () {
     generatefriendmap ()
     inithistory ()
     renderwhokilled ()
-    savebutton ()
+    // savebutton ()
     cw_init ()
-    nb_render ()
+    // nb_render ()
     th_init ()
 }
 function startgamedebug () {
@@ -25,7 +26,7 @@ function startgamedebug () {
     document.getElementById('selcnt').value = 'noval'
     startgame ()
     ldb.mycnt = 'spectator 0 0'
-    ldb.pow = 100
+    ldb.pow = 999
     stoploop ()
     //document.getElementById('savebutton').click()
 }
@@ -51,7 +52,7 @@ function th_debug () {
 
 gameinit ()
 //cw_debug()
-//startgamedebug ()
+startgamedebug ()
 //th_debug ()
 //document.getElementById('loadgame').click()
 //nb_debug ()

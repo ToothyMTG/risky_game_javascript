@@ -186,10 +186,15 @@ function attack (c) {
     if (val < 0) {
         target.classList.remove(oldcode)
         target.classList.add(c)
+        target.isOwned = 1
         target.innerHTML = 0
+        target.value = 0
     } else {
         target.innerHTML = val
+        target.value -= 2
+        if (target.value < 0) {target.value = 0}
     }
+    singleopacityhandler(target)
     var countAgressorCode = document.getElementsByClassName(oldcode).length
     if (countAgressorCode == 0) {
         assignwhokilled(c,oldcode,target.id)
@@ -254,7 +259,7 @@ function round () {
     var name = cix.name
     //console.log(name)
     var code = cix.code
-    populatestatebox(name,ldb.round)
+    // populatestatebox(name,ldb.round)
     if (name == ldb.mycnt[0]) {
         cw_getoptions(ldb.mycnt[1])
         if (cw_options == 0) {
@@ -292,8 +297,9 @@ function lastround () {
     //ldb.countries = ldb.countries.sort(() => 0.5 - Math.random())
     //Allymap[ldb.round] = []
     //Allymap[ldb.round - 3] = []
-    populatehandbox ()
-    populatehistory ()
+    // populatehandbox ()
+    raisevalues()
+    // populatehistory ()
     var randifResistance = Math.floor(Math.random() * 5)
     if (randifResistance == 0 ) {
         resistance ()
@@ -447,7 +453,7 @@ function startgame () {
             ldb.mycnt = Country.filter(x => x.includes(teamval))[0].split(' ')
         }
     }
-    renderhandbox ()
+    // renderhandbox ()
     ldb.countries = gamemode.countries.sort(() => 0.5 - Math.random())
     ldb.year = gamemode.year
     for (let i = 0; i < gamemode.startup.length; i++) {
@@ -538,7 +544,6 @@ function resistance () {
     ldb.whokilled[a.ix].splice(randwhoResists, 1)
     c_name = Country.filter(x => x.includes(b.code))[0].split(' ')[0]
     nb_msg = b.name + ' has a resistance!'
-    nb_push(nb_msg,0)
 }
 
 function populatehistory () {
@@ -589,7 +594,6 @@ function assignwhokilled(a,b,c) {
     //a_name = Country.filter(x => x.includes(a))[0].split(' ')[0]
     //b_name = Country.filter(x => x.includes(b))[0].split(' ')[0]
     nb_msg = A.name + ' defeated ' + B.name
-    nb_push(nb_msg,1)
     //console.log(a + ' anihilated ' + b)
 }
 
@@ -614,4 +618,16 @@ function runturnbut () {
         stoploop ()
         return
     }
+}
+
+function raisevalues() {
+    var tiles = document.getElementsByClassName('tile')
+    for (let i = 0; i < tiles.length; i++) {
+        if (tiles[i].isOwned == 0) {continue}
+        tiles[i].value++
+        if (tiles[i].value > 10) {
+            tiles[i].value = 10
+        }
+    }
+    opacityhandler()
 }

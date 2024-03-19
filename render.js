@@ -1,13 +1,16 @@
 console.clear()
 
-var south = 41
-var north = -41
+var south = 50
+var north = -50
 var west = -1
 var east = 1
 var mainframe = document.getElementById('mainframe')
 var wherefocus = ''
 var maptiles = {}
 var tilegather = []
+var Scale = 1
+var posy = 0
+var posx = 0
 
 function rendermap () {
     var x = 1
@@ -66,11 +69,13 @@ function rendermapimg () {
 }
 
 function populatemap () {
-    for (let i = 0; i < Tiles.length; i++) {
+    for (let i = 0; i < 50*50; i++) {
         var tile = document.createElement('div')
-        tile.id = Tiles[i].id
-        tile.classList.value = Tiles[i].value
+        tile.id = 'field' + i
+        tile.classList.value = 'tile sea'
         tile.innerHTML = 0
+        tile.value = 0
+        tile.isOwned = 0
         tile.onfocus = () => {
             wherefocus = event.target.id.split('d')[1]
             showinfo (wherefocus)
@@ -81,33 +86,39 @@ function populatemap () {
 }
 
 function showinfo (t) {
-    var infobox = document.getElementById('infobox')
+    // var infobox = document.getElementById('infobox')
     var tiletoshow = document.getElementById('field' + wherefocus)
-    infobox.innerHTML = ''
-    infobox.innerHTML += 'Field ' + wherefocus + '<br>'
+    // infobox.innerHTML = ''
+    // infobox.innerHTML += 'Field ' + wherefocus + '<br>'
     var who
     if (tiletoshow.classList[1] == 'sea') {
         who = 'noone (sea)'
     } else (
         who = Country.filter(x => x.includes(' '+tiletoshow.classList[1]))[0].split(' ')[0]
     )
-    infobox.innerHTML += 'Belongs to ' + who + '<br>'
-    infobox.innerHTML += 'Power is ' + tiletoshow.innerHTML + '<br>'
+    // infobox.innerHTML += 'Belongs to ' + who + '<br>'
+    // infobox.innerHTML += 'Power is ' + tiletoshow.innerHTML + '<br>'
     var ally = document.createElement('p')
     ally.innerHTML = "Click here or press A to show enemies"
     ally.onclick = () => {
         renderallies(tiletoshow.classList[1])
     }
-    infobox.appendChild(ally)
+    // infobox.appendChild(ally)
 }
 
 function opacityhandler () {
     var tiles = document.getElementsByClassName('tile')
     for (let i = 0; i < tiles.length; i++) {
-        var opa = (Number(tiles[i].innerHTML)) * 0.05 + 0.55
+        var opa = (Number(tiles[i].value)) * 0.05 + 0.50
         tiles[i].style.opacity = opa
     }
     cw_render ()
+}
+
+function singleopacityhandler (x) {
+    var tile = x
+    var opa = (Number(tile.value)) * 0.05 + 0.50
+    tile.style.opacity = opa
 }
 
 function removeflash () {
@@ -396,6 +407,8 @@ function randommode () {
         ix_country(ldb.countries[i])
         thetile.classList.add(cix.code)
         thetile.innerHTML = 9
+        thetile.isOwned = 1
+        thetile.value = 10
     }
 }
 
@@ -694,7 +707,7 @@ function mapgenerator () {
     }
     //var randhowmuch = Math.floor(Math.random() * 30) + 50
     //var tilesLimit = Math.floor(tiles.length * (randhowmuch / 100))
-    var directions = [1,-1,41,-41]
+    var directions = [1,-1,50,-50]
     for (let i = 0; i < (tiles.length * 6); i++) {
         var tile = document.getElementsByClassName('land')
         var randtile = Math.floor(Math.random() * tile.length)
@@ -705,7 +718,7 @@ function mapgenerator () {
         if (newid < 1) {
             continue
         }
-        if (newid > 1353) {
+        if (newid >= (50*50)) {
             continue
         }
         var newtile = document.getElementById('field' + newid)
@@ -713,16 +726,16 @@ function mapgenerator () {
     }
     var sparetiles = []
     var d = 0
-    for (let i = 0; i < 33; i++) {
+    for (let i = 0; i < 50; i++) {
         sparetiles.push(d)
-        d += 41 
+        d += 50 
     }
     //console.log(sparetiles)
     for (let i = 0; i < sparetiles.length; i++) {
         var value = sparetiles[i]
         tiles[value].className = 'tile sea'
     }
-    for (let i = sparetiles[sparetiles.length - 1]; i < (sparetiles[sparetiles.length - 1] + 41); i++) {
+    for (let i = sparetiles[sparetiles.length - 1]; i < (sparetiles[sparetiles.length - 1] + 50); i++) {
         //console.log(i)
         tiles[i].className = 'tile sea' 
     }
@@ -789,3 +802,52 @@ function rendersavefield () {
     }
     div.appendChild(button)
 }
+
+function zoomIn (x) {
+    var par = x.parentElement
+    if (par.id != 'mapframe') {return}
+    Scale += 0.2
+    if (Scale > 3) {Scale = 3}
+    par.style.width = 100 * Scale + '%'
+    par.style.height = 100 * Scale + '%'
+    par.style.fontSize = 100 * Scale + '%'
+}
+function zoomOut (x) {
+    var par = x.parentElement
+    if (par.id != 'mapframe') {return}
+    Scale -= 0.2
+    if (Scale < 0.6) {Scale = 0.6}
+    par.style.width = 100 * Scale + '%'
+    par.style.height = 100 * Scale + '%'
+    par.style.fontSize = 100 * Scale + '%'
+}
+
+function centerScreen (x) {
+    var par = x.parentElement
+    if (par.id != 'mapframe') {return}
+    var posY = Math.floor((Number(x.id.split('d')[1]) / 50))
+    var posX = (Number(x.id.split('d')[1])) - (50 * posY)
+    var tilewidth = Scale
+    var fixedleft = 50 - tilewidth - (posX * 2)*Scale
+    var fixedtop = 50 - tilewidth - (posY * 2)*Scale
+    par.style.left = fixedleft + '%'
+    par.style.top = fixedtop + '%'
+}
+
+function moveToCentre() {
+    var x = document.getElementById('field1225')
+    Scale = 0.8
+    zoomIn(x)
+    centerScreen(x)
+}
+
+function centerDiv () {
+    var mainframe = document.getElementById('mainframe')
+    var posleft = (window.innerWidth - mainframe.offsetWidth) / 2
+    var postop = (window.innerHeight - mainframe.offsetHeight) / 2
+    mainframe.style.top = postop + 'px'
+    mainframe.style.left = posleft + 'px'
+}
+
+
+

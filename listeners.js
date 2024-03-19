@@ -11,12 +11,12 @@ document.addEventListener('keydown', e => {
     }
     if (e.key === 'ArrowUp') {
         var cur = document.getElementById(wherefocus)
-        var newid = Number(cur.id) - 41
+        var newid = Number(cur.id) - 50
         document.getElementById('field' + newid).focus()  
     }
     if (e.key === 'ArrowDown') {
         var cur = document.getElementById(wherefocus)
-        var newid = Number(cur.id) + 41
+        var newid = Number(cur.id) + 50
         document.getElementById('field' + newid).focus()  
     }
     if (e.key === 'Escape') {
@@ -48,9 +48,10 @@ document.addEventListener('keydown', e => {
         renderallies(code)
     }
     if (e.key == 'r') {
-        if (document.getElementById('runturn').style.display != 'none') {
             runturnbut()
-        }
+        // if (document.getElementById('runturn').style.display != 'none') {
+        //     runturnbut()
+        // }
     }
     if (e.key == 't') {
         th_maker ()
@@ -64,3 +65,37 @@ document.addEventListener('keydown', e => {
         }
     }
 })
+
+// document.addEventListener('mousedown', movemap)
+document.addEventListener("mousedown", (event) => {
+    if (event.button === 1) {
+    //   console.log("Middle mouse button clicked!");
+      var x = event.target
+      centerScreen(x)
+    }
+    if (event.button === 0) {
+      console.log("Left mouse button clicked");
+      console.log(event.target)
+      thetile = event.target
+    }
+    if (event.button === 2) {
+      console.log("Right mouse button clicked");
+    }
+  });
+
+document.addEventListener('contextmenu', () => {
+    event.preventDefault()
+})
+
+document.addEventListener('wheel', () => {
+    deltaY = event.deltaY
+    var e = event.target
+    if (deltaY < 0) {
+        zoomIn(e)
+      } else if (deltaY > 0) {
+        zoomOut(e)
+      }
+    centerScreen(e)
+})
+
+window.addEventListener('resize', centerDiv())
