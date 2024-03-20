@@ -117,13 +117,16 @@ function getenemies (c) {
 function getpower (c) {
     var ters = document.getElementsByClassName(c)
     Power = 0
+    Support = 0
     for (let i = 0; i < ters.length; i++) {
         Power += Number(ters[i].innerHTML)
+        Support += ters[i].value
     }
-    Power = Math.floor(Power/9)
+    Support = Support / ters.length / 10
+    Power = Math.floor((Power/9) * Support)
     if (Power < 1) {Power = 1}
     if (Power > ldb.pow) {Power = ldb.pow}
-    //console.log(c + ' has power of ' + Power)
+    // console.log(c + ' has power of ' + Power + ' and support of ' + Support)
 }
 
 function focuscentral (c) {
@@ -304,12 +307,12 @@ function lastround () {
     if (randifResistance == 0 ) {
         resistance ()
     }
-    var rand_cw = Math.floor(Math.random() * 10)
-    if (rand_cw == 0) {
-    cw_action ()
-    }
-    cw_managerstr ()
-    th_populate ()
+    // // var rand_cw = Math.floor(Math.random() * 10)
+    // // if (rand_cw == 0) {
+    // // cw_action ()
+    // }
+    // cw_managerstr ()
+    // th_populate ()
 }
 
 function clearaliances (n) {
@@ -543,7 +546,15 @@ function resistance () {
     }
     ldb.whokilled[a.ix].splice(randwhoResists, 1)
     c_name = Country.filter(x => x.includes(b.code))[0].split(' ')[0]
+    supportResistance (b.code)
     nb_msg = b.name + ' has a resistance!'
+}
+
+function supportResistance (x) {
+    var tiles = document.getElementsByClassName(x)
+    for (let i = 0; i < tiles.length; i++) {
+        tiles[i].value = 9
+    }
 }
 
 function populatehistory () {

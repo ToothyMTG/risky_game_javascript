@@ -26,7 +26,7 @@ function startgamedebug () {
     document.getElementById('selcnt').value = 'noval'
     startgame ()
     ldb.mycnt = 'spectator 0 0'
-    ldb.pow = 999
+    ldb.pow = 200
     stoploop ()
     //document.getElementById('savebutton').click()
 }

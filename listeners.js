@@ -98,4 +98,8 @@ document.addEventListener('wheel', () => {
     centerScreen(e)
 })
 
-window.addEventListener('resize', centerDiv())
+var resizeTimer
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer)
+    resizeTimer = setTimeout(centerDiv(), 100)
+})
