@@ -1,7 +1,7 @@
 function gameinit () {
     renderwelcomescreen ()
     ldb = {}
-    // rendermenu ()
+    rendermenu ()
     // renderinfobox ()
     // rendermenubuttons ()
     // renderstatebox ()

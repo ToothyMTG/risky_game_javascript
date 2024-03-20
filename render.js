@@ -45,7 +45,50 @@ function rendermenu () {
     div.classList.add('menu')
     div.id = 'menu'
     mainframe.appendChild(div)
+    renderplaybutton()
+    renderReturnToCenterButton()
 }
+
+// PLAY AND PAUSE BUTTON //
+function renderplaybutton () {
+    var div = document.createElement('div')
+    div.classList.add('playbutton')
+    div.id = 'playbutton'
+    menu.appendChild(div)
+    renderPlayTriangle()
+    // renderPauseBlocks()
+}
+function renderPlayTriangle() {
+    var par = document.getElementById('playbutton')
+    par.innerHTML = ''
+    var cnv = document.createElement('canvas')
+    cnv.classList.add('playbutcnv')
+    cnv.id = 'playstart'
+    var ctx = cnv.getContext('2d')
+    ctx.beginPath()
+    ctx.moveTo(cnv.width * 0.35,cnv.height * 0.2)
+    ctx.lineTo(cnv.width * 0.35,cnv.height * 0.8)
+    ctx.lineTo(cnv.width * 0.8,cnv.height * 0.5)
+    ctx.closePath()
+    ctx.fill()
+    par.appendChild(cnv)
+    cnv.onclick = () => {runloop();renderPauseBlocks()}
+}
+function renderPauseBlocks() {
+    var par = document.getElementById('playbutton')
+    par.innerHTML = ''
+    var cnv = document.createElement('canvas')
+    cnv.classList.add('playbutcnv')
+    cnv.id = 'playstop'
+    var ctx = cnv.getContext('2d')
+    ctx.fillStyle = '#000000'
+    ctx.fillRect(cnv.width * 0.3,cnv.height * 0.2,cnv.width * 0.15,cnv.height * 0.6)
+    ctx.fillRect(cnv.width * 0.55,cnv.height * 0.2,cnv.width * 0.15,cnv.height * 0.6)
+    par.appendChild(cnv)
+    cnv.onclick = () => {stoploop();renderPlayTriangle()}
+}
+function emptyplaybutton() {document.getElementById('playbutton').innerHTML = ''}
+
 
 function rendermapframe () {
     var mapframe = document.createElement('div')
@@ -730,9 +773,16 @@ function mapgenerator () {
         sparetiles.push(d)
         d += 50 
     }
-    //console.log(sparetiles)
+    console.log(sparetiles)
+    for (let i = 0; i < 50; i++) {
+        tiles[i].className = 'tile sea'
+    }
     for (let i = 0; i < sparetiles.length; i++) {
         var value = sparetiles[i]
+        tiles[value].className = 'tile sea'
+    }
+    for (let i = 0; i < sparetiles.length; i++) {
+        var value = sparetiles[i] + 49
         tiles[value].className = 'tile sea'
     }
     for (let i = sparetiles[sparetiles.length - 1]; i < (sparetiles[sparetiles.length - 1] + 50); i++) {
@@ -803,6 +853,7 @@ function rendersavefield () {
     div.appendChild(button)
 }
 
+// ZOOM IN OUT AND CAMERA POSITION //
 function zoomIn (x) {
     var par = x.parentElement
     if (par.id != 'mapframe') {return}
@@ -821,7 +872,6 @@ function zoomOut (x) {
     par.style.height = 100 * Scale + '%'
     par.style.fontSize = 100 * Scale + '%'
 }
-
 function centerScreen (x) {
     var par = x.parentElement
     if (par.id != 'mapframe') {return}
@@ -832,21 +882,32 @@ function centerScreen (x) {
     var fixedtop = 50 - tilewidth - (posY * 2)*Scale
     par.style.left = fixedleft + '%'
     par.style.top = fixedtop + '%'
+    document.getElementById('returntocentre').style.top = 0
 }
-
 function moveToCentre() {
-    var x = document.getElementById('field1225')
-    Scale = 0.8
-    zoomIn(x)
-    centerScreen(x)
+    var par = document.getElementById('mapframe')
+    Scale = 1
+    par.style.width = 100 * Scale + '%'
+    par.style.height = 100 * Scale + '%'
+    par.style.fontSize = 100 * Scale + '%'
+    par.style.left = 0
+    par.style.top = 0
+    document.getElementById('returntocentre').style.top = '-50%'
 }
-
 function centerDiv () {
     var mainframe = document.getElementById('mainframe')
     var posleft = (window.innerWidth - mainframe.offsetWidth) / 2
     var postop = (window.innerHeight - mainframe.offsetHeight) / 2
     mainframe.style.top = postop + 'px'
     mainframe.style.left = posleft + 'px'
+}
+function renderReturnToCenterButton () {
+    var div = document.createElement('div')
+    div.id = 'returntocentre'
+    div.classList.add('returntocentre')
+    div.innerHTML = 'Restore map to original size'
+    div.onclick = () => {moveToCentre()}
+    document.getElementById('mainframe').appendChild(div)
 }
 
 
