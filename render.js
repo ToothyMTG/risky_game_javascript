@@ -455,11 +455,33 @@ function randommode () {
     }
 }
 
-function renderhandbox () {
+// HANDBOX HANDLER //
+function renderhandbox (x) {
+    removehandbox()
+    if (x.classList[0] != 'tile') {
+        return 
+    }
+    console.log(x)
     var div = document.createElement('div')
     div.classList.add('handbox')
     div.id = 'handbox'
     mainframe.appendChild(div)
+    var tilerect = x.getBoundingClientRect()
+    var mainframerect = document.getElementById('mainframe').getBoundingClientRect()
+    var hbrect = div.getBoundingClientRect()
+    console.log(tilerect, hbrect,mainframerect)
+    div.style.left = tilerect.x + tilerect.width - mainframerect.x + 'px'
+    div.style.top = tilerect.y - mainframerect.y + 'px'
+    if ((tilerect.x + tilerect.width + hbrect.width) > mainframerect.width) {
+        div.style.left = tilerect.x - hbrect.width - mainframerect.x + 'px'
+    }
+    if ((tilerect.y + hbrect.height) > mainframerect.height) {
+        div.style.top = tilerect.y + tilerect.height - mainframerect.y - hbrect.height + 'px'    
+    }
+}
+function removehandbox () {
+    var exihand = document.getElementById('handbox')
+    if (exihand != undefined) {exihand.remove()}
 }
 
 function renderwelcomescreen() {
@@ -909,6 +931,5 @@ function renderReturnToCenterButton () {
     div.onclick = () => {moveToCentre()}
     document.getElementById('mainframe').appendChild(div)
 }
-
 
 

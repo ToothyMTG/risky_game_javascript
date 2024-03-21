@@ -326,26 +326,18 @@ body {
 }
 
 .handbox {
-    background-color: transparent;
+    background-color: white;
     position: absolute;
-    left: 0%;
-    top: 90%;
-    width: 60%;
-    height: 10%;
+    width: 20%;
+    height: 20%;
     opacity: 0.5;
+    transition: all 0.2s ease-in-out;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
 }
-.handbox h1 {
-    font-size: 80%;
-    text-align: center;
-    width: 100%;
-    margin: 0;
-}
-.handbox h2 {
-    font-size: 80%;
-    width: 33%;
-    float:left;
-    margin: 0;
-    text-align: center;
+.handbox:hover {
+    opacity: 1;
 }
 
 @keyframes showaly {
