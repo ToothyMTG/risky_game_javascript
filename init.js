@@ -25,7 +25,8 @@ function startgamedebug () {
     document.getElementById('selgmo').value = 4
     document.getElementById('selcnt').value = 'noval'
     startgame ()
-    ldb.mycnt = 'spectator 0 0'
+    // ldb.mycnt = '0 0 0'
+    ldb.mycnt = 'Poland'
     ldb.pow = 200
     stoploop ()
     //document.getElementById('savebutton').click()
@@ -53,6 +54,10 @@ function th_debug () {
 gameinit ()
 //cw_debug()
 startgamedebug ()
+loadgame('saveslot0')
+// ix_t_code('cccz')
+// ix_gatherfacts(cix)
+
 //th_debug ()
 //document.getElementById('loadgame').click()
 //nb_debug ()

@@ -39,14 +39,46 @@ function rendermap () {
         id++
     }
 }
-
+// MENU ELEMENTS //
 function rendermenu () {
     var div = document.createElement('div')
     div.classList.add('menu')
     div.id = 'menu'
     mainframe.appendChild(div)
     renderplaybutton()
+    renderstatebox()
+    rendermystatebox()
     renderReturnToCenterButton()
+}
+function renderstatebox () {
+    var div = document.createElement('div')
+    div.classList.add('statebox')
+    div.classList.add('menuboxes')
+    div.id = 'statebox'
+    menu.appendChild(div)
+}
+function populatestatebox () {
+    var statebox = document.getElementById('statebox')
+    statebox.innerHTML = ''
+    var year = Math.floor(ldb.year)
+    var season = (ldb.year - year) * 4 + 1
+    statebox.innerHTML = 'Round: ' + ldb.round + ' | ' + year + ' | Q' + season
+}
+function rendermystatebox () {
+    var div = document.createElement('div')
+    div.classList.add('menuboxes')
+    div.classList.add('mystatebox')
+    div.id = 'mystatebox'
+    menu.appendChild(div)
+    myalliesbox()
+}
+function myalliesbox () {
+    var div = document.createElement('div')
+    div.classList.add('myalliesbox')
+    div.classList.add('menuboxes')
+    div.id = 'myalliesboxes'
+    div.innerHTML = 'Menu'
+    menu.appendChild(div)
 }
 
 // PLAY AND PAUSE BUTTON //
@@ -88,7 +120,14 @@ function renderPauseBlocks() {
     cnv.onclick = () => {stoploop();renderPlayTriangle()}
 }
 function emptyplaybutton() {document.getElementById('playbutton').innerHTML = ''}
-
+function clickPlay() {
+    var t = document.getElementById('playstart')
+    if (t != undefined) {t.click()}
+}
+function clickPause() {
+    var t = document.getElementById('playstop')
+    if (t != undefined) {t.click()}
+}
 
 function rendermapframe () {
     var mapframe = document.createElement('div')
@@ -149,6 +188,7 @@ function showinfo (t) {
     // infobox.appendChild(ally)
 }
 
+// OPACITY HANDLERS //
 function opacityhandler () {
     var tiles = document.getElementsByClassName('tile')
     for (let i = 0; i < tiles.length; i++) {
@@ -157,11 +197,27 @@ function opacityhandler () {
     }
     cw_render ()
 }
-
 function singleopacityhandler (x) {
     var tile = x
     var opa = (Number(tile.value)) * 0.05 + 0.50
     tile.style.opacity = opa
+}
+
+// BIG BOX RENDER //
+function renderbigbox () {
+    removebigbox()
+    var box = document.createElement('div')
+    box.classList.add('bigbox')
+    box.id = 'bigbox'
+    mainframe.appendChild(box)
+    var bigboxcross = document.createElement('div')
+    bigboxcross.classList.add('bigboxcross')
+    bigboxcross.onclick = () => {removebigbox()}
+    box.appendChild(bigboxcross)
+}
+function removebigbox () {
+    var oldbox = document.getElementById('bigbox')
+    if (oldbox != undefined) {oldbox.remove()}
 }
 
 function removeflash () {
@@ -338,43 +394,6 @@ function renderpowerperteritory () {
     }    
 }
 
-function rendermenubuttons () {
-    var menu = document.getElementById('menu')
-    var but_tr = document.createElement('button')
-    but_tr.innerHTML = 'Teritory Ranking (1)'
-    but_tr.onclick = () => {renderteritoryranking ()}
-    menu.appendChild(but_tr)
-    var but_pr = document.createElement('button')
-    but_pr.innerHTML = 'Power Ranking (2)'
-    but_pr.onclick = () => {renderpowerranking ()}
-    menu.appendChild(but_pr)
-    var but_pt = document.createElement('button')
-    but_pt.innerHTML = 'PPT Ranking (3)'
-    but_pt.onclick = () => {renderpowerperteritory ()}
-    menu.appendChild(but_pt)
-    var but_sc = document.createElement('button')
-    but_sc.innerHTML = 'Show Country (4)'
-    but_sc.onclick = () => (rendercountrystats ())
-    menu.appendChild(but_sc)
-    var but_rt = document.createElement('button')
-    but_rt.id = 'runturn'
-    but_rt.innerHTML = 'Run Turn (R)'
-    but_rt.onclick = () => {runturnbut()}
-    menu.appendChild(but_rt)
-    but_tt = document.createElement('button')
-    but_tt.innerHTML = "Take turn (Space)"
-    but_tt.id = 'taketurn'
-    but_tt.style.display = 'none'
-    menu.appendChild(but_tt)
-}
-
-function renderstatebox () {
-    var div = document.createElement('div')
-    div.classList.add('statebox')
-    div.id = 'statebox'
-    document.getElementById('menu').appendChild(div)
-}
-
 function renderdiplomacy () {
     Aliances = {}
     Allymap = []
@@ -457,11 +476,12 @@ function randommode () {
 
 // HANDBOX HANDLER //
 function renderhandbox (x) {
+    clickPause()
     removehandbox()
     if (x.classList[0] != 'tile') {
         return 
     }
-    console.log(x)
+    // console.log(x)
     var div = document.createElement('div')
     div.classList.add('handbox')
     div.id = 'handbox'
@@ -469,7 +489,7 @@ function renderhandbox (x) {
     var tilerect = x.getBoundingClientRect()
     var mainframerect = document.getElementById('mainframe').getBoundingClientRect()
     var hbrect = div.getBoundingClientRect()
-    console.log(tilerect, hbrect,mainframerect)
+    // console.log(tilerect, hbrect,mainframerect)
     div.style.left = tilerect.x + tilerect.width - mainframerect.x + 'px'
     div.style.top = tilerect.y - mainframerect.y + 'px'
     if ((tilerect.x + tilerect.width + hbrect.width) > mainframerect.width) {
@@ -478,10 +498,26 @@ function renderhandbox (x) {
     if ((tilerect.y + hbrect.height) > mainframerect.height) {
         div.style.top = tilerect.y + tilerect.height - mainframerect.y - hbrect.height + 'px'    
     }
+    populatehandbox(x)
 }
 function removehandbox () {
     var exihand = document.getElementById('handbox')
     if (exihand != undefined) {exihand.remove()}
+}
+function populatehandbox(x) {
+    var main = document.getElementById('handbox')
+    console.log(x)
+    ix_t_tile(x.id)
+    ix_gatherfacts(cix)
+    getpower(cix.code)
+    main.innerHTML += 'Country: ' + cix.name + '<br>'
+    main.innerHTML += 'Economy: ' + Number(x.innerHTML) + '<br>'
+    main.innerHTML += 'Support: ' + x.value + '<br>'
+    main.innerHTML += 'Tiles total: ' + cfx.tiles + '<br>'
+    main.innerHTML += 'Economy rate: ' + cfx.economyrate + '%<br>'
+    main.innerHTML += 'Support rate: ' + cfx.safetyrate + '%<br>'
+    main.innerHTML += 'Power: ' + Power + '<br>'
+    
 }
 
 function renderwelcomescreen() {

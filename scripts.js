@@ -313,6 +313,7 @@ function lastround () {
     // }
     // cw_managerstr ()
     // th_populate ()
+    populatestatebox()
 }
 
 function clearaliances (n) {
@@ -331,55 +332,6 @@ function clearaliances (n) {
             Aliances[c2].splice[des,1]
         }
     }
-}
-
-function populatehandbox () {
-    var handbox = document.getElementById('handbox')
-    handbox.innerHTML = ''
-    var title = document.createElement('h1')
-    title.innerHTML = "Top 10 Countries"
-    handbox.appendChild(title)
-    var table = []
-    for (let i = 0; i < Country.length; i++) {
-        var code = Country[i].split(' ')[1]
-        var name = Country[i].split(' ')[0]
-        var terits = document.getElementsByClassName(code)
-        table[i] = []
-        table[i][0] = 0
-        for (let x = 0; x < terits.length; x++) {
-            table[i][0] += Number(terits[x].innerHTML)
-        }
-        table[i][1] = name
-        //table[i][0] = Math.floor((table[i][0] + terits.length) / 2)
-    }
-    table = table.sort((a,b) => {return b[0] - a[0]})
-    for (let i = 0; i < 12; i++) {
-        var pos = document.createElement('h2')
-        if (table[i][1] == ldb.mycnt[0]) {
-            pos.classList.add('my')
-        }
-        if (table[i][0] == 0) {
-            continue
-        }
-        pos.innerHTML = (i + 1) +' : ' + table[i][1] + ' - ' + table[i][0]
-        handbox.appendChild(pos)
-    }    
-}
-
-function populatestatebox (c,t) {
-    var statebox = document.getElementById('statebox')
-    statebox.innerHTML = ''
-    var year = document.createElement('h1')
-    var whatyear = ldb.year
-    year.innerHTML = Math.floor(whatyear)
-    statebox.appendChild(year)   
-    var yearprog = document.createElement('div')
-    yearprog.style.width = (whatyear - Math.floor(whatyear)) * 100 + 12.5 + "%"
-    yearprog.classList.add('progressbar')
-    statebox.appendChild(yearprog)   
-    var who = document.createElement('h2')
-    who.innerHTML = c
-    statebox.appendChild(who)
 }
 
 function act () {
@@ -609,12 +561,14 @@ function assignwhokilled(a,b,c) {
 }
 
 function runloop () {
+    removebigbox()
     th_remover ()
     loop = setInterval(round, 20)
     loopstate = 1
 }
 
 function stoploop () {
+    removebigbox()
     clearInterval(loop)
     loopstate = 0
 }
