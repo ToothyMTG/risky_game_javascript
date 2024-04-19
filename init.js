@@ -17,8 +17,10 @@ function gameinit () {
     renderwhokilled ()
     // savebutton ()
     cw_init ()
+    cw_distributenocw ()
     // nb_render ()
     th_init ()
+    Tiles = document.getElementsByClassName('tile')
 }
 function startgamedebug () {
     document.getElementById('newgame').click()
@@ -33,7 +35,9 @@ function startgamedebug () {
 }
 function cw_debug () {
     cw_init ()
-    //cw_render ()
+    cw_distributenocw ()
+    ldb.cw.cws[5] = 2
+    cw_render ()
     //cw_runner ()
 }
 function nb_debug () {
@@ -52,9 +56,9 @@ function th_debug () {
 }
 
 gameinit ()
-//cw_debug()
 startgamedebug ()
-loadgame('saveslot0')
+// loadgame('saveslot0')
+// cw_debug()
 // ix_t_code('cccz')
 // ix_gatherfacts(cix)
 

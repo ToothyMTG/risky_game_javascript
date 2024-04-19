@@ -510,6 +510,7 @@ function populatehandbox(x) {
     ix_t_tile(x.id)
     ix_gatherfacts(cix)
     getpower(cix.code)
+    main.classList.add(cix.code)
     main.innerHTML += 'Country: ' + cix.name + '<br>'
     main.innerHTML += 'Economy: ' + Number(x.innerHTML) + '<br>'
     main.innerHTML += 'Support: ' + x.value + '<br>'

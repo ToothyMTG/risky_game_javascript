@@ -1,35 +1,47 @@
 function cw_init () {
-    ldb.cw = []
-    var cw_colors = ['#BC6AFF','#49A6E0','#FA8375','#E0BE61','#7CFF6A','white']
-    for (let i = 0; i < cw_colors.length; i++) {
-        ldb.cw[i] = {}
-        ldb.cw[i].styling = 'inset 0 0 0 2px ' + cw_colors[i]
-        ldb.cw[i].countries = []
-        ldb.cw[i].pow = 3
+    ldb.cw = {} // Countries bucket
+    ldb.cw.cws = []
+    ldb.cw.reqs = []
+}
+
+function cw_distributenocw () {
+    for (let i = 0; i < Country.length; i++) {
+        ldb.cw.cws[i] = 0
+        ldb.cw.reqs[i] = []
     }
 }
 
+
 function cw_render () {
-    var tiles = document.getElementsByClassName('tile')
-    for (let i = 0; i < tiles.length; i++) {
-        tiles[i].style.boxShadow = ''
-    }   
-    for (let i = 0; i < ldb.cw.length; i++) {
-        var countries = ldb.cw[i].countries
-        for (let c = 0; c < countries.length; c++) {
-            var country = countries[c]
-            var fields = document.getElementsByClassName(country)
-            for (let f = 0; f < fields.length; f++) {
-                fields[f].style.boxShadow = ldb.cw[i].styling
-            }
+    for (let i = 0; i < ldb.countries.length; i++) {
+        ix_country(ldb.countries[i])
+        var tiles = document.getElementsByClassName(cix.code)
+        for (let x = 0; x < tiles.length; x++) {
+            var ctrm = tiles[x].classList[2]
+            tiles[x].classList.remove(ctrm)
+            if (ldb.cw.cws[cix.ix] == 0) {continue}
+            var classtoadd = CommonWealths[ldb.cw.cws[cix.ix]]
+            tiles[x].classList.add(classtoadd)
         }
     }
+}
+
+function cw_assign (x,y) {
+    ix_t_code(x)
+    ldb.cw.cws[cix.ix] = y
+    cw_render()
+}
+
+function cw_remove (x) {
+    ix_t_code(x)
+    ldb.cw.cws[cix.ix] = 0
+    cw_render()
 }
 
 function cw_boolalies (a,b) {
     cw_check = 0
     cw_findcw(a,b)
-    if ((cw_cindex == -1) || (cw_dindex == -1)) {
+    if ((cw_cindex == 0) && (cw_dindex == 0)) {
         cw_check = 0
         return
     }
@@ -115,25 +127,18 @@ function cw_createcw(i,c,d) {
 }
 
 function cw_findcw(c,d) {
-    cw_cindex = -1
-    cw_dindex = -1
-    for (let i = 0; i < ldb.cw.length; i++) {
-        var bool = ldb.cw[i].countries.indexOf(c)
-        if (bool > -1) {
-            cw_cindex = i
-        }
-        var bool = ldb.cw[i].countries.indexOf(d)
-        if (bool > -1) {
-            cw_dindex = i
-        }
-    }
-    //rconsole.log(cw_cindex,cw_dindex)
+    ix_t_code(c)
+    var cixa = cix
+    ix_t_code(d)
+    var cixb = cix
+    cw_cindex = ldb.cw.cws[cixa.ix]
+    cw_dindex = ldb.cw.cws[cixb.ix]
 }
 
 function cw_emptycw () {
     for (let i = 0; i < ldb.cw.length; i++) {
-        if (ldb.cw[i].countries.length == 1) {
-            ldb.cw[i].countries = []
+        if (ldb.cw.cws[i].countries.length == 1) {
+            ldb.cw.cws[i].countries = []
         } 
     }
 }

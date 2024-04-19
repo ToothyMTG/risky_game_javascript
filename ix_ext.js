@@ -41,7 +41,6 @@ function ix_country (n) {
 }
 function ix_gatherfacts (x) {
     cfx = {}
-    console.log(x)
     var tiles = document.getElementsByClassName(x.code)
     cfx.tiles = tiles.length
     cfx.economy = 0
@@ -52,9 +51,6 @@ function ix_gatherfacts (x) {
     }
     cfx.safetyrate = Math.floor((cfx.safety/10) / cfx.tiles * 10000)/100
     cfx.economyrate = Math.floor((cfx.economy/9) / cfx.tiles * 10000)/100
-    
-    console.log(cfx)
-
 }
 
 function ix_rendertiles () {

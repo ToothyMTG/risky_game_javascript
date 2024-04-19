@@ -25,26 +25,29 @@ function getneigh (c) {
             Necon.push(nene)
         }
     }
+    Recon = []
+    for (let i = 0; i < Necon.length; i++) {
+        ix_t_code(Necon[i])
+        ix_gatherfacts(cix)
+        Recon.push(cfx)
+        Recon[i].code = cix.code
+    }
 }
 
 function getfriends (c) {
     Targets = []
     ix_t_code(c)
-    var a = cix.ix
-    for (let i = 0; i < Necon.length; i++) {
-        var code = Necon[i]
-        ix_t_code(code)
-        var b = cix.ix
-        var val = ldb.friends[a][b]
-        if (code == 'land') {
-            val = 1
-        }
+    getownfacts(c)
+    getneigh(c)
+    ix_gatherfacts(c)
+    var a = OwnFacts
+    for (let i = 0; i < Recon.length; i++) {
+        var b = Recon[i]
+        var val = Math.floor(a.economyrate + a.safetyrate - b.economyrate - b.safetyrate)
+        if (val < 1) {val = 1}
+        // console.log(b.code + "=" + val)
         for (let x = 0; x < val; x++) {
-            //cw_boolalies(c,code)
-            //if (cw_check = 1) {
-            //   continue
-            //}
-            Targets.push(code)
+            Targets.push(b.code)
         }
     }
     //console.log(Targets)
@@ -100,6 +103,13 @@ function getownteritories (c) {
         }   
     }
 }
+
+function getownfacts (c) {
+    ix_t_code(c)
+    ix_gatherfacts(cix)
+    OwnFacts = cfx
+}
+
 
 function getenemies (c) {
     Enemies = []
@@ -169,8 +179,9 @@ function attack (c) {
     //console.log(Targets[randtarget],lands)
     var rand = Math.floor(Math.random() * lands.length)
     var target = lands[rand]
+
     if (target == undefined) { //DEBUG
-        //console.log(target,randtarget,rand,lands,c,Neigh,Targets)
+        console.log(target,randtarget,rand,lands,c,Neigh,Targets)
     }
     //console.log(target)
     var oldcode = target.classList[1]
@@ -187,8 +198,9 @@ function attack (c) {
     val--
     //console.log(val)
     if (val < 0) {
-        target.classList.remove(oldcode)
-        target.classList.add(c)
+        // target.classList.remove(oldcode)
+        // target.classList.add(c)
+        target.className = 'tile ' + c
         target.isOwned = 1
         target.innerHTML = 0
         target.value = 0
@@ -254,6 +266,28 @@ function turn (c) {
     opacityhandler ()
 }
 
+function newturn (c) {
+    getpower(c)
+    // console.log(Recon,Necon, Neigh,Own)
+    for (let i = 0; i < Power; i++) {
+        // console.log(i)
+        getownfacts(c)
+        var rand = Math.floor(Math.random() * 200)
+        if (rand > OwnFacts.economyrate) {
+            build(c)
+            // console.log('gonna build')
+            if (Own.length == 0) {
+                attack(c) 
+                // console.log('cannot build. will attack')
+            }
+        } else {
+            attack(c)
+            // console.log('gonna attack')
+        }
+    }
+    raisevalues(c)
+}
+
 
 function round () {
     var country_id = ldb.countries[ldb.next]
@@ -283,7 +317,7 @@ function round () {
         stoploop ()
         return
     }
-    turn(code)
+    newturn(code)
     ldb.next++
     if (ldb.next >= ldb.countries.length) {
         lastround ()
@@ -301,7 +335,7 @@ function lastround () {
     //Allymap[ldb.round] = []
     //Allymap[ldb.round - 3] = []
     // populatehandbox ()
-    raisevalues()
+    // raisevalues()
     // populatehistory ()
     var randifResistance = Math.floor(Math.random() * 5)
     if (randifResistance == 0 ) {
@@ -350,7 +384,7 @@ function act () {
         Turns--
     }
     if (ifneigh == tile) {
-        cw_boolalies(ldb.mycnt[1],tile.classList[1])
+        // cw_boolalies(ldb.mycnt[1],tile.classList[1])
         if ((cw_cindex == cw_dindex) && (cw_cindex > -1)) {
             return
         }
@@ -585,8 +619,8 @@ function runturnbut () {
     }
 }
 
-function raisevalues() {
-    var tiles = document.getElementsByClassName('tile')
+function raisevalues(c) {
+    var tiles = document.getElementsByClassName(c)
     for (let i = 0; i < tiles.length; i++) {
         if (tiles[i].isOwned == 0) {continue}
         tiles[i].value++

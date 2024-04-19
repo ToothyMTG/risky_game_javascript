@@ -14,9 +14,8 @@ body {
         height: 100vw;
         /* font-size: 2vw; */
     }
-    .menu { 
-        font-size: 1.9vw;
-    }
+    .menu {font-size: 1.9vw;}
+    .handbox {font-size: 1.6vw;}
 }
 @media (orientation: landscape) {
     #mainframe {
@@ -24,9 +23,8 @@ body {
         height: 100vh;
         /* font-size: 2vh; */
     }
-    .menu { 
-        font-size: 1.9vh;
-    }
+    .menu {font-size: 1.9vh;}
+    .handbox {font-size: 1.6vh;}
 }
 
 .mapframe {
@@ -265,22 +263,22 @@ body {
 .ccbs {background-color:darkturquoise;color:darkgreen} /* Bosnia */
 .ccsr {background-color:aquamarine;color:darkblue} /* Serbia */
 .ccko {background-color:cornflowerblue;color:white} /* Kosovo */
-.land {color:grey;}
+.land {background-color: white;color: grey;}
 
-.cc01 {background-color: black;color:red;}
-.cc02 {background-color: black;color:lightblue;}
-.cc03 {background-color: red;color:black;}
-.cc04 {background-color: red;color:yellow;}
-.cc05 {background-color: blue;color:black;}
-.cc06 {background-color: blue;color:green;}
-.cc07 {background-color: green;color:black;}
-.cc08 {background-color: yellow;color:grey;}
-.cc09 {background-color: orange;color:blue;}
-.cc00 {background-color: white;color:red;}
+.cw01 {background-image: radial-gradient(transparent 50%,gold 55%);}
+.cw02 {background-image: radial-gradient(transparent 50%,royalblue 55%);}
+.cw03 {background-image: radial-gradient(transparent 50%,silver 55%);}
+.cw04 {background-image: radial-gradient(transparent 50%,chartreuse 55%);}
+.cw05 {background-image: radial-gradient(transparent 50%,darkmagenta 55%);}
+.cw06 {background-image: radial-gradient(transparent 50%,firebrick 55%);}
+.cw07 {background-image: radial-gradient(transparent 50%,indigo 55%);}
+.cw08 {background-image: radial-gradient(transparent 50%,moccasin 55%);}
+.cw09 {background-image: radial-gradient(transparent 50%,peru 55%);}
+.cw10 {background-image: radial-gradient(transparent 50%,saddlebrown 55%);}
 
 .dd01{background-color: red;color:black}
 .dd02{background-color: blue;color:white}
-.dd03{background-color: yellow;color:black}
+.dd03{background-color: rgb(12, 12, 11);color:black}
 .dd04{background-color: orange;color:darkred}
 .dd05{background-color: black;color:white}
 .dd06{background-color: green;color:white}
@@ -389,7 +387,7 @@ body {
 }
 
 .handbox {
-    background-color: white;
+    /* background-color: white; */
     position: absolute;
     width: 20%;
     height: 20%;
@@ -400,8 +398,7 @@ body {
     box-sizing: border-box;
     border-radius: 20px;
     text-align: center;
-    padding-top: 3%;
-    font-size: 90%;
+    font-weight: bold;
 }
 .handbox:hover {
     opacity: 1;
