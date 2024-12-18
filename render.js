@@ -192,14 +192,14 @@ function showinfo (t) {
 function opacityhandler () {
     var tiles = document.getElementsByClassName('tile')
     for (let i = 0; i < tiles.length; i++) {
-        var opa = (Number(tiles[i].value)) * 0.05 + 0.50
+        var opa = (Number(tiles[i].innerHTML)) * 0.05 + 0.50
         tiles[i].style.opacity = opa
     }
     cw_render ()
 }
 function singleopacityhandler (x) {
     var tile = x
-    var opa = (Number(tile.value)) * 0.05 + 0.50
+    var opa = (Number(tile.innerHTML)) * 0.05 + 0.50
     tile.style.opacity = opa
 }
 
@@ -968,5 +968,3 @@ function renderReturnToCenterButton () {
     div.onclick = () => {moveToCentre()}
     document.getElementById('mainframe').appendChild(div)
 }
-
-

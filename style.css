@@ -12,7 +12,7 @@ body {
     #mainframe {
         width: 100vw;
         height: 100vw;
-        /* font-size: 2vw; */
+        font-size: 1.8vw;
     }
     .menu {font-size: 1.9vw;}
     .handbox {font-size: 1.6vw;}
@@ -21,7 +21,7 @@ body {
     #mainframe {
         width: 100vh;
         height: 100vh;
-        /* font-size: 2vh; */
+        font-size: 1.8vh;
     }
     .menu {font-size: 1.9vh;}
     .handbox {font-size: 1.6vh;}
@@ -37,21 +37,31 @@ body {
     transition:all 0.5s ease-in-out;
 }
 
+div {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
 .tile {
     width: 2%;
     height: 2%;
     float:left;
     font-weight: bold;
     background-color: white;
+    padding: none;
+    margin: none;
     vertical-align: middle;
     text-align: center;
     box-shadow: inset 0 0 0 0.25px;
 }
 .tile:hover {
-    box-shadow: inset 0 0 0 1px black;
+    box-shadow: inset 0 0 0 2px black;
 }
 .tile:focus {
-    box-shadow: inset 0 0 0 2px black;
+    box-shadow: inset 0 0 0 3px black;
 }
 
 .menu {
@@ -265,16 +275,16 @@ body {
 .ccko {background-color:cornflowerblue;color:white} /* Kosovo */
 .land {background-color: white;color: grey;}
 
-.cw01 {background-image: radial-gradient(transparent 50%,gold 55%);}
-.cw02 {background-image: radial-gradient(transparent 50%,royalblue 55%);}
-.cw03 {background-image: radial-gradient(transparent 50%,silver 55%);}
-.cw04 {background-image: radial-gradient(transparent 50%,chartreuse 55%);}
-.cw05 {background-image: radial-gradient(transparent 50%,darkmagenta 55%);}
-.cw06 {background-image: radial-gradient(transparent 50%,firebrick 55%);}
-.cw07 {background-image: radial-gradient(transparent 50%,indigo 55%);}
-.cw08 {background-image: radial-gradient(transparent 50%,moccasin 55%);}
-.cw09 {background-image: radial-gradient(transparent 50%,peru 55%);}
-.cw10 {background-image: radial-gradient(transparent 50%,saddlebrown 55%);}
+.cw01 {background-image: radial-gradient(transparent 70%,gold 75%);}
+.cw02 {background-image: radial-gradient(transparent 70%,royalblue 75%);}
+.cw03 {background-image: radial-gradient(transparent 70%,silver 75%);}
+.cw04 {background-image: radial-gradient(transparent 70%,chartreuse 75%);}
+.cw05 {background-image: radial-gradient(transparent 70%,darkmagenta 75%);}
+.cw06 {background-image: radial-gradient(transparent 70%,firebrick 75%);}
+.cw07 {background-image: radial-gradient(transparent 70%,indigo 75%);}
+.cw08 {background-image: radial-gradient(transparent 70%,moccasin 75%);}
+.cw09 {background-image: radial-gradient(transparent 70%,peru 75%);}
+.cw10 {background-image: radial-gradient(transparent 70%,saddlebrown 75%);}
 
 .dd01{background-color: red;color:black}
 .dd02{background-color: blue;color:white}

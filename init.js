@@ -29,8 +29,9 @@ function startgamedebug () {
     startgame ()
     // ldb.mycnt = '0 0 0'
     ldb.mycnt = 'Poland'
-    ldb.pow = 200
+    ldb.pow = 500
     stoploop ()
+    moveToCentre()
     //document.getElementById('savebutton').click()
 }
 function cw_debug () {
