@@ -512,11 +512,10 @@ function populatehandbox(x) {
     getpower(cix.code)
     main.classList.add(cix.code)
     main.innerHTML += 'Country: ' + cix.name + '<br>'
-    main.innerHTML += 'Economy: ' + Number(x.innerHTML) + '<br>'
-    main.innerHTML += 'Support: ' + x.value + '<br>'
+    main.innerHTML += 'Economy: ' + cfx.economy + '<br>'
     main.innerHTML += 'Tiles total: ' + cfx.tiles + '<br>'
     main.innerHTML += 'Economy rate: ' + cfx.economyrate + '%<br>'
-    main.innerHTML += 'Support rate: ' + cfx.safetyrate + '%<br>'
+    main.innerHTML += 'Economy left: ' + cfx.economyleft + '<br>'
     main.innerHTML += 'Power: ' + Power + '<br>'
     
 }

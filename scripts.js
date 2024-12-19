@@ -43,7 +43,7 @@ function getfriends (c) {
     var a = OwnFacts
     for (let i = 0; i < Recon.length; i++) {
         var b = Recon[i]
-        var val = Math.floor(a.economyrate + a.safetyrate - b.economyrate - b.safetyrate)
+        var val = Math.floor(a.economyrate - b.economyrate)
         if (val < 1) {val = 1}
         // console.log(b.code + "=" + val)
         for (let x = 0; x < val; x++) {
@@ -133,7 +133,7 @@ function getpower (c) {
         Support += ters[i].value
     }
     Support = Support / ters.length / 10
-    Power = Math.floor((Power/9) * Support)
+    Power = Math.floor(Power/9)
     if (Power < 1) {Power = 1}
     if (Power > ldb.pow) {Power = ldb.pow}
     // console.log(c + ' has power of ' + Power + ' and support of ' + Support)
@@ -250,14 +250,14 @@ function turn (c) {
         if (cw_options == 0) {
             return
         }
-        var type
         rand = Math.floor(Math.random() * totopts)
-        //console.log(Neigh.length,Own.length,rand,prefval,totopts, pref)
-        if (rand >= prefval) {
+        console.log(Neigh.length,Own.length,rand,prefval,totopts, pref)
+        console.log(OwnFacts)
+        if ((rand >= prefval) && (OwnFacts.economyleft > 0)) {
             build(c)
             //console.log('built')
         } 
-        if (rand < prefval) {
+        else {
             attack(c)
             //console.log('attacked')
         }  
@@ -268,15 +268,19 @@ function turn (c) {
 
 function newturn (c) {
     getpower(c)
+    var pref = ActionPreference[c]
     // console.log(Recon,Necon, Neigh,Own)
     for (let i = 0; i < Power; i++) {
         // console.log(i)
         getownfacts(c)
+        getneigh(c)
+        // console.log(Recon,Necon, Neigh,OwnFacts)
         var rand = Math.floor(Math.random() * 200)
-        if (rand > OwnFacts.economyrate) {
+        // console.log(OwnFacts.economyleft)
+        if ((rand > OwnFacts.economyrate) && (OwnFacts.economyleft > 0)) {
             build(c)
             // console.log('gonna build')
-            if (Own.length == 0) {
+            if (OwnFacts.economyleft < 1) {
                 attack(c) 
                 // console.log('cannot build. will attack')
             }
@@ -318,6 +322,7 @@ function round () {
         return
     }
     newturn(code)
+    // turn(code)
     ldb.next++
     if (ldb.next >= ldb.countries.length) {
         lastround ()

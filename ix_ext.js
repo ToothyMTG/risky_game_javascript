@@ -49,8 +49,13 @@ function ix_gatherfacts (x) {
         cfx.economy += Number(tiles[i].innerHTML)
         cfx.safety += tiles[i].value
     }
+    cfx.maxeconomy = tiles.length * 5
+    cfx.economyleft = cfx.maxeconomy - cfx.economy
+    if (tiles.length == 1) {cfx.economyleft = 9 - cfx.economy}
+    if (cfx.economyleft < 0) {cfx.economyleft = 0}
     cfx.safetyrate = Math.floor((cfx.safety/10) / cfx.tiles * 10000)/100
-    cfx.economyrate = Math.floor((cfx.economy/9) / cfx.tiles * 10000)/100
+    cfx.economyrate = Math.floor((cfx.economy/5) / cfx.tiles * 10000)/100
+    if (cfx.economyrate > 100) {cfx.economyrate = 100}
 }
 
 function ix_rendertiles () {
