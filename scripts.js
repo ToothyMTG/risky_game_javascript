@@ -1,4 +1,12 @@
 
+function getowntiles (c) {
+    OwnTiles = []
+    var tiles = document.getElementsByClassName(c)
+    for (let i = 0; i < tiles.length; i++) {
+        OwnTiles.push(tiles[i])
+    }
+}
+
 function getneigh (c) {
     Neigh = []
     var tiles = document.getElementsByClassName(c)
@@ -31,6 +39,65 @@ function getneigh (c) {
         ix_gatherfacts(cix)
         Recon.push(cfx)
         Recon[i].code = cix.code
+    }
+}
+
+function get_target (c) {
+    TargetList = []
+    getneigh (c)
+    for (let i = 0; i < Neigh.length; i++) {
+        var val = 10 - Number(Neigh[i].innerHTML) 
+        for (let o = 0; o < val; o++) {
+            TargetList.push(Neigh[i])
+        }
+    }
+    getowntiles(c)
+    for (let i = 0; i < OwnTiles.length; i++) {
+        var val = 9 - Number(OwnTiles[i].innerHTML) 
+        for (let o = 0; o < val; o++) {
+            TargetList.push(OwnTiles[i])
+            TargetList.push(OwnTiles[i])
+        }
+    }
+    var rand = Math.floor(Math.random() * TargetList.length)
+    TheTarget = TargetList[rand]
+    Me = c
+    // console.log(rand,TheTarget, Me)
+}
+
+function get_tile (t) {
+    // Has to be TheTarget or other html div element
+    Tile = {}
+    Tile.owner = t.ownername
+    Tile.power = Number(t.innerHTML)
+    // console.log(Tile)
+}
+
+function bot_act (t) {
+    get_tile(t)
+    // console.log(t)
+    if (t.ownername == Me ) {
+        t.innerHTML = Tile.power + 1
+    } else {
+        if (Tile.power <= 1) {
+            t.ownername = Me
+            t.classList = 'tile ' + Me
+            t.innerHTML = 1
+        } else {
+            t.innerHTML = Tile.power - 1
+        }
+    }
+    opacityhandler()
+}
+
+function mock_bot_act (c) {
+    getpower(c)
+    for (let i = 0; i < Power; i++) {
+        get_target(c)
+        if (TheTarget == undefined) {
+            break
+        }
+        bot_act(TheTarget)
     }
 }
 
@@ -321,7 +388,8 @@ function round () {
         stoploop ()
         return
     }
-    newturn(code)
+    // newturn(code)
+    mock_bot_act (code)
     // turn(code)
     ldb.next++
     if (ldb.next >= ldb.countries.length) {

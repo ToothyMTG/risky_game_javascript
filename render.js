@@ -460,6 +460,7 @@ function randommode () {
          tiles[i].classList.remove(old)
          tiles[i].classList.add('land')
          tiles[i].innerHTML = 0
+         tiles[i].ownername = 'land'
     }
     for (let i = 0; i < ldb.countries.length; i++) {
         var available = document.getElementsByClassName('land')
@@ -471,6 +472,7 @@ function randommode () {
         thetile.innerHTML = 9
         thetile.isOwned = 1
         thetile.value = 10
+        thetile.ownername = cix.code
     }
 }
 
