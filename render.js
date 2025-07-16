@@ -920,7 +920,7 @@ function rendersavefield () {
 function zoomIn (x) {
     var par = x.parentElement
     if (par.id != 'mapframe') {return}
-    Scale += 0.2
+    Scale += 0.1
     if (Scale > 3) {Scale = 3}
     par.style.width = 100 * Scale + '%'
     par.style.height = 100 * Scale + '%'
@@ -929,7 +929,7 @@ function zoomIn (x) {
 function zoomOut (x) {
     var par = x.parentElement
     if (par.id != 'mapframe') {return}
-    Scale -= 0.2
+    Scale -= 0.1
     if (Scale < 0.6) {Scale = 0.6}
     par.style.width = 100 * Scale + '%'
     par.style.height = 100 * Scale + '%'

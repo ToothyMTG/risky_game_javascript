@@ -410,7 +410,7 @@ div {
     /* background-color: white; */
     position: absolute;
     width: 20%;
-    height: 20%;
+    height: 10%;
     opacity: 0.5;
     z-index: 2;
     transition: all 0.2s ease-in-out;
