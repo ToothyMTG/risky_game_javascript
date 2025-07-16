@@ -25,6 +25,7 @@ function ix_t_tile(x) {
 function ix_t_code (c) {
     var lookup = Country.filter(x => x.includes(' ' + c))[0]
     var index = Country.indexOf(lookup)
+    // console.log(lookup,index)
     if (index == -1) {
         return
     }

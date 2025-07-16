@@ -13,6 +13,7 @@ function gameinit () {
     renderpreference ()
     Allymap[0] = []
     generatefriendmap ()
+    createallymap ()
     inithistory ()
     renderwhokilled ()
     // savebutton ()
@@ -29,7 +30,7 @@ function startgamedebug () {
     startgame ()
     // ldb.mycnt = '0 0 0'
     ldb.mycnt = 'Poland'
-    ldb.pow = 500
+    ldb.pow = 200
     stoploop ()
     moveToCentre()
     //document.getElementById('savebutton').click()

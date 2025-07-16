@@ -42,22 +42,25 @@ function getneigh (c) {
     }
 }
 
-function get_target (c) {
+function get_target (c, d) {
     TargetList = []
     getneigh (c)
     for (let i = 0; i < Neigh.length; i++) {
-        var val = 10 - Number(Neigh[i].innerHTML) 
+        checkally(c,Neigh[i].ownername)
+        var val = (10 - Number(Neigh[i].innerHTML)) * AllyState
         for (let o = 0; o < val; o++) {
             TargetList.push(Neigh[i])
         }
     }
     getowntiles(c)
-    for (let i = 0; i < OwnTiles.length; i++) {
-        var val = 9 - Number(OwnTiles[i].innerHTML) 
-        for (let o = 0; o < val; o++) {
-            TargetList.push(OwnTiles[i])
-            TargetList.push(OwnTiles[i])
-        }
+    if (d > 0) {
+      for (let i = 0; i < OwnTiles.length; i++) {
+          var val = 9 - Number(OwnTiles[i].innerHTML) 
+          for (let o = 0; o < val; o++) {
+              TargetList.push(OwnTiles[i])
+              TargetList.push(OwnTiles[i])
+          }
+      }
     }
     var rand = Math.floor(Math.random() * TargetList.length)
     TheTarget = TargetList[rand]
@@ -79,6 +82,8 @@ function bot_act (t) {
     if (t.ownername == Me ) {
         t.innerHTML = Tile.power + 1
     } else {
+        checkally(Me, t.ownername)
+        if (AllyState == 1) { allyhandler(Me, t.ownername, 1) }
         if (Tile.power <= 1) {
             t.ownername = Me
             t.classList = 'tile ' + Me
@@ -92,14 +97,127 @@ function bot_act (t) {
 
 function mock_bot_act (c) {
     getpower(c)
+    // if (Power != 0) {diplomacy(c)}
+    var counter = 0
     for (let i = 0; i < Power; i++) {
-        get_target(c)
+        getcapacity(c)
+        get_target(c, Capacity)
         if (TheTarget == undefined) {
             break
         }
         bot_act(TheTarget)
+        counter++
+    }
+    if (Power != counter) {
+        console.log(Power, counter, c)
     }
 }
+
+function createallymap () {
+    ldb.allymap = []
+    ldb.diplomacyqueue = []
+    for (let i = 0; i < Country.length; i++) {
+        ldb.allymap[i] = []
+        ldb.diplomacyqueue[i] = []
+        for (let o = 0; o < Country.length; o++) {
+            ldb.allymap[i][o] = 1
+        }
+    }
+    // 0 is for allies
+    // 1 is for neutral
+    // 2 is for rivals
+    // 3 is for enemies
+}
+
+function checkally (a, b) {
+    ix_t_code(a); var first = cix.ix
+    ix_t_code(b); var second = cix.ix
+    AllyState = ldb.allymap[first][second]
+    // console.log(AllyState)
+}
+
+function allyhandler(a, b, c) {
+    ix_t_code(a); var first = cix.ix
+    ix_t_code(b); var second = cix.ix
+    if (b == 'land') { return }
+    ldb.allymap[first][second] += c
+    ldb.allymap[second][first] += c
+}
+
+function diplomacyrequest (a,b) {
+    ix_t_code(a); var first = cix.ix
+    ix_t_code(b); var second = cix.ix
+    ldb.diplomacyqueue[second].push([first, -1])
+}
+
+function handlediplomacyreq (c) {
+    ix_t_code(c); var myid = cix.ix
+    for (let i = 0; i < ldb.diplomacyqueue[myid].length; i++) {
+        var requesterid = ldb.diplomacyqueue[myid][i][0]
+        ix_country(myid) ; var us = cix
+        ix_country(requesterid) ; var requester = cix
+        checkally(us.code,requester.code)
+        //
+        // console.log(successrand)
+        // if (AllyState == 1) {console.log(requester.name + " asks " + us.name + " to sign a treaty") }
+        // if (AllyState == 2) {console.log(requester.name + " asks " + us.name + " to deescalate") }
+        // if (AllyState == 3) {console.log(requester.name + " asks " + us.name + " to stop the war") }
+        //
+        allyhandler(us.code,requester.code,-1) 
+        if (AllyState == 1) {console.log(requester.name + " and " + us.name + " signs a treaty") }
+        // if (AllyState == 2) {console.log(requester.name + " asks " + us.name + " to deescalate") }
+        if (AllyState == 5) {
+            console.log(requester.name + " and " + us.name + " stopped the war") 
+            allyhandler(us.code,requester.code,-9) 
+        }
+    }
+    ldb.diplomacyqueue[myid] = []
+}
+
+function diplomacy (c) {
+    var randdiplomacy = Math.floor(Math.random() * 10)
+    if (randdiplomacy != 0) { return }
+    handlediplomacyreq(c)
+    getneigh(c)
+    var rand = Math.floor(Math.random() * Necon.length)
+    // console.log(Necon,rand)
+    var choice = Necon[rand]
+    if (choice == 'land') {return}
+    checkally(c,choice)
+    // console.log(choice, AllyState)
+    if (AllyState == 0) {
+        var decrand = Math.floor(Math.random() * 10)
+        if (decrand == 0) { getneutral(c,choice)}
+    }
+    if (AllyState == 1) {diplomacyrequest(c,choice)}
+    if (AllyState == 2) {
+       var decrand = Math.floor(Math.random() * 10) 
+       if (decrand > 0) { allyhandler(c,choice,-1) } else { declarewar(c,choice) }
+    }
+    if (AllyState == 10) {diplomacyrequest(c,choice)}
+}
+
+function declarewar (a,b) {
+    allyhandler(a,b,8)
+    ix_t_code(a); var first = cix.name
+    ix_t_code(b); var second = cix.name
+    console.log(first + " declared war to " + second)
+}
+
+function getneutral (a,b) {
+    allyhandler(a,b,1)
+    ix_t_code(a); var first = cix.name
+    ix_t_code(b); var second = cix.name
+    console.log(first + " are no longer allies with " + second)
+}
+
+function mock_diplomacy (){
+    allyhandler('ccpl','ccde', 1)
+    diplomacyrequest ('ccpl','ccde')
+    diplomacyrequest ('ccko','ccde')
+    handlediplomacyreq('ccde')
+}
+//// NEW CODE
 
 function getfriends (c) {
     Targets = []
@@ -202,8 +320,18 @@ function getpower (c) {
     Support = Support / ters.length / 10
     Power = Math.floor(Power/9)
     if (Power < 1) {Power = 1}
+    if (ters.length == 0) {Power = 0}
     if (Power > ldb.pow) {Power = ldb.pow}
     // console.log(c + ' has power of ' + Power + ' and support of ' + Support)
+}
+function getcapacity (c) {
+    var ters = document.getElementsByClassName(c)
+    var power = 0
+    for (let i = 0; i < ters.length; i++) {
+        power += Number(ters[i].innerHTML)
+    }
+    Teritories = ters.length
+    Capacity = Math.floor(ters.length * 5) - power
 }
 
 function focuscentral (c) {

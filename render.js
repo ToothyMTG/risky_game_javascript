@@ -510,15 +510,18 @@ function populatehandbox(x) {
     var main = document.getElementById('handbox')
     console.log(x)
     ix_t_tile(x.id)
-    ix_gatherfacts(cix)
+    // ix_gatherfacts(cix)
     getpower(cix.code)
+    getcapacity(cix.code)
     main.classList.add(cix.code)
     main.innerHTML += 'Country: ' + cix.name + '<br>'
-    main.innerHTML += 'Economy: ' + cfx.economy + '<br>'
-    main.innerHTML += 'Tiles total: ' + cfx.tiles + '<br>'
-    main.innerHTML += 'Economy rate: ' + cfx.economyrate + '%<br>'
-    main.innerHTML += 'Economy left: ' + cfx.economyleft + '<br>'
+    // main.innerHTML += 'Economy: ' + cfx.economy + '<br>'
+    // main.innerHTML += 'Tiles total: ' + cfx.tiles + '<br>'
+    // main.innerHTML += 'Economy rate: ' + cfx.economyrate + '%<br>'
+    // main.innerHTML += 'Economy left: ' + cfx.economyleft + '<br>'
+    main.innerHTML += 'Teritories: ' + Teritories + '<br>'
     main.innerHTML += 'Power: ' + Power + '<br>'
+    main.innerHTML += 'Capacity: ' + Capacity + '<br>'
     
 }
 
