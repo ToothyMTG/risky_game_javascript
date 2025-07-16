@@ -275,8 +275,18 @@ div {
 .ccko {background-color:cornflowerblue;color:white} /* Kosovo */
 .land {background-color: white;color: grey;}
 
-.cw01 {background-image: radial-gradient(transparent 70%,gold 75%);}
-.cw02 {background-image: radial-gradient(transparent 70%,royalblue 75%);}
+.cw01 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, gold 10%, gold 20%); }
+/* .cw01 {background-image: radial-gradient(transparent 70%,gold 75%);} */
+.cw02 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, royalblue 10%, royalblue 20%); }
+.cw03 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, silver 10%, silver 20%); }
+.cw04 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, chartreuse 10%, chartreuse 20%); }
+.cw05 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, darkmagenta 10%, darkmagenta 20%); }
+.cw06 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, firebrick 10%, firebrick 20%); }
+.cw07 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, indigo 10%, indigo 20%); }
+.cw08 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, moccasin 10%, moccasin 20%); }
+.cw09 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, peru 10%, peru 20%); }
+.cw10 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, saddlebrown 10%, saddlebrown 20%); }
+/* .cw02 {background-image: radial-gradient(transparent 70%,royalblue 75%);}
 .cw03 {background-image: radial-gradient(transparent 70%,silver 75%);}
 .cw04 {background-image: radial-gradient(transparent 70%,chartreuse 75%);}
 .cw05 {background-image: radial-gradient(transparent 70%,darkmagenta 75%);}
@@ -284,7 +294,7 @@ div {
 .cw07 {background-image: radial-gradient(transparent 70%,indigo 75%);}
 .cw08 {background-image: radial-gradient(transparent 70%,moccasin 75%);}
 .cw09 {background-image: radial-gradient(transparent 70%,peru 75%);}
-.cw10 {background-image: radial-gradient(transparent 70%,saddlebrown 75%);}
+.cw10 {background-image: radial-gradient(transparent 70%,saddlebrown 75%);} */
 
 .dd01{background-color: red;color:black}
 .dd02{background-color: blue;color:white}

@@ -97,6 +97,7 @@ function bot_act (t) {
 
 function mock_bot_act (c) {
     getpower(c)
+    diplomacy(c)
     // if (Power != 0) {diplomacy(c)}
     var counter = 0
     for (let i = 0; i < Power; i++) {
@@ -108,9 +109,9 @@ function mock_bot_act (c) {
         bot_act(TheTarget)
         counter++
     }
-    if (Power != counter) {
-        console.log(Power, counter, c)
-    }
+    // if (Power != counter) {
+    //     console.log(Power, counter, c)
+    // }
 }
 
 function createallymap () {
@@ -125,8 +126,7 @@ function createallymap () {
     }
     // 0 is for allies
     // 1 is for neutral
-    // 2 is for rivals
-    // 3 is for enemies
+    // 10 is for enemies
 }
 
 function checkally (a, b) {
@@ -140,69 +140,87 @@ function allyhandler(a, b, c) {
     ix_t_code(a); var first = cix.ix
     ix_t_code(b); var second = cix.ix
     if (b == 'land') { return }
-    ldb.allymap[first][second] += c
-    ldb.allymap[second][first] += c
-}
-
-function diplomacyrequest (a,b) {
-    ix_t_code(a); var first = cix.ix
-    ix_t_code(b); var second = cix.ix
-    ldb.diplomacyqueue[second].push([first, -1])
-}
-
-function handlediplomacyreq (c) {
-    ix_t_code(c); var myid = cix.ix
-    for (let i = 0; i < ldb.diplomacyqueue[myid].length; i++) {
-        var requesterid = ldb.diplomacyqueue[myid][i][0]
-        ix_country(myid) ; var us = cix
-        ix_country(requesterid) ; var requester = cix
-        checkally(us.code,requester.code)
-        //
-        // console.log(successrand)
-        // if (AllyState == 1) {console.log(requester.name + " asks " + us.name + " to sign a treaty") }
-        // if (AllyState == 2) {console.log(requester.name + " asks " + us.name + " to deescalate") }
-        // if (AllyState == 3) {console.log(requester.name + " asks " + us.name + " to stop the war") }
-        //
-        allyhandler(us.code,requester.code,-1) 
-        if (AllyState == 1) {console.log(requester.name + " and " + us.name + " signs a treaty") }
-        // if (AllyState == 2) {console.log(requester.name + " asks " + us.name + " to deescalate") }
-        if (AllyState == 5) {
-            console.log(requester.name + " and " + us.name + " stopped the war") 
-            allyhandler(us.code,requester.code,-9) 
-        }
-    }
-    ldb.diplomacyqueue[myid] = []
-}
-
-function diplomacy (c) {
-    var randdiplomacy = Math.floor(Math.random() * 10)
-    if (randdiplomacy != 0) { return }
-    handlediplomacyreq(c)
-    getneigh(c)
-    var rand = Math.floor(Math.random() * Necon.length)
-    // console.log(Necon,rand)
-    var choice = Necon[rand]
-    if (choice == 'land') {return}
-    checkally(c,choice)
-    // console.log(choice, AllyState)
-    if (AllyState == 0) {
-        var decrand = Math.floor(Math.random() * 10)
-        if (decrand == 0) { getneutral(c,choice)}
-    }
-    if (AllyState == 1) {diplomacyrequest(c,choice)}
-    if (AllyState == 2) {
-       var decrand = Math.floor(Math.random() * 10) 
-       if (decrand > 0) { allyhandler(c,choice,-1) } else { declarewar(c,choice) }
-    }
-    if (AllyState == 10) {diplomacyrequest(c,choice)}
+    ldb.allymap[first][second] = c
+    ldb.allymap[second][first] = c
 }
 
 function declarewar (a,b) {
-    allyhandler(a,b,8)
+    allyhandler(a,b,10)
     ix_t_code(a); var first = cix.name
     ix_t_code(b); var second = cix.name
-    console.log(first + " declared war to " + second)
+    console.log(first + " declared war on " + second)
 }
+
+function askforpeace(a,b) {
+    ix_t_code(a); var first = cix
+    ix_t_code(b); var second = cix
+    ldb.diplomacyqueue[second.ix].push([first.ix, 1])
+    // console.log (first.name + " asked " + second.name + " for peace")
+}
+
+function askforunion(a,b) {
+    ix_t_code(a); var first = cix
+    ix_t_code(b); var second = cix
+    ldb.diplomacyqueue[second.ix].push([first.ix, 0])
+    // console.log (first.name + " asked " + second.name + " to sign union")
+}
+
+function leaveunion (a,b) {
+    allyhandler(a,b,1)
+    ix_t_code(a); var first = cix.name
+    ix_t_code(b); var second = cix.name
+    console.log(first + " and " + second + " are no longer in union")
+}
+
+function signunion (a,b) {
+    allyhandler(a,b,0)
+    ix_t_code(a); var first = cix.name
+    ix_t_code(b); var second = cix.name
+    console.log(first + " and " + second + " are now in union")
+}
+
+function signpeace (a,b) {
+    allyhandler(a,b,1)
+    ix_t_code(a); var first = cix.name
+    ix_t_code(b); var second = cix.name
+    console.log(first + " and " + second + " signed peace")
+}
+
+function answerrequests(c) {
+    ix_t_code(c); var me = cix
+    var queue = ldb.diplomacyqueue[me.ix]
+    for (let i = 0; i < queue.length; i++) {
+        var req = queue[i]
+        ix_country(req[0]); var him = cix
+        var rand = Math.floor(Math.random() * 2) 
+        if (rand == 1) {
+            if (req[1] == 0) { signunion(me.code,him.code) }
+            if (req[1] == 1) { signpeace(me.code,him.code) } 
+        }
+    }
+    ldb.diplomacyqueue[me.ix] = []
+}
+
+function diplomacy (c) {
+    if (Power == 0) {return}
+    getneigh(c)
+    var randnecon = Math.floor(Math.random() * Necon.length)
+    var target = Necon[randnecon]
+    if (target == 'land') {return}
+    checkally(c, target)
+    var randdiplomacy = Math.floor(Math.random() * 50)
+    if (randdiplomacy == 0) {
+        if (AllyState == 10) { return }
+        if (AllyState == 0) { leaveunion(c, target) } else { askforunion(c, target) }
+    } else if (randdiplomacy == 1) {
+        if (AllyState == 0) { return }
+        if (AllyState == 10) { askforpeace(c, target) } else { if (Necon.length > 1) {declarewar(c, target) }}
+    } else {
+        answerrequests(c)
+    }
+}
+
+//
 
 function getneutral (a,b) {
     allyhandler(a,b,1)
@@ -331,7 +349,7 @@ function getcapacity (c) {
         power += Number(ters[i].innerHTML)
     }
     Teritories = ters.length
-    Capacity = Math.floor(ters.length * 5) - power
+    Capacity = Math.floor(ters.length * 5) - power + 4
 }
 
 function focuscentral (c) {
