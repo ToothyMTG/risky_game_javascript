@@ -2,7 +2,8 @@ function gameinit () {
     renderwelcomescreen ()
     ldb = {}
     rendermenu ()
-    // renderinfobox ()
+    renderinfobox ()
+    renderstatsbutton()
     // rendermenubuttons ()
     // renderstatebox ()
     rendermapframe ()
@@ -30,7 +31,7 @@ function startgamedebug () {
     startgame ()
     // ldb.mycnt = '0 0 0'
     ldb.mycnt = 'Poland'
-    ldb.pow = 200
+    ldb.pow = 50
     stoploop ()
     moveToCentre()
     //document.getElementById('savebutton').click()
@@ -59,6 +60,9 @@ function th_debug () {
 
 gameinit ()
 startgamedebug ()
+renderstatsbox()
+// renderpowerranking()
+renderteritoryranking()
 // loadgame('saveslot0')
 // cw_debug()
 // ix_t_code('cccz')

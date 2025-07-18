@@ -95,7 +95,7 @@ function bot_act (t) {
     opacityhandler()
 }
 
-function mock_bot_act (c) {
+async function mock_bot_act (c) {
     getpower(c)
     diplomacy(c)
     // if (Power != 0) {diplomacy(c)}
@@ -148,7 +148,7 @@ function declarewar (a,b) {
     allyhandler(a,b,10)
     ix_t_code(a); var first = cix.name
     ix_t_code(b); var second = cix.name
-    console.log(first + " declared war on " + second)
+    writetoinfobox(first + " declared war on " + second,'r')
 }
 
 function askforpeace(a,b) {
@@ -169,21 +169,21 @@ function leaveunion (a,b) {
     allyhandler(a,b,1)
     ix_t_code(a); var first = cix.name
     ix_t_code(b); var second = cix.name
-    console.log(first + " and " + second + " are no longer in union")
+    writetoinfobox(first + " and " + second + " are no longer in union")
 }
 
 function signunion (a,b) {
     allyhandler(a,b,0)
     ix_t_code(a); var first = cix.name
     ix_t_code(b); var second = cix.name
-    console.log(first + " and " + second + " are now in union")
+    writetoinfobox(first + " and " + second + " are now in union",'b')
 }
 
 function signpeace (a,b) {
     allyhandler(a,b,1)
     ix_t_code(a); var first = cix.name
     ix_t_code(b); var second = cix.name
-    console.log(first + " and " + second + " signed peace")
+    writetoinfobox(first + " and " + second + " signed peace")
 }
 
 function answerrequests(c) {

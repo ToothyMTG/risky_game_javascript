@@ -137,18 +137,135 @@ div {
 .returntocentre:hover {
     opacity: 1
 }
-
-.infobox {
-    width: 25%;
-    height: 100%;
-    background-color: black;   
-    color: white;
-    float:left;
+.roundborder {
+    position: absolute;
+    transition: all 0.2s ease-in-out;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
     text-align: center;
 }
 
-.infobox p {
+.statsbutton {
+    position: absolute;
+    width: 4.5%;
+    height: 4.5%;
+    top: 0.5%;
+    left: 94.5%;
+    background-color: white;
+    opacity: 0.1;
+    z-index: 2;
+    transition: all 0.2s ease-in-out;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: bold;
+    overflow: hidden;
+    font-size: 200%;
+}
+.statsbutton:hover {
+    opacity: 1;
+    color: orange
+}
+.statsbox {
+    position:absolute;
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    left: 10%;
+    background-color: white;
+    z-index: 3;
+    transition: all 0.2s ease-in-out;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
+}
+
+.statsviewer {
+    top: 10%;
+    left: 1%;
+    width: 98%;
+    height: 89%;
+    padding: 0;
+    margin: 0;
+    overflow:auto;
+    line-height: 1%;
+}
+
+.closebutton {
+    position: absolute;
+    width: 4.5%;
+    height: 4.5%;
+    top: 1%;
+    left: 94.5%;
+    transition: all 0.2s ease-in-out;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: bold;
+    overflow: hidden;
+    font-size: 150%;
+}
+.closebutton:hover {
+    color: red
+}
+
+.statbut {
+    width: 20%;
+    height: 3%;
+    top: 6%;
+}
+.statbut:hover {
+    color:orange
+}
+#statbut1 {left: 4%}
+#statbut2 {left: 28%}
+#statbut3 {left: 52%}
+#statbut4 {left: 76%}
+
+.blur {
+    position:absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background-color: transparent;
+    backdrop-filter: blur(1.5px);
+    z-index: 2;
+}
+
+.infobox {
+    position: absolute;
+    width: 4.5%;
+    height: 4.5%;
+    top: 6%;
+    left: 94.5%;
+    background-color: white;
+    opacity: 0.1;
+    z-index: 2;
+    transition: all 0.2s ease-in-out;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: bold;
+    overflow: hidden;
+}
+.infobox:hover{
+    opacity: 1;
+    height: 50%;
+    width: 30%;
+    left: 69%;
     font-size: 70%;
+}
+.redinfo {color: red}
+.greeninfo {color: green}
+.blueinfo {color: blue}
+
+.infobox p:first-of-type {
+    font-size: 200%;
     margin: 0
 }
 .infobox p:hover {

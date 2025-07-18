@@ -140,7 +140,97 @@ function renderinfobox () {
     var infobox = document.createElement('div')
     infobox.classList.add('infobox')
     infobox.id = 'infobox'
-    document.getElementById('menu').appendChild(infobox)
+    // document.getElementById('menu').appendChild(infobox)
+    mainframe.appendChild(infobox)
+    clearinfobox()
+}
+
+function clearinfobox () {
+    var infobox = document.getElementById('infobox')
+    infobox.innerHTML = ''
+    var entry = document.createElement('p')
+    entry.innerHTML = "i"
+    infobox.appendChild(entry)
+}
+
+function writetoinfobox(x,c) {
+    // clearinfobox()
+    var infobox = document.getElementById('infobox')
+    if (infobox.children.length == 17) {
+       infobox.children[1].remove() 
+    }
+    var entry = document.createElement('p')
+    entry.innerHTML = "(" + Math.floor(ldb.year) + ") " + x 
+    if (c == 'r') {entry.classList.add('redinfo')}
+    if (c == 'g') {entry.classList.add('greeninfo')}
+    if (c == 'b') {entry.classList.add('blueinfo')}
+    infobox.appendChild(entry)
+}
+
+function renderstatsbutton() {
+    var statsbutton = document.createElement('statsbutton')
+    statsbutton.classList.add('statsbutton')
+    statsbutton.id = 'statsbutton'
+    statsbutton.innerHTML = 'S'
+    statsbutton.onclick = () => {renderstatsbox()}
+    mainframe.appendChild(statsbutton)
+}
+
+function renderblur() {
+    var blur = document.createElement('div')
+    blur.classList.add('blur')
+    blur.id = 'blur'
+    mainframe.appendChild(blur)
+}
+function removeblur() {
+    var blur = document.getElementById('blur')
+    blur.remove()
+}
+
+function renderstatsbox() {
+    clickPause()
+    renderblur()
+    document.getElementById('infobox').style.display = 'none'
+    document.getElementById('menu').style.display = 'none'
+    var statsbox = document.createElement('div')
+    statsbox.id = 'statsbox'
+    statsbox.classList.add('statsbox')
+    mainframe.appendChild(statsbox)
+    var closebutton = document.createElement('div')
+    closebutton.classList.add('closebutton')
+    closebutton.onclick = () => {removestatsbox();removeblur()}
+    closebutton.innerHTML = 'X'
+    statsbox.appendChild(closebutton)
+    var statbut1 = document.createElement('div')
+    statbut1.classList.add('statbut','roundborder')
+    statbut1.id = 'statbut1'
+    statbut1.innerHTML = 'Power Ranking'
+    statbut1.onclick = () => {renderpowerranking()}
+    statsbox.appendChild(statbut1)
+    var statbut2 = document.createElement('div')
+    statbut2.classList.add('statbut','roundborder')
+    statbut2.innerHTML = 'Teritory Ranking'
+    statbut2.id = 'statbut2'
+    statbut2.onclick = () => {renderteritoryranking()}
+    statsbox.appendChild(statbut2)
+    var statbut3 = document.createElement('div')
+    statbut3.classList.add('statbut','roundborder')
+    statbut3.innerHTML = 'Power Per Teritory'
+    statbut3.onclick = () => {renderpowerperteritory()}
+    statbut3.id = 'statbut3'
+    statsbox.appendChild(statbut3)
+    var statbut4 = document.createElement('div')
+    statbut4.classList.add('statbut','roundborder')
+    statbut4.innerHTML = 'Country Stats'
+    statbut4.id = 'statbut4'
+    statsbox.appendChild(statbut4)
+}
+
+function removestatsbox() {
+    var statsbox = document.getElementById('statsbox')
+    statsbox.remove()
+    document.getElementById('infobox').style.display = 'initial'
+    document.getElementById('menu').style.display = 'initial'
 }
 
 function rendermapimg () {
@@ -268,27 +358,20 @@ function distributepower () {
 }
 
 function renderteritoryranking () {
-    var existing = document.querySelector('.popup')
+    var existing = document.querySelector('.statsviewer')
     if (existing !== null) {
         existing.remove()
     }
+    var statsbox = document.getElementById('statsbox')
     var div = document.createElement('div')
-    div.classList.add('popup')
-    mainframe.appendChild(div)
-    var exit = document.createElement('div')
-    exit.innerHTML = "X"
-    exit.classList.add('exitbut')
-    exit.onclick = () => {
-        event.target.parentElement.remove()
-    }
-    div.appendChild(exit)
-    var title = document.createElement('h1')
-    title.innerHTML = "Teritory Ranking"
-    div.appendChild(title)
+    div.classList.add('statsviewer','roundborder')
+    statsbox.appendChild(div)
     var table = []
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1]
         var name = Country[i].split(' ')[0]
+        if (code == 'land') {continue}
+        if (code == 'sea') {continue}
         var number = document.getElementsByClassName(code).length
         if (number == 0) {continue}
         table[i] = []
@@ -297,8 +380,7 @@ function renderteritoryranking () {
     }
     table = table.sort((a,b) => {return b[0] - a[0]})
     for (let i = 0; i < table.length; i++) {
-        var pos = document.createElement('h2')
-        if (table[i][0] == 0) {continue}
+        var pos = document.createElement('p')
         if (table[i][1] == ldb.mycnt[0]) {
             pos.classList.add('my')
         }
@@ -308,26 +390,19 @@ function renderteritoryranking () {
 }
 
 function renderpowerranking () {
-    var existing = document.querySelector('.popup')
+    var existing = document.querySelector('.statsviewer')
     if (existing !== null) {
         existing.remove()
     }
+    var statsbox = document.getElementById('statsbox')
     var div = document.createElement('div')
-    div.classList.add('popup')
-    mainframe.appendChild(div)
-    var exit = document.createElement('div')
-    exit.innerHTML = "X"
-    exit.classList.add('exitbut')
-    exit.onclick = () => {
-        event.target.parentElement.remove()
-    }
-    div.appendChild(exit)
-    var title = document.createElement('h1')
-    title.innerHTML = "Power Ranking"
-    div.appendChild(title)
+    div.classList.add('statsviewer','roundborder')
+    statsbox.appendChild(div)
     var table = []
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1]
+        if (code == 'land') {continue}
+        if (code == 'sea') {continue}
         var name = Country[i].split(' ')[0]
         var terits = document.getElementsByClassName(code)
         if (terits.length == 0) {continue}
@@ -340,8 +415,7 @@ function renderpowerranking () {
     }
     table = table.sort((a,b) => {return b[0] - a[0]})
     for (let i = 0; i < table.length; i++) {
-        var pos = document.createElement('h2')
-        if (table[i][0] == 0) {continue}
+        var pos = document.createElement('p')
         if (table[i][1] == ldb.mycnt[0]) {
             pos.classList.add('my')
         }
@@ -351,27 +425,20 @@ function renderpowerranking () {
 }
 
 function renderpowerperteritory () {
-    var existing = document.querySelector('.popup')
+    var existing = document.querySelector('.statsviewer')
     if (existing !== null) {
         existing.remove()
     }
+    var statsbox = document.getElementById('statsbox')
     var div = document.createElement('div')
-    div.classList.add('popup')
-    mainframe.appendChild(div)
-    var exit = document.createElement('div')
-    exit.innerHTML = "X"
-    exit.classList.add('exitbut')
-    exit.onclick = () => {
-        event.target.parentElement.remove()
-    }
-    div.appendChild(exit)
-    var title = document.createElement('h1')
-    title.innerHTML = "Power per Teritory Ranking"
-    div.appendChild(title)
+    div.classList.add('statsviewer','roundborder')
+    statsbox.appendChild(div)
     var table = []
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1]
         var name = Country[i].split(' ')[0]
+        if (code == 'land') {continue}
+        if (code == 'sea') {continue}
         var terits = document.getElementsByClassName(code)
         if (terits.length == 0) {continue}
         table[i] = []
@@ -384,8 +451,7 @@ function renderpowerperteritory () {
     }
     table = table.sort((a,b) => {return b[0] - a[0]})
     for (let i = 0; i < table.length; i++) {
-        var pos = document.createElement('h2')
-        if (table[i][0] == 0) {continue}
+        var pos = document.createElement('p')
         if (table[i][1] == ldb.mycnt[0]) {
             pos.classList.add('my')
         }
