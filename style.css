@@ -527,7 +527,7 @@ div {
     /* background-color: white; */
     position: absolute;
     width: 20%;
-    height: 10%;
+    height: 11%;
     opacity: 0.5;
     z-index: 2;
     transition: all 0.2s ease-in-out;
@@ -541,15 +541,34 @@ div {
     opacity: 1;
 }
 
-@keyframes showaly {
-    50% {background-color: brown; color:black}
+.handboxbut {
+    width: 40%;
+    left: 6%;
+    border: 2px currentColor solid;
+    margin-top: 2px;
+}
+.handboxbut:last-of-type {
+    left: 54%;
+}
+.handboxbut:hover {
+    /* border: 2px gold solid; */
+    color: gold;
+    background-color: white;
 }
 
-.showally {
-    animation-name: showaly;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
+/* .ally {background-color: darkblue; color: gold;} */
+/* .enemy {background-color: darkred;color: black} */
+/* .enemy { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, lightpink 10%, lightpink 20%); } */
+
+@keyframes ally {
+    50% {background-color: darkblue; color:gold}
 }
+.ally {animation-name: ally; animation-duration: 1s; animation-fill-mode:both;}
+@keyframes enemy {
+    50% {background-color: darkred; color:black}
+}
+.enemy {animation-name: enemy; animation-duration: 1s; animation-fill-mode:both;}
+
 
 .welcomebox {
     background-color: black;

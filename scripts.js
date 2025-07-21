@@ -98,6 +98,7 @@ function bot_act (t) {
 async function mock_bot_act (c) {
     getpower(c)
     diplomacy(c)
+    populatemystatebox(c)
     // if (Power != 0) {diplomacy(c)}
     var counter = 0
     for (let i = 0; i < Power; i++) {
@@ -507,6 +508,7 @@ function newturn (c) {
 
 
 function round () {
+    populatestatebox()
     var country_id = ldb.countries[ldb.next]
     ix_country(country_id)
     var who = Country[ldb.next]
@@ -544,6 +546,7 @@ function round () {
 }
 
 function lastround () {
+    populatehistory ()
     ldb.next = 0 
     ldb.round++
     ldb.year += 0.25
@@ -555,7 +558,6 @@ function lastround () {
     //Allymap[ldb.round - 3] = []
     // populatehandbox ()
     // raisevalues()
-    // populatehistory ()
     var randifResistance = Math.floor(Math.random() * 5)
     if (randifResistance == 0 ) {
         resistance ()
@@ -566,7 +568,6 @@ function lastround () {
     // }
     // cw_managerstr ()
     // th_populate ()
-    populatestatebox()
 }
 
 function clearaliances (n) {

@@ -31,7 +31,7 @@ function startgamedebug () {
     startgame ()
     // ldb.mycnt = '0 0 0'
     ldb.mycnt = 'Poland'
-    ldb.pow = 50
+    ldb.pow = 50000
     stoploop ()
     moveToCentre()
     //document.getElementById('savebutton').click()
@@ -60,9 +60,9 @@ function th_debug () {
 
 gameinit ()
 startgamedebug ()
-renderstatsbox()
+// renderstatsbox()
 // renderpowerranking()
-renderteritoryranking()
+// renderteritoryranking()
 // loadgame('saveslot0')
 // cw_debug()
 // ix_t_code('cccz')

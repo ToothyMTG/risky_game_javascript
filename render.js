@@ -62,7 +62,7 @@ function populatestatebox () {
     statebox.innerHTML = ''
     var year = Math.floor(ldb.year)
     var season = (ldb.year - year) * 4 + 1
-    statebox.innerHTML = 'Round: ' + ldb.round + ' | ' + year + ' | Q' + season
+    statebox.innerHTML = 'Round ' + (ldb.round + 1) + ' | Year ' + year + ' | Q' + season
 }
 function rendermystatebox () {
     var div = document.createElement('div')
@@ -71,6 +71,10 @@ function rendermystatebox () {
     div.id = 'mystatebox'
     menu.appendChild(div)
     myalliesbox()
+}
+function populatemystatebox (c) {
+    ix_t_code(c) ; var cnt = cix
+    document.getElementById('mystatebox').innerHTML = cnt.name
 }
 function myalliesbox () {
     var div = document.createElement('div')
@@ -215,7 +219,7 @@ function renderstatsbox() {
     statsbox.appendChild(statbut2)
     var statbut3 = document.createElement('div')
     statbut3.classList.add('statbut','roundborder')
-    statbut3.innerHTML = 'Power Per Teritory'
+    statbut3.innerHTML = 'Integrity Ranking'
     statbut3.onclick = () => {renderpowerperteritory()}
     statbut3.id = 'statbut3'
     statsbox.appendChild(statbut3)
@@ -447,7 +451,7 @@ function renderpowerperteritory () {
             table[i][0] += Number(terits[x].innerHTML)
         }
         table[i][1] = name
-        table[i][0] = Math.floor((table[i][0] + terits.length) / 2)
+        table[i][0] = Math.floor((table[i][0] / terits.length) * 1000 / 90)
     }
     table = table.sort((a,b) => {return b[0] - a[0]})
     for (let i = 0; i < table.length; i++) {
@@ -546,9 +550,9 @@ function randommode () {
 function renderhandbox (x) {
     clickPause()
     removehandbox()
-    if (x.classList[0] != 'tile') {
-        return 
-    }
+    if (x.classList[0] != 'tile') {return }
+    if (x.classList[1] == 'land') {return }
+    if (x.classList[1] == 'sea') {return }
     // console.log(x)
     var div = document.createElement('div')
     div.classList.add('handbox')
@@ -575,7 +579,7 @@ function removehandbox () {
 function populatehandbox(x) {
     var main = document.getElementById('handbox')
     console.log(x)
-    ix_t_tile(x.id)
+    ix_t_tile(x.id) ; var cnt = cix
     // ix_gatherfacts(cix)
     getpower(cix.code)
     getcapacity(cix.code)
@@ -588,7 +592,57 @@ function populatehandbox(x) {
     main.innerHTML += 'Teritories: ' + Teritories + '<br>'
     main.innerHTML += 'Power: ' + Power + '<br>'
     main.innerHTML += 'Capacity: ' + Capacity + '<br>'
-    
+    var abut = document.createElement('div')
+    abut.innerHTML = 'Allies'
+    abut.classList.add('roundborder','handboxbut')
+    abut.onclick = () => {showallies(cnt)}
+    main.appendChild(abut)
+    var ebut = document.createElement('div')
+    ebut.innerHTML = 'Enemies'
+    ebut.classList.add('roundborder','handboxbut')
+    ebut.onclick = () => {showenemies(cnt)}
+    main.appendChild(ebut)
+}
+
+function showallies(x) {
+    removehandbox()
+    // need cix to work
+    var allymap = ldb.allymap[x.ix]
+    for (let i = 0; i < allymap.length; i++) {
+        var allyval = allymap[i]
+        if (allyval == 0) {
+            ix_country(i) ; var c = cix
+            if (c.code == 'land') { continue }
+            if (c.code == 'sea') { continue }
+            var tiles = [... document.getElementsByClassName(c.code)]
+            tiles.forEach(tile => {tile.classList.add('ally')})
+        }
+    }
+    setTimeout(() => {
+        var tiles = [... document.getElementsByClassName('ally')]
+        tiles.forEach(tile => {tile.classList.remove('ally')})
+    },1000)
+    // console.log(allymap)
+}
+function showenemies(x) {
+    removehandbox()
+    // need cix to work
+    var allymap = ldb.allymap[x.ix]
+    for (let i = 0; i < allymap.length; i++) {
+        var allyval = allymap[i]
+        if (allyval == 10) {
+            ix_country(i) ; var c = cix
+            if (c.code == 'land') { continue }
+            if (c.code == 'sea') { continue }
+            var tiles = [... document.getElementsByClassName(c.code)]
+            tiles.forEach(tile => {tile.classList.add('enemy')})
+        }
+    }
+    setTimeout(() => {
+        var tiles = [... document.getElementsByClassName('enemy')]
+        tiles.forEach(tile => {tile.classList.remove('enemy')})
+    },1000)
+    // console.log(allymap)
 }
 
 function renderwelcomescreen() {

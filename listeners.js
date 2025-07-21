@@ -71,19 +71,20 @@ document.addEventListener("mousedown", (event) => {
     if (event.button === 1) {
         removehandbox()
     //   console.log("Middle mouse button clicked!");
-      var x = event.target
-      centerScreen(x)
+        var x = event.target
+        centerScreen(x)
+        console.log(event.target)
     }
     if (event.button === 0) {
     //   console.log("Left mouse button clicked");
-      removehandbox()
-      console.log(event.target)
-      thetile = event.target
+        if (event.target.parentElement.id == 'handbox') { return }
+        removehandbox()
+        thetile = event.target
     }
     if (event.button === 2) {
     //   console.log("Right mouse button clicked");
-      removehandbox()
-      renderhandbox(event.target)
+        removehandbox()
+        renderhandbox(event.target)
     }
   });
 
