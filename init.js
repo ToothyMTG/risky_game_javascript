@@ -60,7 +60,9 @@ function th_debug () {
 
 gameinit ()
 startgamedebug ()
-// renderstatsbox()
+populatehistory()
+renderstatsbox()
+renderpowerchart()
 // renderpowerranking()
 // renderteritoryranking()
 // loadgame('saveslot0')

@@ -226,6 +226,7 @@ function renderstatsbox() {
     var statbut4 = document.createElement('div')
     statbut4.classList.add('statbut','roundborder')
     statbut4.innerHTML = 'Country Stats'
+    statbut3.onclick = () => {renderpowerchart()}
     statbut4.id = 'statbut4'
     statsbox.appendChild(statbut4)
 }
@@ -359,6 +360,14 @@ function distributepower () {
         }
     }
     opacityhandler ()
+}
+
+function renderpowerchart () {
+    var statsbox = document.getElementById('statsbox')
+    var canvas = document.createElement('canvas')
+    canvas.classList.add('statsviewer','roundborder')
+    statsbox.appendChild(canvas)
+    
 }
 
 function renderteritoryranking () {
