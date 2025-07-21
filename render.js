@@ -365,7 +365,47 @@ function distributepower () {
 function renderpowerchart () {
     var statsbox = document.getElementById('statsbox')
     var canvas = document.createElement('canvas')
+    canvas.getContext('2d')
     canvas.classList.add('statsviewer','roundborder')
+    var thedata = {}
+    thedata.labels = []
+    for (let i = 0; i < ldb.history[0].length; i++) { 
+        thedata.labels.push(ldb.history[0][i][0])
+    }
+    thedata.datasets = []
+    for (let i = 0; i < ldb.history.length; i++) {
+        ix_country(i); var c = cix
+        thedata.datasets[i] = {}
+        var dataset = {}
+        thedata.datasets[i].label = cix.name
+        thedata.datasets[i].data = [] 
+        for (let x = 0; x < ldb.history[i].length; x++) {
+            thedata.datasets[i].data.push(ldb.history[i][x][2])
+        }
+        thedata.datasets[i].borderWidth = 1
+    }
+    
+    // var chart = new Chart()
+    console.log(thedata)
+    new Chart(canvas, {
+    type: 'line',
+    data: thedata,
+    // data: {
+    //   labels: thedata.labels,
+    //   datasets: [{
+    //     label: '# of Votes',
+    //     data: [12, 19, 3, 5, 2, 3],
+    //     borderWidth: 2
+    //   }]
+    // },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
     statsbox.appendChild(canvas)
     
 }
@@ -815,7 +855,7 @@ function generatefriendmap () {
 }
 
 function inithistory () {
-    ldb.history = {}
+    ldb.history = []
     for (let i = 0; i < Country.length; i++) {
         var cnt = Country[i].split(' ')[1]
         ldb.history[i] = []

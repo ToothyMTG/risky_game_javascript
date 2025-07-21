@@ -60,7 +60,6 @@ function th_debug () {
 
 gameinit ()
 startgamedebug ()
-populatehistory()
 renderstatsbox()
 renderpowerchart()
 // renderpowerranking()
