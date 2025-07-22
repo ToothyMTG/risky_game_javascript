@@ -40,6 +40,30 @@ function rendermap () {
     }
 }
 // MENU ELEMENTS //
+
+function rendermainmenu () {
+    renderblur()
+    var div = document.createElement('div')
+    div.classList.add('roundborder','mainmenubox')
+    div.id = 'mainmenu'
+    mainframe.appendChild(div)
+    var resumer = document.createElement('div')
+    resumer.classList.add('roundborder','mainmenubutton')
+    resumer.id = 'resumer'
+    resumer.innerHTML = 'Resume'
+    div.appendChild(resumer)
+    var saver = document.createElement('div')
+    saver.classList.add('roundborder','mainmenubutton')
+    saver.id = 'saver'
+    saver.innerHTML = 'Save Game'
+    div.appendChild(saver)
+    var loader = document.createElement('div')
+    loader.classList.add('roundborder','mainmenubutton')
+    loader.innerHTML = 'Load Game'
+    loader.id = 'loader'
+    div.appendChild(loader)
+}
+
 function rendermenu () {
     var div = document.createElement('div')
     div.classList.add('menu')
@@ -208,25 +232,25 @@ function renderstatsbox() {
     var statbut1 = document.createElement('div')
     statbut1.classList.add('statbut','roundborder')
     statbut1.id = 'statbut1'
-    statbut1.innerHTML = 'Power Ranking'
-    statbut1.onclick = () => {renderpowerranking()}
+    statbut1.innerHTML = 'Power History'
+    statbut1.onclick = () => {renderpowerchart()}
     statsbox.appendChild(statbut1)
     var statbut2 = document.createElement('div')
     statbut2.classList.add('statbut','roundborder')
-    statbut2.innerHTML = 'Teritory Ranking'
+    statbut2.innerHTML = 'Teritory History'
     statbut2.id = 'statbut2'
-    statbut2.onclick = () => {renderteritoryranking()}
+    statbut2.onclick = () => {renderteritorychart()}
     statsbox.appendChild(statbut2)
     var statbut3 = document.createElement('div')
     statbut3.classList.add('statbut','roundborder')
-    statbut3.innerHTML = 'Integrity Ranking'
-    statbut3.onclick = () => {renderpowerperteritory()}
+    statbut3.innerHTML = 'Power Pie'
+    statbut3.onclick = () => {renderpowerpie()}
     statbut3.id = 'statbut3'
     statsbox.appendChild(statbut3)
     var statbut4 = document.createElement('div')
     statbut4.classList.add('statbut','roundborder')
-    statbut4.innerHTML = 'Country Stats'
-    statbut3.onclick = () => {renderpowerchart()}
+    statbut4.innerHTML = 'Teritory Pie'
+    statbut4.onclick = () => {renderpowerchart()}
     statbut4.id = 'statbut4'
     statsbox.appendChild(statbut4)
 }
@@ -362,52 +386,157 @@ function distributepower () {
     opacityhandler ()
 }
 
+LinechartOptions = {
+    plugin: {decimation:{enabled:true,algorithm: 'min-max',samples:5}},
+    responsive: true,
+    maintainAspectRatio: false,
+    elements: {point: {radius: 2,hitRadius: 10},line:{tension:0.4}},
+    layout: { padding: 10},plugins: {legend: {labels: {font: {size:8},boxWidth: 10}}},
+    scales: {y: {beginAtZero: true},x: {ticks:{autoSkip: true}}}
+}
+
 function renderpowerchart () {
+    var existing = document.querySelector('.statsviewer')
+    if (existing !== null) {
+        existing.remove()
+    }
     var statsbox = document.getElementById('statsbox')
+    var div = document.createElement('div')
+    div.classList.add('statsviewer','roundborder')
+    statsbox.appendChild(div)
     var canvas = document.createElement('canvas')
     canvas.getContext('2d')
-    canvas.classList.add('statsviewer','roundborder')
     var thedata = {}
     thedata.labels = []
-    for (let i = 0; i < ldb.history[0].length; i++) { 
-        thedata.labels.push(ldb.history[0][i][0])
+    for (let i = 0; i < ldb.historylen; i++) { 
+        thedata.labels.push(ldb.historyyear[i])
     }
     thedata.datasets = []
-    for (let i = 0; i < ldb.history.length; i++) {
-        ix_country(i); var c = cix
+    for (let i = 0; i < ldb.countries.length; i++) {
+        ix_country(ldb.countries[i]); var c = cix
         thedata.datasets[i] = {}
         var dataset = {}
         thedata.datasets[i].label = cix.name
         thedata.datasets[i].data = [] 
-        for (let x = 0; x < ldb.history[i].length; x++) {
-            thedata.datasets[i].data.push(ldb.history[i][x][2])
+        for (let x = 0; x < ldb.history[c.ix].length; x++) {
+            var power = (ldb.history[c.ix][x][2] + ldb.history[c.ix][x][1]) / 2
+            thedata.datasets[i].data.push(Math.floor(power))
         }
-        thedata.datasets[i].borderWidth = 1
+        thedata.datasets[i].borderColor = Colors[c.code].bgcolor
+        thedata.datasets[i].backgroundColor = Colors[c.code].color
+        thedata.datasets[i].borderWidth = 2
     }
-    
-    // var chart = new Chart()
+    new Chart(canvas, {
+        type: 'line',
+        data: thedata,
+        options: LinechartOptions
+    })
+    div.appendChild(canvas)
+}
+
+StackchartOptions = {
+    plugins: {stacked100:{enable: true},tooltip:{enabled:true,mode:'nearest',intersect:true,callbacks:{label: context => context.dataset.label + ": " + context.parsed.y + '%'}},decimation:{enabled:true,algorithm: 'min-max',samples:5}},
+    interaction: {mode: 'nearest',intersect: false},
+    responsive: true,
+    maintainAspectRatio: false,
+    elements: {point: {radius: 0,hitRadius: 0},line:{tension:0.4}},
+    layout: { padding: 10},plugins: {legend: {labels: {font: {size:8},boxWidth: 10}}},
+    scales: {y: {stacked: true,ticks: {callback: value => value + '%'},max: 100},x: {ticks: {autoSkip: true}}}
+}
+function renderteritorychart () {
+    var existing = document.querySelector('.statsviewer')
+    if (existing !== null) {
+        existing.remove()
+    }
+    var statsbox = document.getElementById('statsbox')
+    var div = document.createElement('div')
+    div.classList.add('statsviewer','roundborder')
+    statsbox.appendChild(div)
+    var canvas = document.createElement('canvas')
+    canvas.getContext('2d')
+    var thedata = {}
+    thedata.labels = []
+    for (let i = 0; i < ldb.historylen; i++) { 
+        thedata.labels.push(ldb.historyyear[i])
+    }
+    ix_t_code('sea'); var sea = ldb.history[cix.ix]
+    ix_t_code('land'); var land = ldb.history[cix.ix]
+    var alltiles = document.getElementsByClassName('tile').length
+    thedata.datasets = []
+    for (let i = 0; i < ldb.countries.length; i++) {
+        ix_country(ldb.countries[i]); var c = cix
+        thedata.datasets[i] = {}
+        var dataset = {}
+        thedata.datasets[i].label = cix.name
+        thedata.datasets[i].data = [] 
+        for (let x = 0; x < ldb.history[c.ix].length; x++) {
+            var sparenum = alltiles - (sea[x]?.[1] ?? 0) - (land[x]?.[1] ?? 0)
+            var proc = ldb.history[c.ix][x][1] / sparenum * 100
+            thedata.datasets[i].data.push(proc)
+        }
+        thedata.datasets[i].borderColor = Colors[c.code].color
+        thedata.datasets[i].backgroundColor = Colors[c.code].bgcolor
+        thedata.datasets[i].borderWidth = 0
+        thedata.datasets[i].fill = 'origin'
+    }
+    new Chart(canvas, {
+        type: 'line',
+        data: thedata,
+        options: StackchartOptions
+    })
+    div.appendChild(canvas)
+}
+
+PieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    elements: {point: {radius: 0,hitRadius: 0},line:{tension:0.4}},
+    layout: { padding: 10},plugins: {legend: {labels: {font: {size:8},boxWidth: 10}}},
+}
+function renderpowerpie () {
+    var existing = document.querySelector('.statsviewer')
+    if (existing !== null) {
+        existing.remove()
+    }
+    var statsbox = document.getElementById('statsbox')
+    var div = document.createElement('div')
+    div.classList.add('statsviewer','roundborder')
+    statsbox.appendChild(div)
+    var canvas = document.createElement('canvas')
+    canvas.getContext('2d')
+    var thedata = {}
+    thedata.labels = []
+    for (let i = 0; i < ldb.countries.length; i++) {
+        ix_country(ldb.countries[i]); var c = cix
+        thedata.labels.push(cix.name)
+    }
+    ix_t_code('sea'); var sea = ldb.history[cix.ix]
+    ix_t_code('land'); var land = ldb.history[cix.ix]
+    var alltiles = document.getElementsByClassName('tile').length
+    thedata.datasets = []
+    thedata.datasets[0] = {}
+    thedata.datasets[0].label = 'Power'
+    thedata.datasets[0].data = []
+    thedata.datasets[0].borderColor = []
+    thedata.datasets[0].backgroundColor = []
+    for (let i = 0; i < ldb.countries.length; i++) {
+        ix_country(ldb.countries[i]); var c = cix
+        getpower(c.code); var p = RealPower
+        getcapacity(c.code); var t = Teritories
+        thedata.datasets[0].data.push((p+t)/2)
+
+        thedata.datasets[0].borderColor.push(Colors[c.code].color)
+        thedata.datasets[0].backgroundColor.push(Colors[c.code].bgcolor)
+        thedata.datasets[0].borderWidth = 2
+        thedata.datasets[0].fill = 'origin'
+    }
     console.log(thedata)
     new Chart(canvas, {
-    type: 'line',
-    data: thedata,
-    // data: {
-    //   labels: thedata.labels,
-    //   datasets: [{
-    //     label: '# of Votes',
-    //     data: [12, 19, 3, 5, 2, 3],
-    //     borderWidth: 2
-    //   }]
-    // },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-    statsbox.appendChild(canvas)
-    
+        type: 'doughnut',
+        data: thedata,
+        options: PieOptions
+    })
+    div.appendChild(canvas)
 }
 
 function renderteritoryranking () {
@@ -860,6 +989,8 @@ function inithistory () {
         var cnt = Country[i].split(' ')[1]
         ldb.history[i] = []
     }
+    ldb.historylen = 0
+    ldb.historyyear = []
 }
 
 function rendercountrystats () {

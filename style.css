@@ -181,6 +181,26 @@ div {
     box-sizing: border-box;
     border-radius: 20px;
 }
+.mainmenubox {
+    width: 60%;
+    height: 60%;
+    top: 10%;
+    left: 20%;
+    z-index: 3;
+    background-color: white;
+}
+.mainmenubutton {
+   width: 60%;
+   /* height: 5%; */
+   left: 20%;
+}
+.mainmenubutton:hover {
+    background-color: orange;
+}
+#resumer {top: 15%;}
+#saver {top: 30%;}
+#loader {top: 45%;}
+
 
 .statsviewer {
     top: 10%;

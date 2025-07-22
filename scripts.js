@@ -337,6 +337,7 @@ function getpower (c) {
         Support += ters[i].value
     }
     Support = Support / ters.length / 10
+    RealPower = Power
     Power = Math.floor(Power/9)
     if (Power < 1) {Power = 1}
     if (ters.length == 0) {Power = 0}
@@ -777,6 +778,8 @@ function populatehistory () {
         var vals = [ldb.year,tiles.length,power]
         ldb.history[i].push(vals)
     }
+    ldb.historylen++
+    ldb.historyyear.push(ldb.year)
 }
 
 function searchcountry() {
@@ -849,4 +852,18 @@ function raisevalues(c) {
         }
     }
     opacityhandler()
+}
+
+function getcolormap () {
+    Colors = {}
+    for (let i = 0; i < ldb.countries.length; i++) {
+        ix_country(ldb.countries[i]); var c = cix
+        Colors[c.code] = {}
+        var clr = getComputedStyle(document.querySelector('.' + c.code)).color
+        Colors[c.code].color = clr
+        var bg = getComputedStyle(document.querySelector('.' + c.code)).backgroundColor
+        Colors[c.code].bgcolor = bg
+        
+    }
+    console.log(Colors)
 }
