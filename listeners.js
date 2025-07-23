@@ -80,6 +80,9 @@ document.addEventListener("mousedown", (event) => {
         if (event.target.parentElement.id == 'handbox') { return }
         removehandbox()
         thetile = event.target
+        if ((Turns > 0) && (thetile.classList[0] == 'tile')) {
+            act ()      
+        }
     }
     if (event.button === 2) {
     //   console.log("Right mouse button clicked");

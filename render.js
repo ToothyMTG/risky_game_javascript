@@ -40,28 +40,34 @@ function rendermap () {
     }
 }
 // MENU ELEMENTS //
+function resume() {
+    removeblur()
+    document.getElementById('mainmenu').remove()
+}
+function rendersaver () {}
+function renderloader () {}
 
 function rendermainmenu () {
+    clickPause()
     renderblur()
     var div = document.createElement('div')
     div.classList.add('roundborder','mainmenubox')
     div.id = 'mainmenu'
     mainframe.appendChild(div)
-    var resumer = document.createElement('div')
-    resumer.classList.add('roundborder','mainmenubutton')
-    resumer.id = 'resumer'
-    resumer.innerHTML = 'Resume'
-    div.appendChild(resumer)
-    var saver = document.createElement('div')
-    saver.classList.add('roundborder','mainmenubutton')
-    saver.id = 'saver'
-    saver.innerHTML = 'Save Game'
-    div.appendChild(saver)
-    var loader = document.createElement('div')
-    loader.classList.add('roundborder','mainmenubutton')
-    loader.innerHTML = 'Load Game'
-    loader.id = 'loader'
-    div.appendChild(loader)
+    var buttons = [
+        ['resumer','Resume',resume],
+        ['saver','Save Game',rendersaver],
+        ['loader','Load Game',renderloader],
+        ['exiter','Exit Game',renderwelcomescreen],
+    ]
+    for (let i = 0; i < buttons.length; i++) {
+        var button = document.createElement('div')
+        button.id = buttons[i][0]
+        button.innerHTML = buttons[i][1]
+        button.onclick = buttons[i][2]
+        button.classList.add('roundborder','mainmenubutton')
+        div.appendChild(button)
+    }
 }
 
 function rendermenu () {
@@ -105,6 +111,7 @@ function myalliesbox () {
     div.classList.add('myalliesbox')
     div.classList.add('menuboxes')
     div.id = 'myalliesboxes'
+    div.onclick = () => {rendermainmenu()}
     div.innerHTML = 'Menu'
     menu.appendChild(div)
 }
@@ -314,7 +321,42 @@ function opacityhandler () {
         var opa = (Number(tiles[i].innerHTML)) * 0.05 + 0.50
         tiles[i].style.opacity = opa
     }
-    cw_render ()
+    if (ldb.mycnt[1] != 0) {
+        makemeblind(ldb.mycnt[1])
+    }
+    // cw_render ()
+}
+function makemeblind(x) {
+    ix_t_code(x); var c = cix
+    getneigh(c.code); var n = Neigh
+    var allies = []
+    getowntiles(c.code); var o = OwnTiles
+    if (o.length == 0) { return }
+    for (let i = 0; i < ldb.allymap[c.ix].length; i++) {
+       if (ldb.allymap[c.ix][i] == 0) {
+            ix_country(i); var nn = cix
+            allies.push(nn.code)
+       }
+    }
+    var ids = []
+    for (let i = 0; i < allies.length; i++) {
+        var ts = document.getElementsByClassName(allies[i]) 
+        for (let x = 0; x < ts.length; x++) {
+           ids.push(ts[x].id) 
+        }
+    }
+    for (let i = 0; i < n.length; i++) {
+        ids.push(n[i].id)
+        gettileneigh(n[i].id); var t = TileNeigh
+        for (let i = 0; i < t.length; i++) {ids.push(t[i].id)}
+    }
+    for (let i = 0; i < o.length; i++) {ids.push(o[i].id)}
+    var tiles = document.getElementsByClassName('tile')
+    for (let i = 0; i < tiles.length; i++) {
+        if (ids.includes(tiles[i].id)) {continue}
+        if (tiles[i].classList[1] == 'sea') {continue}
+        tiles[i].style.opacity = 0
+    }
 }
 function singleopacityhandler (x) {
     var tile = x
@@ -349,12 +391,10 @@ function removeflash () {
 
 function addflash () {
     for (let i = 0; i < Neigh.length; i++) {
-        cw_boolalies(ldb.mycnt[1],Neigh[i].classList[1])
-        //console.log(cw_cindex,cw_dindex)
-        if ((cw_cindex == cw_dindex) && (cw_cindex > -1)) {
-            continue
-        }
-        if (Neigh[i].classList[1] == 'sea') {continue}
+        ix_t_code(Neigh[i].classList[1]); var c = cix    
+        ix_t_code(ldb.mycnt[1]); var m = cix
+        if (ldb.allymap[m.ix][c.ix] == 0) {continue}
+        if (c.code == 'sea') {continue}
         Neigh[i].classList.add('neighfocus')
     }
 }
@@ -826,57 +866,37 @@ function showenemies(x) {
 function renderwelcomescreen() {
     var div = document.createElement('div')
     div.id = 'welcomebox'
-    div.classList.add('welcomebox')
+    div.classList.add('welcomebox','roundborder')
     mainframe.appendChild(div)
     var title = document.createElement('h1')
     title.innerHTML = 'Risky Game'
     div.appendChild(title)
-    var newgame = document.createElement('button')
-    newgame.innerHTML = 'New Game'
-    newgame.id = 'newgame'
-    div.appendChild(newgame)
-    var loadgame = document.createElement('button')
-    loadgame.innerHTML = 'Load Game'
-    loadgame.id = 'loadgame'
-    div.appendChild(loadgame)
-    var mapeditor = document.createElement('button')
-    mapeditor.innerHTML = 'Map Editor'
-    mapeditor.id = 'mapeditor'
-    div.appendChild(mapeditor)
-    var ngdiv = document.createElement('div')
-    ngdiv.id = 'ngdiv'
-    div.appendChild(ngdiv)
-    var lgdiv = document.createElement('div')
-    lgdiv.id = 'lgdiv'
-    div.appendChild(lgdiv)
-
-    newgame.onclick = () => {
-        lgdiv.classList.remove('rolldownanim')
-        lgdiv.innerHTML = ''
-        ngdiv.classList.add('rolldownanim')
-        newgamediv()
+    var buttons = [
+        ['newgame','New Game',newgameselector],
+        ['loadgame','Load Game',loadgameselector],
+        ['mapeditor','Map Editor',mapeditorselector],
+    ]
+    for (let i = 0; i < buttons.length; i++) {
+        var button = document.createElement('div')
+        button.id = buttons[i][0]
+        button.innerHTML = buttons[i][1]
+        button.onclick = buttons[i][2]
+        button.classList.add('roundborder','welcomeboxbut')
+        div.appendChild(button)
     }
-    loadgame.onclick = () => {
-        ngdiv.classList.remove('rolldownanim')
-        ngdiv.innerHTML = ''
-        lgdiv.classList.add('rolldownanim')
-        loadgamediv ()
-    }
+    var div = document.createElement('div')
+    div.classList.add('roundborder','wcbox')
+    div.id = 'wcbox'
+    welcomebox.appendChild(div)
 }
-
-function newgamediv () {
-    var ngdiv = document.getElementById('ngdiv')
-    ngdiv.innerHTML = ''
+function newgameselector () {
+    wcbox.innerHTML = ''
     var titgmo = document.createElement('h3')
     titgmo.innerHTML = 'Please select game mode'
-    ngdiv.appendChild(titgmo)
+    wcbox.appendChild(titgmo)
     var selgmo = document.createElement('select')
     selgmo.id = 'selgmo'
-    ngdiv.appendChild(selgmo)
-    var blank = document.createElement('option')
-    blank.innerHTML = ''
-    blank.value = 'noval'
-    selgmo.appendChild(blank)
+    wcbox.appendChild(selgmo)
     for (let i = 0; i < Gamemodes.length; i++) {
         var opt = document.createElement('option')
         opt.innerHTML = Gamemodes[i]
@@ -885,22 +905,78 @@ function newgamediv () {
     }
     var titcnt = document.createElement('h3')
     titcnt.innerHTML = 'Please select your country'
-    ngdiv.appendChild(titcnt)
+    wcbox.appendChild(titcnt)
     var selcnt = document.createElement('select')
     selcnt.id = 'selcnt'
-    ngdiv.appendChild(selcnt)
+    wcbox.appendChild(selcnt)
+    populateteamselector(0)
     var titpow = document.createElement('h3')
     titpow.innerHTML = 'Please select max power'
-    ngdiv.appendChild(titpow)
+    wcbox.appendChild(titpow)
     var selpow = document.createElement('select')
     selpow.id = 'selpow'
-    ngdiv.appendChild(selpow)
+    wcbox.appendChild(selpow)
     for (let i = 0; i < Maxpowers.length; i++) {
         var opt = document.createElement('option')
         opt.innerHTML = Maxpowers[i]
         opt.value = Maxpowers[i]
         selpow.appendChild(opt)
     }
+    var startbut = document.createElement('div')
+    startbut.classList.add('roundborder')
+    startbut.id = 'startbut'
+    startbut.innerHTML = "Start Game"
+    startbut.onclick = () => {startgame()}
+    wcbox.appendChild(startbut)
+}
+function populateteamselector (x) {
+    var selcnt = document.getElementById('selcnt')
+    if (x == 0) {
+        var mode = New_GameModes[0]
+        var blankopt = document.createElement('option')
+        blankopt.innerHTML = 'Spectate'
+        blankopt.value = 'noval'
+        selcnt.appendChild(blankopt)
+        for (let i = 0; i < mode.countries.length; i++) {
+            var c = mode.countries[i]
+            ix_country(c); var a = cix
+            var opt = document.createElement('option')  
+            opt.innerHTML = a.name
+            opt.value = a.code
+            selcnt.appendChild(opt)
+        }
+    }
+    // console.log(selgmo.value)
+    // var mode = New_GameModes[selgmo.value]
+    // selcnt.innerHTML = ''       
+    // var blankopt = document.createElement('option')
+    // blankopt.innerHTML = 'Spectate'
+    // blankopt.value = 'noval'
+    // selcnt.appendChild(blankopt)
+    // for (let i = 0; i < mode.countries.length; i++) {
+    //     var a = mode.countries[i]
+    //     ix_country(a)
+    //     var opt = document.createElement('option')
+    //     opt.innerHTML = cix.name   
+    //     opt.value = cix.code
+    //     selcnt.appendChild(opt)
+    // }
+    // var randomopt = document.createElement('option')
+    // randomopt.innerHTML = 'Random'
+    // randomopt.value = 'rand'
+    // selcnt.appendChild(randomopt)
+
+}
+function loadgameselector () {
+    wcbox.innerHTML = 'heh'
+}
+function mapeditorselector () {
+    wcbox.innerHTML = 'kek'
+}
+
+function newgamediv () {
+    var ngdiv = document.getElementById('ngdiv')
+    ngdiv.innerHTML = ''
     var startbut = document.createElement('button')
     startbut.innerHTML = "Start Game"
     startbut.id = 'startbut'
@@ -908,27 +984,6 @@ function newgamediv () {
     startbut.onclick = () => {startgame ()}
     ngdiv.appendChild(startbut)
 
-    selgmo.onchange = () => {
-        console.log(selgmo.value)
-        var mode = New_GameModes[selgmo.value]
-        selcnt.innerHTML = ''       
-        var blankopt = document.createElement('option')
-        blankopt.innerHTML = 'Spectate'
-        blankopt.value = 'noval'
-        selcnt.appendChild(blankopt)
-        for (let i = 0; i < mode.countries.length; i++) {
-            var a = mode.countries[i]
-            ix_country(a)
-            var opt = document.createElement('option')
-            opt.innerHTML = cix.name   
-            opt.value = cix.code
-            selcnt.appendChild(opt)
-        }
-        var randomopt = document.createElement('option')
-        randomopt.innerHTML = 'Random'
-        randomopt.value = 'rand'
-        selcnt.appendChild(randomopt)
-    }
 }
 
 function loadgamediv () {
@@ -1217,6 +1272,16 @@ function rendersavefield () {
 }
 
 // ZOOM IN OUT AND CAMERA POSITION //
+
+function zoomOnCountry (x) {
+    var c = document.getElementsByClassName(x)
+    var sel = c[Math.floor(c.length / 2)]
+    for (let i = 0; i < 5; i++) {
+        zoomIn(sel)
+        centerScreen(sel)
+    }
+}
+
 function zoomIn (x) {
     var par = x.parentElement
     if (par.id != 'mapframe') {return}

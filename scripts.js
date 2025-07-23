@@ -7,6 +7,26 @@ function getowntiles (c) {
     }
 }
 
+function gettileneigh (t) {
+    var tile = document.getElementById(t)
+    // console.log(tile)
+    TileNeigh = []
+    var id = Number(tile.id.split('d')[1])
+    var idS = id + south
+    var idN = id + north
+    var idW = id + west
+    var idE = id + east
+    if (idN < 1) {idN = 1}
+    var S = document.getElementById('field' + idS)
+    TileNeigh.push(S)
+    var N = document.getElementById('field' + idN)
+    TileNeigh.push(N)
+    var W = document.getElementById('field' + idW)
+    TileNeigh.push(W)
+    var E = document.getElementById('field' + idE)
+    TileNeigh.push(E)
+}
+
 function getneigh (c) {
     Neigh = []
     var tiles = document.getElementsByClassName(c)
@@ -98,7 +118,6 @@ function bot_act (t) {
 async function mock_bot_act (c) {
     getpower(c)
     diplomacy(c)
-    populatemystatebox(c)
     // if (Power != 0) {diplomacy(c)}
     var counter = 0
     for (let i = 0; i < Power; i++) {
@@ -509,32 +528,34 @@ function newturn (c) {
 
 
 function round () {
-    populatestatebox()
     var country_id = ldb.countries[ldb.next]
-    ix_country(country_id)
+    ix_country(country_id); var c = cix
     var who = Country[ldb.next]
-    var name = cix.name
+    var name = c.name
     //console.log(name)
-    var code = cix.code
+    var code = c.code
     // populatestatebox(name,ldb.round)
+    populatestatebox()
+    populatemystatebox(c)
     if (name == ldb.mycnt[0]) {
-        cw_getoptions(ldb.mycnt[1])
-        if (cw_options == 0) {
-            ldb.next++
-            if (ldb.next >= Country.length) {
-                lastround ()
-            }
-            return
-        }
-        document.getElementById('runturn').style.display = 'none'
-        document.getElementById('taketurn').style.display = 'block'
-        focuscentral(code)
+        clickPause()
+        // cw_getoptions(ldb.mycnt[1])
+        // if (cw_options == 0) {
+        //     ldb.next++
+        //     if (ldb.next >= Country.length) {
+        //         lastround ()
+        //     }
+        //     return
+        // }
+        // document.getElementById('runturn').style.display = 'none'
+        // document.getElementById('taketurn').style.display = 'block'
+        // focuscentral(code)
         getpower(code)
         Turns = Power
-        document.getElementById('taketurn').innerHTML = "Take turn (Space) <br>" + Turns + ' turn(s)'
+        // document.getElementById('taketurn').innerHTML = "Take turn (Space) <br>" + Turns + ' turn(s)'
         getneigh(code)
         addflash()
-        stoploop ()
+        // clickPause ()
         return
     }
     // newturn(code)
@@ -606,14 +627,10 @@ function act () {
     }
     if (ifneigh == tile) {
         // cw_boolalies(ldb.mycnt[1],tile.classList[1])
-        if ((cw_cindex == cw_dindex) && (cw_cindex > -1)) {
-            return
-        }
-        escalate(ldb.mycnt[1],tile.classList[1])
         var power = Number(tile.innerHTML)
         power--
         //console.log(power)
-        if (power < 0) {
+        if (power < 1) {
             var countAgressorCode = document.getElementsByClassName(tile.classList[1]).length - 1
             //console.log(countAgressorCode)
             if (countAgressorCode == 0) {
@@ -621,7 +638,7 @@ function act () {
             }
             tile.classList.remove(tile.classList[1])
             tile.classList.add(ldb.mycnt[1])
-            power = 0
+            power = 1
         }
         tile.innerHTML = power
         removeflash()
@@ -632,16 +649,13 @@ function act () {
     opacityhandler ()
     cw_getoptions(ldb.mycnt[1])
     if ((Turns < 1) || (cw_options == 0)) {
-        document.getElementById('taketurn').style.display = 'none'
-        document.getElementById('runturn').style.display = 'block'
         removeflash()
         ldb.next++
         if (ldb.next >= Country.length) {
             lastround ()
         }
-        runloop ()
+        clickPlay()
     }
-    document.getElementById('taketurn').innerHTML = "Take turn (Space) <br>" + Turns + ' turn(s)'
 }
 
 function startgame () {
@@ -653,7 +667,7 @@ function startgame () {
     document.getElementById('welcomebox').style.display = 'none'
     var teamval = document.getElementById('selcnt').value
     if (teamval == 'noval') {
-        ldb.mycnt = 'spectator 0 0'
+        ldb.mycnt = ['spectator', 0, 0]
     } else {
         if (teamval == 'rand') {
             var randteam = Math.floor(Math.random() * gamemode.countries.length)  
@@ -668,14 +682,19 @@ function startgame () {
     ldb.year = gamemode.year
     for (let i = 0; i < gamemode.startup.length; i++) {
         var command = gamemode.startup[i]
-        if (command == 'rendercapitals') {rendercapitals()}
-        if (command == 'distributepower') {distributepower()}
-        if (command == 'renderonlycapitals') {renderonlycapitalmode ()}
+        // if (command == 'rendercapitals') {rendercapitals()}
+        // if (command == 'distributepower') {distributepower()}
+        // if (command == 'renderonlycapitals') {renderonlycapitalmode ()}
         if (command == 'randommode') {randommode ()}
         if (command == 'mapgenerator') {mapgenerator ()}
     }
     opacityhandler ()
+    rendermenu ()
+    renderinfobox ()
+    renderstatsbutton()
+    zoomOnCountry(ldb.mycnt[1])
     th_populate ()
+    getcolormap()
     console.log(gamemode)
     /*if (gmode == 0) { // Europe as of 2022
         //rendercapitals ()
@@ -707,7 +726,7 @@ function startgame () {
     }*/
     var gpow = Number(document.getElementById('selpow').value)
     ldb.pow = gpow
-    runloop ()
+    // runloop ()
     //console.log(teamval,gmode,gpow)
 }
 
@@ -866,4 +885,15 @@ function getcolormap () {
         
     }
     console.log(Colors)
+}
+
+function everyoneisally () {
+    for (let i = 0; i < ldb.countries.length; i++) {
+        var me = ldb.countries[i]
+        for (let x = 0; x < ldb.countries.length; x++) {
+            var him = ldb.countries[x]
+            if (me == him) {continue}
+            ldb.allymap[me][him] = 0
+        }
+    }
 }

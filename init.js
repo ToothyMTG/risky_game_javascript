@@ -1,9 +1,6 @@
 function gameinit () {
     renderwelcomescreen ()
     ldb = {}
-    rendermenu ()
-    renderinfobox ()
-    renderstatsbutton()
     // rendermenubuttons ()
     // renderstatebox ()
     rendermapframe ()
@@ -26,15 +23,18 @@ function gameinit () {
 }
 function startgamedebug () {
     document.getElementById('newgame').click()
-    document.getElementById('selgmo').value = 4
+    // document.getElementById('selgmo').value = 0
     document.getElementById('selcnt').value = 'noval'
-    startgame ()
+    document.getElementById('startbut').click()
+    // startgame ()
     // ldb.mycnt = '0 0 0'
-    ldb.mycnt = 'Poland'
-    ldb.pow = 50000
-    stoploop ()
-    moveToCentre()
+    // ldb.mycnt = 'Poland'
+    // ldb.pow = 50
+    // stoploop ()
+    // moveToCentre()
     //document.getElementById('savebutton').click()
+    opacityhandler()
+    zoomOnCountry('ccpl')
 }
 function cw_debug () {
     cw_init ()
@@ -59,9 +59,12 @@ function th_debug () {
 }
 
 gameinit ()
-startgamedebug ()
-getcolormap()
-rendermainmenu()
+// document.getElementById('newgame').click()
+// startgamedebug ()
+// zoomOnCountry('ccpl')
+// everyoneisally()
+// getcolormap()
+// rendermainmenu()
 // populatehistory()
 // populatehistory()
 // populatehistory()

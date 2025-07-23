@@ -1,12 +1,17 @@
 body {
-    background-color: azure;
+    background-color: var(--sea-color);
     margin:0;
     overflow: hidden;
 }
+
+:root {
+    --sea-color: rgb(201, 255, 255)
+}
+
 #mainframe {
     position:absolute;
     margin: auto;
-    background-color: azure;
+    background-color: var(--sea-color);
 }
 @media (orientation: portrait) {
     #mainframe {
@@ -200,6 +205,7 @@ div {
 #resumer {top: 15%;}
 #saver {top: 30%;}
 #loader {top: 45%;}
+#exiter {top: 60%;}
 
 
 .statsviewer {
@@ -373,7 +379,7 @@ div {
     width: 110%;
 }
 
-.sea {background-color:azure;color:transparent;opacity:1} /* Sea */
+.sea {background-color:var(--sea-color);color:transparent;opacity:1} /* Sea */
 .ccpl {background-color:red; color:white} /* Poland */
 .ccde {background-color:black;color:yellow;} /* Germany */
 .cces {background-color:orange;color:darkred;} /* Spain */
@@ -591,22 +597,51 @@ div {
 
 
 .welcomebox {
-    background-color: black;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 10;
+    background-color: white;
+    width: 80%;
+    left: 10%;
+    top: 5%;
+    height: 80%;
+    z-index: 3;
     text-align: center;
-    color: white;
+    color:black;
 }
-.welcomebox button {
-    width: 33.33%;
-    height: 5%;
-    float:left;
-    margin-top: 5%;
+.welcomebox select {
+    width: 50%;
+    transition: all 0.2s ease-in-out;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
+    text-align: center;
 }
+.welcomeboxbut {
+    width: 25%;
+    left: 5%;
+    background-color: white;
+    font-size: 150%;
+}
+.welcomeboxbut:hover {
+    background-color: orange;
+}
+.wcbox {
+    width: 60%;
+    height: 80%;
+    background-color: white;
+    left: 35%;
+    top: 15%;
+}
+#newgame {top: 35%}
+#loadgame {top: 50%}
+#mapeditor {top: 65%}
+#startbut {
+    width: 50%;
+    font-size: 150%;
+    left: 25%;
+    top: 90%;
+}
+#startbut:hover {background-color: orange;}
 .lgdiv-div {
-    background-color: black;
+    background-color: white;
     float:left;
     height: 20%;
     width: 100%;
@@ -619,18 +654,6 @@ div {
 #lgdiv button {
     height: 100%;
     margin-top: 0;;
-}
-.welcomebox div {
-    background-color: black;
-    height: 50%;
-    opacity: 0;
-    float:left;
-    width: 33.33%;
-}
-.welcomebox select {
-    width: 50%;
-    height: 5%;
-    text-align: center;
 }
 
 @keyframes rolldowndiv {
@@ -650,10 +673,6 @@ div {
     animation-name: rollupdiv;
     animation-fill-mode: forwards;
     animation-duration: 2s;
-}
-#startbut {
-    height: 10%;
-    margin-top: 20%;
 }
 .savebutton {
     float:left;
