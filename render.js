@@ -46,6 +46,7 @@ function resume() {
 }
 function rendersaver () {}
 function renderloader () {}
+function exitgame () {location.reload()}
 
 function rendermainmenu () {
     clickPause()
@@ -58,7 +59,7 @@ function rendermainmenu () {
         ['resumer','Resume',resume],
         ['saver','Save Game',rendersaver],
         ['loader','Load Game',renderloader],
-        ['exiter','Exit Game',renderwelcomescreen],
+        ['exiter','Exit Game',exitgame],
     ]
     for (let i = 0; i < buttons.length; i++) {
         var button = document.createElement('div')
@@ -222,6 +223,7 @@ function populatediplomacybox () {
         ix_country(i); var a = cix
         console.log(a)
         var nei = document.createElement('div')
+        nei.value = a.code
         nei.classList.add('reqentry')
         var neilab = document.createElement('div')
         neilab.innerHTML = a.name
@@ -235,6 +237,7 @@ function populatediplomacybox () {
             leaveunion(c.code,x.parentElement.value)
             diplomabox.remove()
             removeblur()
+            reflash()
             DiplomaOptions = 0
         }
         nei.appendChild(neibreak)

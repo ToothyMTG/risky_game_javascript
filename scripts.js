@@ -576,7 +576,7 @@ function lastround () {
     populatehistory ()
     ldb.next = 0 
     ldb.round++
-    ldb.year += 0.25
+    ldb.year++
     //console.log(ldb.round)
     //clearaliances(ldb.round)
     deescalate ()
@@ -615,6 +615,12 @@ function clearaliances (n) {
     }
 }
 
+function reflash () {
+    opacityhandler()
+    removeflash()
+    addflash()
+}
+
 function act () {
     th_remover ()
     getcapacity(ldb.mycnt[1])
@@ -633,7 +639,7 @@ function act () {
         tile.innerHTML = power
         Turns--
     }
-    if (ifneigh == tile) {
+    if (tile.classList.value.includes('neighfocus')) {
         // cw_boolalies(ldb.mycnt[1],tile.classList[1])
         var power = Number(tile.innerHTML)
         power--
