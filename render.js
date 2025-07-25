@@ -78,6 +78,8 @@ function rendermenu () {
     renderplaybutton()
     renderstatebox()
     rendermystatebox()
+    renderturnsbox()
+    renderdiplomacybutton ()
     renderReturnToCenterButton()
 }
 function renderstatebox () {
@@ -94,6 +96,161 @@ function populatestatebox () {
     var season = (ldb.year - year) * 4 + 1
     statebox.innerHTML = 'Round ' + (ldb.round + 1) + ' | Year ' + year + ' | Q' + season
 }
+
+function renderturnsbox () {
+    var div = document.createElement('div')
+    div.classList.add('menuboxes','turnsbox')
+    div.id = 'turnsbox'
+    menu.appendChild(div)
+}
+function populateturnsbox () {
+    var turnsbox = document.getElementById('turnsbox')
+    turnsbox.innerHTML = 'Turns: ' + Turns + ' | Capacity: ' + Capacity 
+}
+
+function renderdiplomacybutton () {
+    var diplomabut = document.createElement('div')
+    diplomabut.classList.add('menuboxes','diplomabut')
+    diplomabut.id = 'diplomabut'
+    diplomabut.innerHTML = 'Diplomacy'
+    diplomabut.style.display = 'none'
+    diplomabut.onclick = () => {renderdiplomacybox()}
+    menu.appendChild(diplomabut)
+}
+function populatediplomacybox () {
+    ix_t_code(ldb.mycnt[1]); var c = cix
+    var diplomabox = document.getElementById('diplomabox')
+    var titreq = document.createElement('h3')
+    titreq.innerHTML = 'Diplomacy Requests'
+    diplomabox.appendChild(titreq)
+    for (let i = 0; i < ldb.diplomacyqueue[c.ix].length; i++) {
+        var request = ldb.diplomacyqueue[c.ix][i]
+        ix_country(request[0]); var r = cix
+        if (request[1] == 1) { var prompt = 'peace'}
+        if (request[1] == 0) { var prompt = 'union'}
+        var req = document.createElement('div')
+        req.classList.add('reqentry')
+        var reqprompt = document.createElement('div')
+        reqprompt.classList.add('reqprompt')
+        reqprompt.innerHTML = r.name + ' wants to sign ' + prompt
+        req.appendChild(reqprompt)
+        var acc = document.createElement('div')
+        acc.classList.add('reqacc','reqgen')
+        acc.innerHTML = '✔'
+        acc.value = r.code
+        acc.prompt = prompt
+        acc.queuepos = [c.ix,i]
+        acc.onclick = () => {
+            var x = event.target
+            if (x.prompt == 'union') {signunion(c.code,x.value)}
+            if (x.prompt == 'peace') {signpeace(c.code,x.value)}
+            x.parentElement.remove()
+            ldb.diplomacyqueue[x.queuepos[0]].splice(x.queuepos[1],1)
+            diplomabox.innerHTML = ''
+            populatediplomacybox()
+            opacityhandler()
+        }
+        var den = document.createElement('div')
+        den.classList.add('reqden','reqgen')
+        den.innerHTML = '✘'
+        den.queuepos = [c.ix,i]
+        den.onclick = () => {
+            var x = event.target
+            x.parentElement.remove()
+            ldb.diplomacyqueue[x.queuepos[0]].splice(x.queuepos[1],1)
+            diplomabox.innerHTML = ''
+            populatediplomacybox()
+        }
+        req.appendChild(acc)
+        req.appendChild(den)
+        diplomabox.appendChild(req)
+    }
+    if (DiplomaOptions == 0) { return }
+    var titneg = document.createElement('h3')
+    titneg.innerHTML = 'Deplomacy Options'
+    diplomabox.appendChild(titneg)
+    getneigh(ldb.mycnt[1]); var necs = Necon
+    for (let i = 0; i < necs.length; i++) {
+        ix_t_code(necs[i]); var n = cix
+        if (n.code == 'land') {continue}
+        checkally(ldb.mycnt[1],necs[i]); var state = AllyState
+        if (state == 0) {continue }
+        var nei = document.createElement('div')
+        nei.classList.add('reqentry')
+        nei.value = n.code
+        var neilab = document.createElement('div')
+        neilab.innerHTML = n.name
+        neilab.classList.add('neilabel')
+        nei.appendChild(neilab)
+        var neiunion = document.createElement('div')
+        neiunion.classList.add('neigen','neiunion')
+        neiunion.innerHTML = 'U'
+        neiunion.onclick = () => {
+            x = event.target
+            askforunion(c.code,x.parentElement.value)
+            diplomabox.remove()
+            removeblur()
+            DiplomaOptions = 0
+        }
+        if (state == 1) {nei.appendChild(neiunion)}
+        var neipeace = document.createElement('div')
+        neipeace.classList.add('neigen','neipeace')
+        neipeace.innerHTML = 'P'
+        neipeace.onclick = () => {
+            x = event.target
+            askforpeace(c.code,x.parentElement.value)
+            diplomabox.remove()
+            removeblur()
+            DiplomaOptions = 0
+        }
+        if (state == 10) {nei.appendChild(neipeace)}
+        var neiwar = document.createElement('div')
+        neiwar.classList.add('neigen','neiwar')
+        neiwar.innerHTML = 'W'
+        neiwar.onclick = () => {
+            x = event.target
+            declarewar(c.code,x.parentElement.value)
+            diplomabox.remove()
+            removeblur()
+            DiplomaOptions = 0
+        }
+        if (state == 1) {nei.appendChild(neiwar)}
+        diplomabox.appendChild(nei)
+    }
+    for (let i = 0; i < ldb.allymap[c.ix].length; i++) {
+        if (ldb.allymap[c.ix][i] != 0) {continue}
+        ix_country(i); var a = cix
+        console.log(a)
+        var nei = document.createElement('div')
+        nei.classList.add('reqentry')
+        var neilab = document.createElement('div')
+        neilab.innerHTML = a.name
+        neilab.classList.add('neilabel')
+        nei.appendChild(neilab)
+        var neibreak = document.createElement('div')
+        neibreak.classList.add('neigen','neibreak')
+        neibreak.innerHTML = 'L'
+        neibreak.onclick = () => {
+            x = event.target
+            leaveunion(c.code,x.parentElement.value)
+            diplomabox.remove()
+            removeblur()
+            DiplomaOptions = 0
+        }
+        nei.appendChild(neibreak)
+        diplomabox.appendChild(nei)
+    }
+}
+function renderdiplomacybox () {
+    renderblur()
+    var div = document.createElement('div')
+    div.classList.add('roundborder','diplomabox')
+    div.id = 'diplomabox'
+    document.getElementById('blur').onclick = () => {div.remove();removeblur()}
+    mainframe.appendChild(div)
+    populatediplomacybox ()
+}
+
 function rendermystatebox () {
     var div = document.createElement('div')
     div.classList.add('menuboxes')
@@ -288,6 +445,7 @@ function populatemap () {
             wherefocus = event.target.id.split('d')[1]
             showinfo (wherefocus)
         }
+        tile.onclick = () => {if (Turns > 0) {act ()}}
         tile.tabIndex = -1
         document.getElementById('mapframe').appendChild(tile)
     }
@@ -1274,6 +1432,7 @@ function rendersavefield () {
 // ZOOM IN OUT AND CAMERA POSITION //
 
 function zoomOnCountry (x) {
+    if (x == 0) {return}
     var c = document.getElementsByClassName(x)
     var sel = c[Math.floor(c.length / 2)]
     for (let i = 0; i < 5; i++) {

@@ -353,6 +353,75 @@ div {
     height: 50%;
     border-top-left-radius: 50px;
 }
+.turnsbox {
+    width: 45%;
+    top: 0%;
+    left: 55%;
+    height: 50%;
+    border-top-right-radius: 50px;
+}
+.diplomabut {
+    width: 45%;
+    top: 50%;
+    height: 50%;
+    left: 55%;
+    border-bottom-right-radius: 50px;
+}
+.diplomabut:hover {background-color: greenyellow;}
+.diplomabox {
+    z-index: 3;
+    background-color: white;
+    width: 50%;
+    top: 35%;
+    left: 40%;
+    height: 50%;
+}
+.reqentry {
+    float:left;
+    width: 80%;
+    margin-left: 10%;
+    text-align: left;
+    transition: all 0.2s ease-in-out;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
+    text-align: center;
+}
+.reqprompt {
+    float:left;
+    width: 80%;
+}
+.reqgen {
+    float:left;
+    transition: all 0.2s ease-in-out;
+    border-radius: 20px;
+    text-align: center;
+    width: 8%;
+}
+.reqgen:hover {
+    background-color: grey;
+}
+.neigen {
+    float:left;
+    transition: all 0.2s ease-in-out;
+    border-radius: 20px;
+    text-align: center;
+    width: 7%;
+    font-weight: bold;
+}
+.neigen:hover {
+    background-color: currentColor;
+}
+.reqacc {color: lightgreen;}
+.reqden {color: red;}
+.neilabel {
+    width: 70%;
+    float:left;
+}
+.neiunion {color: blue}
+.neipeace {color: green}
+.neiwar {color: red}
+.neibreak {color: orange}
 .mystatebox {
     width: 30%;
     top: 50%;

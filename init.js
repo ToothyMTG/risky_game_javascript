@@ -24,7 +24,7 @@ function gameinit () {
 function startgamedebug () {
     document.getElementById('newgame').click()
     // document.getElementById('selgmo').value = 0
-    document.getElementById('selcnt').value = 'noval'
+    document.getElementById('selcnt').value = 'ccpl'
     document.getElementById('startbut').click()
     // startgame ()
     // ldb.mycnt = '0 0 0'
@@ -34,7 +34,6 @@ function startgamedebug () {
     // moveToCentre()
     //document.getElementById('savebutton').click()
     opacityhandler()
-    zoomOnCountry('ccpl')
 }
 function cw_debug () {
     cw_init ()
@@ -61,6 +60,11 @@ function th_debug () {
 gameinit ()
 // document.getElementById('newgame').click()
 // startgamedebug ()
+// signunion('ccpl','cccz')
+// askforunion('ccde','ccpl')
+// askforpeace('ccfr','ccpl')
+// askforunion('ccgb','ccpl')
+// document.getElementById('diplomabut').click()
 // zoomOnCountry('ccpl')
 // everyoneisally()
 // getcolormap()

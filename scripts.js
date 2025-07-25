@@ -98,6 +98,8 @@ function get_tile (t) {
 
 function bot_act (t) {
     get_tile(t)
+    // if (Tile.owner == ldb.mycnt[1] ) {console.log(Me, t, Tile,)}
+    // console.log(Tile)
     // console.log(t)
     if (t.ownername == Me ) {
         t.innerHTML = Tile.power + 1
@@ -538,25 +540,28 @@ function round () {
     populatestatebox()
     populatemystatebox(c)
     if (name == ldb.mycnt[0]) {
-        clickPause()
-        // cw_getoptions(ldb.mycnt[1])
-        // if (cw_options == 0) {
-        //     ldb.next++
-        //     if (ldb.next >= Country.length) {
-        //         lastround ()
-        //     }
-        //     return
-        // }
-        // document.getElementById('runturn').style.display = 'none'
-        // document.getElementById('taketurn').style.display = 'block'
-        // focuscentral(code)
         getpower(code)
+        getcapacity(code)
         Turns = Power
-        // document.getElementById('taketurn').innerHTML = "Take turn (Space) <br>" + Turns + ' turn(s)'
-        getneigh(code)
-        addflash()
-        // clickPause ()
-        return
+        if (Turns > 0) { 
+            getneigh(code)
+            addflash()
+            var flashes = document.getElementsByClassName('neighfocus')
+            if ((Capacity + flashes.length) > 0) {
+                clickPause()
+                populateturnsbox ()
+                document.getElementById('diplomabut').style.display = 'block'
+                DiplomaOptions = 1
+                document.getElementById('playstart').style.display = 'none'
+                // clickPause ()
+                return
+            } else {
+                clickPause()
+                document.getElementById('diplomabut').style.display = 'block'
+                DiplomaOptions = 1
+                Turns = 0
+            }
+        }
     }
     // newturn(code)
     mock_bot_act (code)
@@ -612,11 +617,14 @@ function clearaliances (n) {
 
 function act () {
     th_remover ()
+    getcapacity(ldb.mycnt[1])
+    getneigh(ldb.mycnt[1])
     var tile = event.target
     var ifneigh = Neigh.filter(x => x.id.includes(tile.id))[0]
     //console.log(ifneigh)
     if (tile.classList[1] == ldb.mycnt[1]) {
         var power = Number(tile.innerHTML)
+        if (Capacity < 1) { return }
         power++
         if (power > 9) {
             power = 9
@@ -638,6 +646,7 @@ function act () {
             }
             tile.classList.remove(tile.classList[1])
             tile.classList.add(ldb.mycnt[1])
+            tile.ownername = ldb.mycnt[1]
             power = 1
         }
         tile.innerHTML = power
@@ -646,14 +655,18 @@ function act () {
         addflash()
         Turns--
     }
+    var flashes = document.getElementsByClassName('neighfocus')
     opacityhandler ()
-    cw_getoptions(ldb.mycnt[1])
-    if ((Turns < 1) || (cw_options == 0)) {
+    getcapacity(ldb.mycnt[1])
+    document.getElementById('diplomabut').style.display = 'none'
+    populateturnsbox()
+    if ((Turns < 1) || ((Capacity + flashes.length) == 0)) {
         removeflash()
         ldb.next++
         if (ldb.next >= Country.length) {
             lastround ()
         }
+        document.getElementById('turnsbox').innerHTML = ''
         clickPlay()
     }
 }
@@ -661,6 +674,7 @@ function act () {
 function startgame () {
     ldb.next = 0
     ldb.round = 0
+    DiplomaOptions = 0
     var gmode = document.getElementById('selgmo').value
     var gamemode = New_GameModes[gmode]
     //Country = Country.sort(() => 0.5 - Math.random())
@@ -695,6 +709,7 @@ function startgame () {
     zoomOnCountry(ldb.mycnt[1])
     th_populate ()
     getcolormap()
+    clickPlay()
     console.log(gamemode)
     /*if (gmode == 0) { // Europe as of 2022
         //rendercapitals ()
