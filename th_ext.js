@@ -1,21 +1,26 @@
 function th_init () {
     ldb.tilehistory = []
-    var tiles = document.getElementsByClassName('tile')
-    for (let i = 0; i < tiles.length; i++) {
-        ldb.tilehistory[i] = []
-    }
+    // var tiles = document.getElementsByClassName('tile')
+    // for (let i = 0; i < tiles.length; i++) {
+    //     ldb.tilehistory[i] = []
+    // }
 }
 
-function th_populate () {
+function th_populate (x) {
+    ldb.tilehistory[x] = []
     var tiles = document.getElementsByClassName('tile')
     for (let i = 0; i < tiles.length; i++) {
-        var code = tiles[i].classList[1]
-        ix_t_code(code)
-        if (cix.code == 'sea') {
-            continue
-        }
-        var vals = [cix.ix,Number(tiles[i].innerHTML)]
-        ldb.tilehistory[i].push(vals)
+        var owner = tiles[i].classList[1]
+        ix_t_code(owner); var o = cix
+        var power = Number(tiles[i].innerHTML)
+        ldb.tilehistory[x][i] = [o.ix,power]
+        // var code = tiles[i].classList[1]
+        // ix_t_code(code)
+        // if (cix.code == 'sea') {
+        //     continue
+        // }
+        // var vals = [cix.ix,Number(tiles[i].innerHTML)]
+        // ldb.tilehistory[i].push(vals)
     }
 }
 

@@ -24,7 +24,7 @@ function gameinit () {
 function startgamedebug () {
     document.getElementById('newgame').click()
     // document.getElementById('selgmo').value = 0
-    document.getElementById('selcnt').value = 'ccpl'
+    document.getElementById('selcnt').value = 'noval'
     document.getElementById('startbut').click()
     // startgame ()
     // ldb.mycnt = '0 0 0'
@@ -32,7 +32,8 @@ function startgamedebug () {
     // ldb.pow = 50
     // stoploop ()
     // moveToCentre()
-    //document.getElementById('savebutton').click()
+    clickPause()
+    // document.getElementById('s').click()
     opacityhandler()
 }
 function cw_debug () {
@@ -59,7 +60,7 @@ function th_debug () {
 
 gameinit ()
 // document.getElementById('newgame').click()
-// startgamedebug ()
+startgamedebug ()
 // signunion('ccpl','cccz')
 // askforunion('ccde','ccpl')
 // askforpeace('ccfr','ccpl')
@@ -73,6 +74,7 @@ gameinit ()
 // populatehistory()
 // populatehistory()
 // renderstatsbox()
+// rendertilehistory()
 // renderpowerpie()
 // renderintegritychart()
 // renderpowerranking()

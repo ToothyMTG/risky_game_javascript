@@ -1,13 +1,9 @@
 document.addEventListener('keydown', e => {
     if (e.key === 'ArrowLeft') {
-        var cur = document.getElementById(wherefocus)
-        var newid = Number(cur.id) - 1
-        document.getElementById('field' + newid).focus()  
+        if (document.getElementById('thmap') != null) {movetilehistory('l')}
     }
     if (e.key === 'ArrowRight') {
-        var cur = document.getElementById(wherefocus)
-        var newid = Number(cur.id) + 1
-        document.getElementById('field' + newid).focus()  
+        if (document.getElementById('thmap') != null) {movetilehistory('r')}
     }
     if (e.key === 'ArrowUp') {
         var cur = document.getElementById(wherefocus)

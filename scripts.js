@@ -574,6 +574,7 @@ function round () {
 
 function lastround () {
     populatehistory ()
+    th_populate (ldb.year)
     ldb.next = 0 
     ldb.round++
     ldb.year++
@@ -594,7 +595,6 @@ function lastround () {
     // // cw_action ()
     // }
     // cw_managerstr ()
-    // th_populate ()
 }
 
 function clearaliances (n) {
@@ -713,7 +713,7 @@ function startgame () {
     renderinfobox ()
     renderstatsbutton()
     zoomOnCountry(ldb.mycnt[1])
-    th_populate ()
+    th_populate(ldb.round)
     getcolormap()
     clickPlay()
     console.log(gamemode)

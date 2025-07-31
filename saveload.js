@@ -30,6 +30,47 @@ function savegame (x) {
     localStorage.saves = JSON.stringify(saves)
 }
 
+function rendersaver () {
+    gettiles()
+    var fileContent = JSON.stringify(ldb)
+    var bb = new Blob([fileContent ], { type: 'text/plain' });
+    var a = document.createElement('a');
+    a.download = 'savegame.json';
+    a.href = window.URL.createObjectURL(bb);
+    a.click();
+}
+
+function renderloader () {
+    var file = document.createElement('input')
+    file.type = 'file'
+    file.id = 'loadfile'
+    file.accept='.json'
+    file.onchange = () => {
+        console.log(file.result)
+        var reader = new FileReader()
+        reader.onload = e => {
+            ldb = JSON.parse(e.target.result)
+            loadtiles()
+            document.getElementById('mainmenu').remove()
+            removeblur()
+        }
+        reader.readAsText(file.files[0])
+        
+    }
+    file.click()
+}
+
+function loadtiles () {
+    var tiles = document.getElementsByClassName('tile')
+    for (let i = 0; i < tiles.length; i++) {
+        var tile = tiles[i]
+        var ldbtile = ldb.tiles[i]
+        tile.innerHTML = ldbtile[0]
+        tile.classList.value = 'tile ' + ldbtile[1]
+        tile.ownername = ldbtile[1]
+        opacityhandler()
+    }
+}
 function loadgame (x) {
     ldb = JSON.parse(localStorage[x])
     /*var tiles = document.getElementsByClassName('tile')

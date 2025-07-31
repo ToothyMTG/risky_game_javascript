@@ -44,8 +44,8 @@ function resume() {
     removeblur()
     document.getElementById('mainmenu').remove()
 }
-function rendersaver () {}
-function renderloader () {}
+// function rendersaver () {}
+// function renderloader () {}
 function exitgame () {location.reload()}
 
 function rendermainmenu () {
@@ -72,6 +72,8 @@ function rendermainmenu () {
 }
 
 function rendermenu () {
+    var menu = document.getElementById('menu')
+    if (menu != undefined) { menu.remove()}
     var div = document.createElement('div')
     div.classList.add('menu')
     div.id = 'menu'
@@ -84,6 +86,7 @@ function rendermenu () {
     renderReturnToCenterButton()
 }
 function renderstatebox () {
+    var menu = document.getElementById('menu')
     var div = document.createElement('div')
     div.classList.add('statebox')
     div.classList.add('menuboxes')
@@ -99,6 +102,7 @@ function populatestatebox () {
 }
 
 function renderturnsbox () {
+    var menu = document.getElementById('menu')
     var div = document.createElement('div')
     div.classList.add('menuboxes','turnsbox')
     div.id = 'turnsbox'
@@ -110,6 +114,7 @@ function populateturnsbox () {
 }
 
 function renderdiplomacybutton () {
+    var menu = document.getElementById('menu')
     var diplomabut = document.createElement('div')
     diplomabut.classList.add('menuboxes','diplomabut')
     diplomabut.id = 'diplomabut'
@@ -255,6 +260,7 @@ function renderdiplomacybox () {
 }
 
 function rendermystatebox () {
+    var menu = document.getElementById('menu')
     var div = document.createElement('div')
     div.classList.add('menuboxes')
     div.classList.add('mystatebox')
@@ -267,6 +273,7 @@ function populatemystatebox (c) {
     document.getElementById('mystatebox').innerHTML = cnt.name
 }
 function myalliesbox () {
+    var menu = document.getElementById('menu')
     var div = document.createElement('div')
     div.classList.add('myalliesbox')
     div.classList.add('menuboxes')
@@ -278,6 +285,7 @@ function myalliesbox () {
 
 // PLAY AND PAUSE BUTTON //
 function renderplaybutton () {
+    var menu = document.getElementById('menu')
     var div = document.createElement('div')
     div.classList.add('playbutton')
     div.id = 'playbutton'
@@ -416,8 +424,8 @@ function renderstatsbox() {
     statsbox.appendChild(statbut3)
     var statbut4 = document.createElement('div')
     statbut4.classList.add('statbut','roundborder')
-    statbut4.innerHTML = 'Teritory Pie'
-    statbut4.onclick = () => {renderpowerchart()}
+    statbut4.innerHTML = 'Tile History'
+    statbut4.onclick = () => {rendertilehistory()}
     statbut4.id = 'statbut4'
     statsbox.appendChild(statbut4)
 }
@@ -842,6 +850,116 @@ function renderpowerperteritory () {
         div.appendChild(pos)
     }    
 }
+function rendertilehistory () {
+    var existing = document.querySelector('.statsviewer')
+    if (existing !== null) {
+        existing.remove()
+    }
+    var statsbox = document.getElementById('statsbox')
+    var div = document.createElement('div')
+    div.classList.add('statsviewer','roundborder')
+    statsbox.appendChild(div)
+    var yearbar = document.createElement('select')
+    yearbar.classList.add('thyb','roundborder')
+    yearbar.id = 'thyearbar'
+    yearbar.onchange = () => {populatetilehistory(yearbar.value)}
+    for (let i = 0; i < ldb.tilehistory.length; i++) {
+        var o = document.createElement('option')
+        o.innerHTML = i
+        o.value = i
+        yearbar.appendChild(o)
+    }
+    yearbar.selectedIndex = yearbar.options.length - 1
+    div.appendChild(yearbar)
+    var map = document.createElement('div')
+    map.classList.add('thmap')
+    map.id = 'thmap'
+    div.appendChild(map)
+    var left = document.createElement('div')
+    left.classList.add('roundborder','thleft','tharrow')
+    left.onclick = () => {movetilehistory('l')}
+    var right = document.createElement('div')
+    right.classList.add('roundborder','thright','tharrow')
+    right.onclick = () => {movetilehistory('r')}
+    div.appendChild(left)
+    div.appendChild(right)
+    TileHistorySC = true
+    TileHistoryHL = false
+    var switcher = document.createElement('div')
+    switcher.innerHTML = "Show tile power only"
+    switcher.classList.add('roundborder','thswitch')
+    switcher.onclick = () => {
+        if (TileHistorySC == true) {
+            TileHistorySC = false
+            populatetilehistory(yearbar.value)
+            switcher.classList.add('thswitchon')
+            return
+        }
+        if (TileHistorySC == false) {
+            TileHistorySC = true
+            populatetilehistory(yearbar.value)
+            switcher.classList.remove('thswitchon')
+            return
+        }
+    }
+    div.appendChild(switcher)
+    var hlswitcher = document.createElement('div')
+    hlswitcher.innerHTML = "Show heartlands only"
+    hlswitcher.classList.add('roundborder','thswitchhl')
+    hlswitcher.onclick = () => {
+        // if (TileHistorySC == false) {return}
+        if (TileHistoryHL == false) {
+            TileHistoryHL = true
+            populatetilehistory(yearbar.value)
+            hlswitcher.classList.add('thswitchon')
+            return
+        }
+        if (TileHistoryHL == true) {
+            TileHistoryHL = false
+            populatetilehistory(yearbar.value)
+            hlswitcher.classList.remove('thswitchon')
+            return
+        }
+    }
+    div.appendChild(hlswitcher)
+    
+    populatetilehistory(yearbar.value)
+}
+
+function movetilehistory (x) {
+    var yb = document.getElementById('thyearbar')
+    if (x == 'l') {
+        if (yb.value < 1) {return}
+        yb.value--
+        populatetilehistory(yb.value)
+    } 
+    if (x == 'r') {
+        if (yb.value >= yb.options.length - 1) {return}
+        yb.value++
+        populatetilehistory(yb.value)
+    }
+
+}
+
+function populatetilehistory (x) {
+    var map = document.getElementById('thmap')
+    map.innerHTML = ''
+    var thset = ldb.tilehistory[x]
+    // console.log(thset)
+    for (let i = 0; i < thset.length; i++) {
+        ix_country(thset[i][0]); var c = cix
+        var thtile = document.createElement('div') 
+        thtile.classList.add('thtile',c.code)
+        if ((c.code != 'land') && (c.code != 'sea')) {
+            if (TileHistoryHL == true) {if (thset[i][1] < 5) {thtile.style.backgroundColor = 'white'}}
+            if (TileHistorySC == false) {thtile.classList.add('thtile'),thtile.style.backgroundColor = 'grey';thtile.style.color = 'white'}
+        }
+        var opa = thset[i][1] * 0.05 + 0.50
+        thtile.innerHTML = '.'
+        thtile.style.opacity = opa
+        map.appendChild(thtile)
+    }
+}
 
 function renderdiplomacy () {
     Aliances = {}
@@ -1130,6 +1248,13 @@ function populateteamselector (x) {
 }
 function loadgameselector () {
     wcbox.innerHTML = 'heh'
+    DiplomaOptions = 0
+    renderloader()
+    rendermenu ()
+    renderinfobox ()
+    renderstatsbutton()
+    zoomOnCountry(ldb.mycnt[1])
+    getcolormap()
 }
 function mapeditorselector () {
     wcbox.innerHTML = 'kek'
