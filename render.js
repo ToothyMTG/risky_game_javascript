@@ -445,12 +445,21 @@ function rendermapimg () {
 }
 
 function populatemap () {
+    var posX = 1
+    var posY = 1
     for (let i = 0; i < 50*50; i++) {
         var tile = document.createElement('div')
         tile.id = 'field' + i
         tile.classList.value = 'tile sea'
         tile.innerHTML = 0
         tile.value = 0
+        tile.posX = posX
+        tile.posY = posY
+        posX++
+        if (posX == 51) {posX = 1; posY++}
+        if ((tile.posX == 1) || (tile.posX == 50) || (tile.posY == 1) || (tile.posY == 50)) {
+            tile.unlandable = true
+        } else {tile.unlandable = false}
         tile.isOwned = 0
         tile.onfocus = () => {
             wherefocus = event.target.id.split('d')[1]
@@ -1247,17 +1256,42 @@ function populateteamselector (x) {
 
 }
 function loadgameselector () {
-    wcbox.innerHTML = 'heh'
+    // wcbox.innerHTML = 'heh'
     DiplomaOptions = 0
     renderloader()
-    rendermenu ()
-    renderinfobox ()
-    renderstatsbutton()
-    zoomOnCountry(ldb.mycnt[1])
-    getcolormap()
+    // rendermenu ()
+    // renderinfobox ()
+    // renderstatsbutton()
+    // zoomOnCountry(ldb.mycnt[1])
+    // getcolormap()
 }
 function mapeditorselector () {
-    wcbox.innerHTML = 'kek'
+    // wcbox.innerHTML = 'kek'
+    wcbox.innerHTML = ''
+    var titmap = document.createElement('h3')
+    titmap.innerHTML = 'Please select map creation mode'
+    wcbox.appendChild(titmap)
+
+    var createNewButton = document.createElement('div')
+    createNewButton.classList.add('roundborder', 'welcomeboxbut')
+    createNewButton.innerHTML = 'Create New Map'
+    createNewButton.id = 'createnewmap'
+    createNewButton.onclick = () => {
+        // Will be implemented later
+        mapeditor_newmap()
+        // console.log('Create new map selected')
+    }
+    wcbox.appendChild(createNewButton)
+
+    var useTemplateButton = document.createElement('div')
+    useTemplateButton.classList.add('roundborder', 'welcomeboxbut')
+    useTemplateButton.id = 'usetemplatemap'
+    useTemplateButton.innerHTML = 'Use Template'
+    useTemplateButton.onclick = () => {
+        // Will be implemented later
+        console.log('Use template selected') 
+    }
+    wcbox.appendChild(useTemplateButton)
 }
 
 function newgamediv () {
@@ -1623,4 +1657,17 @@ function renderReturnToCenterButton () {
     div.innerHTML = 'Restore map to original size'
     div.onclick = () => {moveToCentre()}
     document.getElementById('mainframe').appendChild(div)
+}
+
+function mapeditor_newmap () {
+    document.getElementById('welcomebox').remove()
+    for (let i = 0; i < Tiles.length; i++) {
+        if (Tiles[i].unlandable != true) {
+            Tiles[i].classList.add('editabletile')
+        }
+    }
+}
+
+function mapeditor_toolset () {
+
 }

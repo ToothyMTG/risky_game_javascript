@@ -81,6 +81,7 @@ document.addEventListener("mousedown", (event) => {
     //   console.log("Right mouse button clicked");
         removehandbox()
         renderhandbox(event.target)
+        console.log(event.target)
     }
   });
 

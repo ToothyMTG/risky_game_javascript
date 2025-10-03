@@ -918,3 +918,8 @@ function everyoneisally () {
         }
     }
 }
+
+function gettiles () {
+    var tiles = document.getElementsByClassName('tile')
+    return tiles
+}

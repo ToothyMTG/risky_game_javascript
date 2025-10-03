@@ -19,6 +19,7 @@ function gameinit () {
     cw_distributenocw ()
     // nb_render ()
     th_init ()
+    Turns = 0
     Tiles = document.getElementsByClassName('tile')
 }
 function startgamedebug () {
@@ -60,7 +61,9 @@ function th_debug () {
 
 gameinit ()
 // document.getElementById('newgame').click()
-startgamedebug ()
+document.getElementById('mapeditor').click()
+document.getElementById('createnewmap').click()
+// startgamedebug ()
 // signunion('ccpl','cccz')
 // askforunion('ccde','ccpl')
 // askforpeace('ccfr','ccpl')

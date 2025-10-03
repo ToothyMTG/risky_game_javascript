@@ -884,3 +884,20 @@ div {
 .thswitchon {
     background-color: lightgreen;
 }
+
+#createnewmap {
+   /* Additional styles can be added here */
+   width: 80%;
+   left: 10%;
+   top: 15%;
+}
+#usetemplatemap {
+    width: 80%;
+    left: 10%;
+    top: 30%;
+}
+
+.editabletile {
+    border: 2px gray solid;
+    box-sizing: border-box;
+}
