@@ -61,6 +61,7 @@ div {
     vertical-align: middle;
     text-align: center;
     box-shadow: inset 0 0 0 0.25px;
+    z-index: 1;
 }
 .tile:hover {
     box-shadow: inset 0 0 0 2px black;
@@ -289,6 +290,7 @@ div {
 .redinfo {color: red}
 .greeninfo {color: green}
 .blueinfo {color: blue}
+.orangeinfo {color: darkorange}
 
 .infobox p:first-of-type {
     font-size: 200%;
@@ -448,44 +450,100 @@ div {
     width: 110%;
 }
 
+/* each country code (cXXX) has its own unique color and text color. They can't be the same as other country */
+/* each country code corresponds to Country array in db.js */
+/* each color and text color correspond to factual flag colors where possible */
 .sea {background-color:var(--sea-color);color:transparent;opacity:1} /* Sea */
-.ccpl {background-color:red; color:white} /* Poland */
-.ccde {background-color:black;color:yellow;} /* Germany */
-.cces {background-color:orange;color:darkred;} /* Spain */
-.ccpt {background-color:darkgreen;color:yellow;} /* Portugal */
-.ccfr {background-color:blue;color:white;} /* France */
-.ccgb {background-color:violet;color:darkblue;} /* Great Britain */
-.ccir {background-color:green;color:red} /* Ireland */
-.ccit {background-color:lightgreen;color:blue;} /* Italy */
-.cccz {background-color:pink; color: darkred;} /* Czech Republic */
-.ccsu {background-color:coral;color:grey;} /* Switzerland */
-.ccau {background-color:darkred;color:white;} /* Austria */
-.ccsk {background-color:blueviolet;color:lightblue ;} /* Slovakia */
-.cclt {background-color:yellow;color:darkgreen;} /* Lithuania */
-.cclv {background-color:brown;color:white;} /* Latvia */
-.ccet {background-color:slateblue;color:lightblue;} /* Estonia */
-.ccse {background-color:lightblue;color:yellow;} /* Sweden */
-.ccno {background-color:chocolate;color:darkblue;} /* Norway */
-.ccfi {background-color:lightgray;color:darkblue} /* Finland */
-.ccdk {background-color:lightgray;color:red} /* Denmark */
-.ccnl {background-color:darkorange;color:darkblue;} /* Netherlands */
-.ccbe {background-color:darkgray;color:darkred;} /* Belgium */
-.cchu {background-color:mediumseagreen;color:coral;} /* Hungary */
-.ccbl {background-color:salmon;color:green;} /* Belarus */
-.ccua {background-color:aqua;color:yellow;} /* Ukraine */
-.ccru {background-color:pink;color:blue} /* Russia */
-.cctu {background-color:lightcoral;color:white} /* Turkey */
-.ccgr {background-color:lightblue;color:blue;} /* Greece */
-.ccml {background-color:beige;color:darkred} /* Moldova */
-.ccbg {background-color:greenyellow;color:darkgreen;} /* Bulgaria */
-.ccal {background-color:lightpink;color:black} /* Albania */
-.ccro {background-color:olive;color:lightblue} /* Romania */
-.ccsv {background-color:cadetblue;color:lightgreen} /* Slovenia */
-.cccr {background-color:navy;color:red} /* Croatia */
-.ccbs {background-color:darkturquoise;color:darkgreen} /* Bosnia */
-.ccsr {background-color:aquamarine;color:darkblue} /* Serbia */
-.ccko {background-color:cornflowerblue;color:white} /* Kosovo */
 .land {background-color: white;color: grey;}
+.ccpl {background-color:red; color:white} /* Poland */
+.ccde {background-color:black; color:gold} /* Germany */
+.cces {background-color:yellow; color:red} /* Spain */
+.ccpt {background-color:greenyellow; color:red} /* Portugal */
+.ccfr {background-color:blue; color:white} /* France */
+.ccgb {background-color:purple; color:skyblue} /* Great Britain */
+.ccir {background-color:green; color:orange} /* Ireland */
+.ccit {background-color:lime; color:white} /* Italy */
+.cccz {background-color:blueviolet; color:yellow} /* Czech Republic */
+.ccsu {background-color:silver; color:red} /* Switzerland */
+.ccau {background-color:black; color:red} /* Austria */
+.ccsk {background-color:cornflowerblue; color:coral} /* Slovakia */
+.cclt {background-color:gold; color:green} /* Lithuania */
+.cclv {background-color:maroon; color:cyan} /* Latvia */
+.ccet {background-color:pink; color:blue} /* Estonia */
+.ccse {background-color:navy; color:yellow} /* Sweden */
+.ccno {background-color:tomato; color:blue} /* Norway */
+.ccfi {background-color:silver; color:darkblue} /* Finland */
+.ccdk {background-color:red; color:lime} /* Denmark */
+.ccnl {background-color:orange; color:blue} /* Netherlands */
+.ccbe {background-color:yellow; color:black} /* Belgium */
+.cchu {background-color:green; color:magenta} /* Hungary */
+.ccbl {background-color:olive; color:white} /* Belarus */
+.ccua {background-color:lightblue; color:gold} /* Ukraine */
+.ccru {background-color:violet; color:navy} /* Russia */
+.cctu {background-color:salmon; color:green} /* Turkey */
+.ccgr {background-color:lightblue; color:blue} /* Greece */
+.ccml {background-color:maroon; color:yellow} /* Moldova */
+.ccbg {background-color:green; color:violet} /* Bulgaria */
+.ccal {background-color:crimson; color:wheat} /* Albania */
+.ccro {background-color:navy; color:salmon} /* Romania */
+.ccsv {background-color:darkred; color:plum} /* Slovenia */
+.cccr {background-color:brown; color:aqua} /* Croatia */
+.ccbs {background-color:indigo; color:lightgreen} /* Bosnia */
+.ccsr {background-color:teal; color:coral} /* Serbia */
+.ccko {background-color:sienna; color:darkred} /* Kosovo */
+/* Americas */
+.crus {background-color:purple; color:white} /* USA */
+.crca {background-color:darkred; color:beige} /* Canada */
+.crmx {background-color:darkgreen; color:yellow} /* Mexico */
+.crbr {background-color:olive; color:skyblue} /* Brazil */
+.crar {background-color:teal; color:white} /* Argentina */
+.crli {background-color:indigo; color:yellow} /* Chile */
+.crco {background-color:gold; color:purple} /* Colombia */
+.crve {background-color:brown; color:lime} /* Venezuela */
+.crpe {background-color:sienna; color:magenta} /* Peru */
+/* Africa */
+.crza {background-color:green; color:salmon} /* South Africa */
+.creg {background-color:purple; color:turquoise} /* Egypt */
+.crng {background-color:darkgreen; color:coral} /* Nigeria */
+.crke {background-color:maroon; color:khaki} /* Kenya */
+.creh {background-color:olive; color:plum} /* Ethiopia */
+/* Middle East & Asia */
+.crsa {background-color:darkblue; color:lime} /* Saudi Arabia */
+.cruae {background-color:orange; color:white} /* UAE */
+.crin {background-color:orange; color:green} /* India */
+.crpk {background-color:darkgreen; color:silver} /* Pakistan */
+.crbg {background-color:teal; color:yellow} /* Bangladesh */
+.crsl {background-color:brown; color:pink} /* Sri Lanka */
+.crcn {background-color:crimson; color:gold} /* China */
+.crjp {background-color:white; color:crimson} /* Japan */
+.crks {background-color:navy; color:magenta} /* South Korea */
+.crnk {background-color:maroon; color:turquoise} /* North Korea */
+.crmo {background-color:sienna; color:skyblue} /* Mongolia */
+/* Oceania & SE Asia */
+.crau {background-color:indigo; color:coral} /* Australia */
+.crnu {background-color:navy; color:beige} /* New Zealand */
+.crid {background-color:brown; color:turquoise} /* Indonesia */
+.crph {background-color:blue; color:coral} /* Philippines */
+.crvn {background-color:darkred; color:gold} /* Vietnam */
+.crth {background-color:purple; color:khaki} /* Thailand */
+.crmy {background-color:yellow; color:blue} /* Malaysia */
+.crsq {background-color:orange; color:purple} /* Singapore */
+.crtw {background-color:crimson; color:cyan} /* Taiwan */
+/* European Union */
+.creu {background-color:darkblue; color:gold} /* European Union */
+/* Historical */
+.chah {background-color: darkgoldenrod; color:darkblue;} /* Austria-Hungary */
+.choe {background-color: seagreen; color:orange;} /* Ottoman Empire */
+.chpr {background-color: #1a1a1a; color:gold;} /* Prussia */
+.chsu {background-color: maroon; color:silver;} /* Soviet Union */
+.chyu {background-color: midnightblue; color:orange;} /* Yugoslavia */
+.chcs {background-color: royalblue; color:gold;} /* Czechoslovakia */
+.cheg {background-color: #404040; color:lime;} /* East Germany */
+.chwg {background-color: darkgoldenrod; color:darkblue;} /* West Germany */
+.chae {background-color: saddlebrown; color:cyan;} /* Ancient Egypt */
+.chre {background-color: rebeccapurple; color:silver;} /* Roman Empire */
+.chme {background-color: darkslateblue; color:gold;} /* Mongol Empire */
+.chbe {background-color: firebrick; color:cyan;} /* British Empire */
 
 .cw01 { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, gold 10%, gold 20%); }
 /* .cw01 {background-image: radial-gradient(transparent 70%,gold 75%);} */
@@ -508,16 +566,6 @@ div {
 .cw09 {background-image: radial-gradient(transparent 70%,peru 75%);}
 .cw10 {background-image: radial-gradient(transparent 70%,saddlebrown 75%);} */
 
-.dd01{background-color: red;color:black}
-.dd02{background-color: blue;color:white}
-.dd03{background-color: rgb(12, 12, 11);color:black}
-.dd04{background-color: orange;color:darkred}
-.dd05{background-color: black;color:white}
-.dd06{background-color: green;color:white}
-.dd07{background-color: lightblue;color:black}
-.dd08{background-color: pink;color:black}
-.dd09{background-color: brown;color:red}
-.dd10{background-color: cyan;color:red}
 
 @keyframes tilelight {
    50% {
@@ -656,7 +704,7 @@ div {
 /* .enemy { background-image: repeating-linear-gradient(45deg, transparent 0%, transparent 10%, lightpink 10%, lightpink 20%); } */
 
 @keyframes ally {
-    50% {background-color: darkblue; color:gold}
+    50% {background-color: gold; color:white}
 }
 .ally {animation-name: ally; animation-duration: 1s; animation-fill-mode:both;}
 @keyframes enemy {
@@ -898,6 +946,100 @@ div {
 }
 
 .editabletile {
-    border: 2px gray solid;
+    box-shadow: inset 0 0 0 2px gray;
     box-sizing: border-box;
+}
+.mapeditortoolset {
+    position: absolute;
+    width: 90%;
+    height: 5%;
+    background-color: white;
+    left: 5%;
+    z-index: 3;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: bold;
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
+}
+.mapeditortoolsetbut {
+    position: absolute;
+}
+.mapeditortoolsetbut:hover {
+    background-color: orange;
+}
+#tileselect {
+    width: 13%;
+    height: 70%;
+    top: 15%;
+    left: 2%;
+    position: absolute;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#bginput {
+    position: absolute;
+    width: 45%;
+    height: 70%;
+    top: 15%;
+    left: 16%;
+    border: 2px black solid;
+    box-sizing: border-box;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+#bgup {
+    width: 3%;
+    height: 50%;
+    left: 65%;
+}
+#bgdown {
+    width: 3%;
+    height: 50%;
+    left: 65%;
+    top: 50%;
+}
+#bgleft {
+    width: 3%;
+    height: 50%;
+    left: 62%;
+    top: 25%;
+}
+#bgright {
+    width: 3%;
+    height: 50%;
+    left: 68%;
+    top: 25%;
+}
+#bgsmaller {
+    width: 3%;
+    height: 50%;
+    left: 72%;
+}
+#bgbigger {
+    width: 3%;
+    height: 50%;
+    left: 72%;
+    top: 50%;
+}
+#bgopacity {
+    width: 10%;
+    height: 50%;
+    left: 76%;
+    top: 25%;
+}
+#mapeditorsavebutton {
+    width: 10%;
+    height: 70%;
+    top: 15%;
+    left: 88%;
+    text-align: center;
+    font-weight: bold;
 }

@@ -20,6 +20,7 @@ function gameinit () {
     // nb_render ()
     th_init ()
     Turns = 0
+    MapEditorMode = false
     Tiles = document.getElementsByClassName('tile')
 }
 function startgamedebug () {
@@ -60,9 +61,12 @@ function th_debug () {
 }
 
 gameinit ()
-// document.getElementById('newgame').click()
-document.getElementById('mapeditor').click()
-document.getElementById('createnewmap').click()
+document.getElementById('newgame').click()
+// mapeditor_loadmap('maps/europe.json')
+// document.getElementById('welcomebox').style.display = 'none'
+// document.getElementById('mapeditor').click()
+// document.getElementById('createnewmap').click()
+// https://c7.alamy.com/comp/2BMT7DH/blue-contour-of-detailed-europe-map-on-white-2BMT7DH.jpg
 // startgamedebug ()
 // signunion('ccpl','cccz')
 // askforunion('ccde','ccpl')

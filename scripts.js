@@ -110,6 +110,8 @@ function bot_act (t) {
             t.ownername = Me
             t.classList = 'tile ' + Me
             t.innerHTML = 1
+            var countAgressorCode = document.getElementsByClassName(Tile.owner).length
+            if (countAgressorCode == 0) {assignwhokilled(Me,Tile.owner,t.id)}
         } else {
             t.innerHTML = Tile.power - 1
         }
@@ -357,10 +359,11 @@ function getpower (c) {
         Power += Number(ters[i].innerHTML)
         Support += ters[i].value
     }
+    Power -= ters.length
     Support = Support / ters.length / 10
     RealPower = Power
     Power = Math.floor(Power/9)
-    if (Power < 1) {Power = 1}
+    if (Power < 2) {Power = 2}
     if (ters.length == 0) {Power = 0}
     if (Power > ldb.pow) {Power = ldb.pow}
     // console.log(c + ' has power of ' + Power + ' and support of ' + Support)
@@ -433,12 +436,13 @@ function attack (c) {
     var val = Number(target.innerHTML)
     val--
     //console.log(val)
-    if (val < 0) {
+    if (val < 1) {
         // target.classList.remove(oldcode)
         // target.classList.add(c)
         target.className = 'tile ' + c
         target.isOwned = 1
-        target.innerHTML = 0
+        target.ownername = c
+        target.innerHTML = 1
         target.value = 0
     } else {
         target.innerHTML = val
@@ -698,7 +702,14 @@ function startgame () {
         }
     }
     // renderhandbox ()
-    ldb.countries = gamemode.countries.sort(() => 0.5 - Math.random())
+    var selcnt = document.getElementById('selcnt')
+    var selpowermode = document.getElementById('selpowermode')
+    var countries = []
+    for (let i = 1; i < selcnt.options.length; i++) {
+        ix_t_code(selcnt.options[i].value); var c = cix
+        countries.push(c.ix)
+    }
+    ldb.countries = countries.sort(() => 0.5 - Math.random())
     ldb.year = gamemode.year
     for (let i = 0; i < gamemode.startup.length; i++) {
         var command = gamemode.startup[i]
@@ -708,47 +719,20 @@ function startgame () {
         if (command == 'randommode') {randommode ()}
         if (command == 'mapgenerator') {mapgenerator ()}
     }
-    opacityhandler ()
+    removeblur()
     rendermenu ()
     renderinfobox ()
     renderstatsbutton()
+    distributepower(ldb.countries,Number(selpowermode.value))
+    opacityhandler ()
     zoomOnCountry(ldb.mycnt[1])
     th_populate(ldb.round)
     getcolormap()
     clickPlay()
     console.log(gamemode)
-    /*if (gmode == 0) { // Europe as of 2022
-        //rendercapitals ()
-        distributepower ()
-        opacityhandler ()
-        ldb.year = 2022
-    }
-    if (gmode == 1) { // Europe powered with capitals
-        rendercapitals ()
-        opacityhandler ()
-        ldb.year = 1995
-    }
-    if (gmode == 2) { // Europe but single cities
-        rendercapitals ()
-        renderonlycapitalmode ()
-        opacityhandler ()
-        ldb.year = 1
-    }
-    if (gmode == 3) { // Random spawn of cities
-        randommode ()
-        opacityhandler ()
-        ldb.year = 1
-    }
-    if (gmode == 4) {
-        mapgenerator ()
-        randommode ()
-        opacityhandler ()
-        ldb.year = 1
-    }*/
     var gpow = Number(document.getElementById('selpow').value)
     ldb.pow = gpow
     // runloop ()
-    //console.log(teamval,gmode,gpow)
 }
 
 function resistance () {
@@ -776,6 +760,7 @@ function resistance () {
     var b = cix
     var c = document.getElementById(whoResists[1])
     c.className = 'tile ' + b.code
+    c.ownername = b.code
     var powerRange = Math.floor(Math.random() * document.getElementsByClassName(a.code).length) * 3
     //console.log(powerRange)
     for (let i = 0; i < powerRange; i++) {
@@ -794,7 +779,9 @@ function resistance () {
     ldb.whokilled[a.ix].splice(randwhoResists, 1)
     c_name = Country.filter(x => x.includes(b.code))[0].split(' ')[0]
     supportResistance (b.code)
+    writetoinfobox(b.name + ' has a resistance!','o')
     nb_msg = b.name + ' has a resistance!'
+    opacityhandler()
 }
 
 function supportResistance (x) {
@@ -808,9 +795,9 @@ function populatehistory () {
     for (let i = 0; i < Country.length; i++) {
         var code = Country[i].split(' ')[1]
         var tiles = document.getElementsByClassName(code)
-        if (tiles.length == 0) {
-            continue
-        }
+        // if (tiles.length == 0) {
+        //     continue
+        // }
         var power = 0
         for (let x = 0; x < tiles.length; x++) {
              power += Number(tiles[x].innerHTML)
@@ -922,4 +909,90 @@ function everyoneisally () {
 function gettiles () {
     var tiles = document.getElementsByClassName('tile')
     return tiles
+}
+
+function mapeditormake (x) {
+    if (x.classList[0] !== 'tile') {return}
+    if (x.unlandable !== false) {return}
+    x.classList.replace(x.classList[1], MapEditorCode)
+    x.ownername = MapEditorCode
+    x.innerHTML = '0'
+    x.isOwned = 1
+    x.value = 0
+    singleopacityhandler(x)
+}
+
+function mapeditor_savemap () {
+    var mapdata = []
+    for (let i = 0; i < Tiles.length; i++) {
+        var t = Tiles[i]
+        ix_t_code(t.classList[1])
+        var val = cix.ix
+        mapdata.push(val)
+    }
+    // now the code to save to file, taken from savegame()
+    var json = JSON.stringify(mapdata)
+    var blob = new Blob([json], {type: 'application/json'})
+    var url  = URL.createObjectURL(blob)
+    var a = document.createElement('a')
+    a.download    = 'map.json'
+    a.href        = url
+    a.textContent = 'Download map.json'
+    a.click()
+}
+
+// load function fetches the map from maps/europe.json
+async function mapeditor_loadmap (file) {
+    const response = await fetch(file)
+    const mapdata = await response.json()
+    if (mapdata.length !== Tiles.length) {
+        alert('Map size does not match! Cannot load map.')
+        return
+    }
+    for (let i = 0; i < Tiles.length; i++) {
+        var t = Tiles[i]
+        var val = mapdata[i]
+        ix_country(val)
+        var code = cix.code
+        if (t.unlandable !== false) {
+            continue
+        }
+        t.classList.replace(t.classList[1], code)
+        t.ownername = code
+        t.innerHTML = '0'
+        t.isOwned = 1
+        t.value = 0
+        singleopacityhandler(t)
+    }
+    var countries = getcountriesfromtiles()
+    return countries
+}
+
+function getcountriesfromtiles () {
+    var availablecountries = []
+    for (let i = 0; i < Tiles.length; i++) {
+        //searches for all countries and add to availablecountries, if not already present
+        var t = Tiles[i]
+        ix_t_code(t.classList[1]); var c = cix
+        if (availablecountries.indexOf(c.code) < 0) {
+            availablecountries.push(c.code)
+        }
+    }
+    return availablecountries
+}
+
+function applyunions (x) {
+    // x is New_GameModes
+    var mode = New_GameModes[x]
+    for (let i = 0; i < mode.predefinedUnions.length; i++) {
+        var union = mode.predefinedUnions[i]
+        for (let o = 1; o < union.length; o++) {
+            // every country with every other country
+            for (let p = 0; p < union.length; p++) {
+                if (o == p) {continue}
+                signunion(union[o], union[p])
+            }
+        }
+    }
+
 }

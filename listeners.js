@@ -1,9 +1,15 @@
 document.addEventListener('keydown', e => {
     if (e.key === 'ArrowLeft') {
         if (document.getElementById('thmap') != null) {movetilehistory('l')}
+        var cur = document.getElementById(wherefocus)
+        var newid = Number(cur.id) - 1
+        document.getElementById('field' + newid).focus()
     }
     if (e.key === 'ArrowRight') {
         if (document.getElementById('thmap') != null) {movetilehistory('r')}
+        var cur = document.getElementById(wherefocus)
+        var newid = Number(cur.id) + 1
+        document.getElementById('field' + newid).focus()
     }
     if (e.key === 'ArrowUp') {
         var cur = document.getElementById(wherefocus)
@@ -56,9 +62,67 @@ document.addEventListener('keydown', e => {
         rendersavefield ()
     }
     if (e.code == 'Space') {
+        if (MapEditorMode == true) {
+            removehandbox()
+            thetile = event.target
+            mapeditormake(thetile)
+            return
+        }
         if (Turns > 0) {
             act ()      
         }
+    }
+    if (e.key == "z") {
+        // this is for selecting which country to paint tile with
+        if (MapEditorMode == true) {
+            var tileselect = document.getElementById('tileselect')
+            tileselect.focus()
+            tileselect.onkeydown = (event) => {
+                event.stopPropagation()
+                if (event.code == 'Enter') {
+                    tileselect.size = 1
+                    tileselect.blur()
+                }
+            }
+        // if i press enter, it sets the country and closes the selection box
+        }
+    }
+    // i, j, k, l moves the background image when in map editor mode
+    // o, p makes the background image smaller or bigger
+    // [ and ] increases or decreases the opacity of the background image, bgopacity is an input range element
+    if (MapEditorMode == true) {
+        if (e.key == 'i') {
+            var bg = document.getElementById('bgup').click()
+        }
+        if (e.key == 'k') {
+            var bg = document.getElementById('bgdown').click()
+        }
+        if (e.key == 'j') {
+            var bg = document.getElementById('bgleft').click()
+        }
+        if (e.key == 'l') {
+            var bg = document.getElementById('bgright').click()
+        }
+        if (e.key == 'o') {
+            var bg = document.getElementById('bgsmaller').click()
+        }
+        if (e.key == 'p') {
+            var bg = document.getElementById('bgbigger').click()
+        }
+        if (e.key == '[') {
+            var bg = document.getElementById('bgopacity')
+            if (bg.value > 0) {
+                bg.value = Number(bg.value) - 0.1
+                bg.dispatchEvent(new Event('input'))
+            }
+        }
+        if (e.key == ']') {
+            var bg = document.getElementById('bgopacity')
+            if (bg.value < 1) {
+                bg.value = Number(bg.value) + 0.1
+                bg.dispatchEvent(new Event('input'))
+            }
+        }   
     }
 })
 
@@ -76,6 +140,7 @@ document.addEventListener("mousedown", (event) => {
         if (event.target.parentElement.id == 'handbox') { return }
         removehandbox()
         thetile = event.target
+        if (MapEditorMode == true) {mapeditormake(event.target)}
     }
     if (event.button === 2) {
     //   console.log("Right mouse button clicked");

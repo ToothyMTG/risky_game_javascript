@@ -30,6 +30,7 @@ function ix_t_code (c) {
         return
     }
     ix_country(index)   
+    return cix
 }
 
 function ix_country (n) {

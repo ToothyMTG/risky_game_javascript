@@ -367,6 +367,7 @@ function writetoinfobox(x,c) {
     if (c == 'r') {entry.classList.add('redinfo')}
     if (c == 'g') {entry.classList.add('greeninfo')}
     if (c == 'b') {entry.classList.add('blueinfo')}
+    if (c == 'o') {entry.classList.add('orangeinfo')}
     infobox.appendChild(entry)
 }
 
@@ -587,21 +588,69 @@ function rendercapitals () {
     }
 }
 
-function distributepower () {
-    for (let i = 0; i < ldb.countries.length; i++) {
-        ix_country(ldb.countries[i])
-        var who = cix.code
-        var power = cix.initstr
-        for (let x = 0; x < (power * 2); x++) {
-            var ters = document.getElementsByClassName(who)
-            var rand = Math.floor(Math.random() * ters.length)
-            var cur = Number(ters[rand].innerHTML)
-            cur++
-            if (cur > 9) {cur = 9}
-            ters[rand].innerHTML = cur
+function distributepower (x,y) {
+    // x is ldb.countries
+    // y is dist mode
+    if (y == 0) {
+        for (let i = 0; i < x.length; i++) {
+            ix_country(x[i]); var c = cix
+            getowntiles(c.code); var o = OwnTiles
+            var rand = Math.floor(Math.random() * o.length)
+            o[rand].innerHTML = 9
+            for (let t = 0; t < o.length; t++) {
+                if (t == rand) {o[t].ownername = c.code;continue}
+                o[t].classList.replace(c.code,'land')
+                o[t].ownername = 'noone'
+            }
         }
     }
-    opacityhandler ()
+    if (y == 1) {
+        for (let i = 0; i < x.length; i++) {
+            ix_country(x[i]); var c = cix
+            getowntiles(c.code); var o = OwnTiles
+            var rand = Math.floor(Math.random() * o.length)
+            o[rand].innerHTML = 9
+            for (let t = 0; t < o.length; t++) {
+                o[t].ownername = c.code
+                if (t == rand) {continue}
+                o[t].innerHTML = '1'
+            }
+        }
+    }
+    if (y == 2) {
+        for (let i = 0; i < x.length; i++) {
+            ix_country(x[i]); var c = cix
+            getowntiles(c.code); var o = OwnTiles
+            for (let t = 0; t < o.length; t++) {
+                o[t].innerHTML = 1
+                o[t].ownername = c.code
+            }
+            var rand = Math.floor(Math.random() * o.length)
+            o[rand].innerHTML = 9
+            for (let t = 0; t < c.initstr; t++) {
+                build(c.code)
+            }
+        }
+    }
+    if (y == 3) {
+        for (let i = 0; i < x.length; i++) {
+            ix_country(x[i]); var c = cix
+            getowntiles(c.code); var o = OwnTiles
+            for (let t = 0; t < o.length; t++) {
+                o[t].innerHTML = 1
+                o[t].ownername = c.code
+            }
+            var rand = Math.floor(Math.random() * o.length)
+            o[rand].innerHTML = 9
+            for (let t = 0; t < c.initstr; t++) {
+                build(c.code)
+            }
+        }
+        var selgmo = document.getElementById('selgmo')
+        applyunions(Number(selgmo.value))
+    }
+    opacityhandler()
+
 }
 
 LinechartOptions = {
@@ -1191,12 +1240,28 @@ function newgameselector () {
         opt.value = i
         selgmo.appendChild(opt)
     }
+    selgmo.onchange = () => {populateteamselector(selgmo.value)}
     var titcnt = document.createElement('h3')
     titcnt.innerHTML = 'Please select your country'
     wcbox.appendChild(titcnt)
     var selcnt = document.createElement('select')
     selcnt.id = 'selcnt'
     wcbox.appendChild(selcnt)
+    var titpowermode = document.createElement('h3')
+    titpowermode.innerHTML = 'Please select power distribution mode'
+    titpowermode.id = 'titpowermode'
+    titpowermode.style.display = 'none'
+    wcbox.appendChild(titpowermode)
+    var selpowermode = document.createElement('select')
+    selpowermode.id = 'selpowermode'
+    selpowermode.style.display = 'none'
+    for (let i = 0; i < PowDistModes.length; i++) {
+        var opt = document.createElement('option')
+        opt.innerHTML = PowDistModes[i]
+        opt.value = i
+        selpowermode.appendChild(opt)
+    }
+    wcbox.appendChild(selpowermode)
     populateteamselector(0)
     var titpow = document.createElement('h3')
     titpow.innerHTML = 'Please select max power'
@@ -1219,12 +1284,13 @@ function newgameselector () {
 }
 function populateteamselector (x) {
     var selcnt = document.getElementById('selcnt')
+    selcnt.options.length = 0
+    var mode = New_GameModes[x]
+    var blankopt = document.createElement('option')
+    blankopt.innerHTML = 'Spectate'
+    blankopt.value = 'noval'
+    selcnt.appendChild(blankopt)
     if (x == 0) {
-        var mode = New_GameModes[0]
-        var blankopt = document.createElement('option')
-        blankopt.innerHTML = 'Spectate'
-        blankopt.value = 'noval'
-        selcnt.appendChild(blankopt)
         for (let i = 0; i < mode.countries.length; i++) {
             var c = mode.countries[i]
             ix_country(c); var a = cix
@@ -1233,6 +1299,29 @@ function populateteamselector (x) {
             opt.value = a.code
             selcnt.appendChild(opt)
         }
+        document.getElementById('titpowermode').style.display = 'none'
+        document.getElementById('selpowermode').style.display = 'none'
+    } else {
+        mapeditor_loadmap(mode.mapfile).then(countries => {
+            // console.log(Availablecountries)
+            for (let i = 0; i < countries.length; i++) {
+                var c = countries[i]
+                if (c == 'land') {continue}
+                if (c == 'sea') {continue}
+                // console.log(c)
+                ix_t_code(c); var a = cix
+                var opt = document.createElement('option')  
+                opt.innerHTML = a.name
+                opt.value = a.code
+                selcnt.appendChild(opt)
+            }
+        })
+        .catch((error) => {
+            console.error('Error loading map:', error);
+        });
+        renderblur()
+        document.getElementById('titpowermode').style.display = 'block'
+        document.getElementById('selpowermode').style.display = 'initial'
     }
     // console.log(selgmo.value)
     // var mode = New_GameModes[selgmo.value]
@@ -1666,8 +1755,164 @@ function mapeditor_newmap () {
             Tiles[i].classList.add('editabletile')
         }
     }
+    mapeditor_toolset()
+    MapEditorMode = true
+    opacityhandler()
 }
 
 function mapeditor_toolset () {
+    var toolset = document.createElement('div')
+    toolset.id = 'mapeditortoolset'
+    toolset.classList.add('mapeditortoolset','roundborder')
+    mainframe.appendChild(toolset)
+    var tileselect = document.createElement('select')
+    tileselect.id = 'tileselect'
+    for (let i = 0; i < Country.length; i++) {
+        var code = Country[i].split(' ')[1]
+        ix_t_code(code)
+        var opt = document.createElement('option')
+        opt.value = cix.code
+        opt.innerHTML = cix.name
+        tileselect.appendChild(opt)
+    }
+    tileselect.value = 'land'
+    MapEditorCode = 'land'
+    tileselect.onchange = () => {
+        MapEditorCode = tileselect.value
+    }
+    toolset.appendChild(tileselect)
+    // i need field to put link to the image that will serve as background for mainframe
+    var bginput = document.createElement('input')
+    bginput.type = 'text'
+    bginput.id = 'bginput'
+    bginput.placeholder = 'Background image URL'
+    bginput.classList.add('roundborder')
+    toolset.appendChild(bginput)
+    bginput.onchange = () => {
+        var url = bginput.value
+        // i have to create element that will hold backkground image
+        var bgdiv = document.getElementById('mapbackground')
+        if (bgdiv == undefined) {
+            bgdiv = document.createElement('div')
+            bgdiv.id = 'mapbackground'
+            bgdiv.classList.add('mapbackground')
+            bgdiv.style.position = 'absolute'
+            bgdiv.style.zIndex = '0'
+            bgdiv.style.opacity = '0.3'
+            bgdiv.style.pointerEvents = 'none'
+            bgdiv.style.top = '2%'
+            bgdiv.style.left = '2%'
+            bgdiv.style.width = '96%'
+            bgdiv.style.height = '96%'
+            // background has to fit the mapframe, appear only inside it and not repeat
+            bgdiv.style.backgroundSize = 'contain'
+            bgdiv.style.backgroundRepeat = 'no-repeat'
+            bgdiv.style.backgroundPosition = 'center'
 
+            mapframe.appendChild(bgdiv)
+        }
+        bgdiv.style.backgroundImage = 'url(' + url + ')'
+    }
+    // now i need buttons to control bgdiv opacity, size and position
+
+    var bgup = document.createElement('button')
+    bgup.innerHTML = '↑'
+    bgup.id = 'bgup'
+    bgup.classList.add('roundborder','mapeditortoolsetbut')
+    bgup.onclick = () => {
+        var bgdiv = document.getElementById('mapbackground')
+        if (bgdiv == undefined) {return}
+        var top = Number(bgdiv.style.top.split('%')[0])
+        top -= 1
+        bgdiv.style.top = top + '%'
+    }
+    toolset.appendChild(bgup)
+    var bgdown = document.createElement('button')
+    bgdown.innerHTML = '↓'
+    bgdown.id = 'bgdown'
+    bgdown.classList.add('roundborder','mapeditortoolsetbut')
+    bgdown.onclick = () => {
+        var bgdiv = document.getElementById('mapbackground')
+        if (bgdiv == undefined) {return}
+        var top = Number(bgdiv.style.top.split('%')[0])
+        top += 1
+        bgdiv.style.top = top + '%'
+    }
+    toolset.appendChild(bgdown)
+    var bgleft = document.createElement('button')
+    bgleft.innerHTML = '←'
+    bgleft.id = 'bgleft'
+    bgleft.classList.add('roundborder','mapeditortoolsetbut')
+    bgleft.onclick = () => {
+        var bgdiv = document.getElementById('mapbackground')
+        if (bgdiv == undefined) {return}
+        var left = Number(bgdiv.style.left.split('%')[0])
+        left -= 1
+        bgdiv.style.left = left + '%'
+    }
+    toolset.appendChild(bgleft)
+    var bgright = document.createElement('button')
+    bgright.innerHTML = '→'
+    bgright.id = 'bgright'
+    bgright.classList.add('roundborder','mapeditortoolsetbut')
+    bgright.onclick = () => {
+        var bgdiv = document.getElementById('mapbackground')
+        if (bgdiv == undefined) {return}
+        var left = Number(bgdiv.style.left.split('%')[0])
+        left += 1
+        bgdiv.style.left = left + '%'
+    }
+    toolset.appendChild(bgright)
+    var bgbigger = document.createElement('button')
+    bgbigger.innerHTML = '+'
+    bgbigger.id = 'bgbigger'
+    bgbigger.classList.add('roundborder','mapeditortoolsetbut')
+    bgbigger.onclick = () => {
+        var bgdiv = document.getElementById('mapbackground')
+        if (bgdiv == undefined) {return}
+        var width = Number(bgdiv.style.width.split('%')[0])
+        var height = Number(bgdiv.style.height.split('%')[0])
+        width += 2
+        height += 2
+        bgdiv.style.width = width + '%'
+        bgdiv.style.height = height + '%'
+    }
+    toolset.appendChild(bgbigger)
+    var bgsmaller = document.createElement('button')
+    bgsmaller.innerHTML = '−'
+    bgsmaller.id = 'bgsmaller'
+    bgsmaller.classList.add('roundborder','mapeditortoolsetbut')
+    bgsmaller.onclick = () => {
+        var bgdiv = document.getElementById('mapbackground')
+        if (bgdiv == undefined) {return}
+        var width = Number(bgdiv.style.width.split('%')[0])
+        var height = Number(bgdiv.style.height.split('%')[0])
+        width -= 2
+        height -= 2
+        bgdiv.style.width = width + '%'
+        bgdiv.style.height = height + '%'
+    }
+    toolset.appendChild(bgsmaller)
+    var bgopacity = document.createElement('input')
+    bgopacity.type = 'range'
+    bgopacity.min = 0
+    bgopacity.max = 1
+    bgopacity.step = 0.1
+    bgopacity.value = 0.3
+    bgopacity.id = 'bgopacity'
+    bgopacity.classList.add('mapeditortoolsetbut')
+    bgopacity.oninput = () => {
+        var bgdiv = document.getElementById('mapbackground')
+        if (bgdiv == undefined) {return}
+        bgdiv.style.opacity = bgopacity.value
+    }
+    toolset.appendChild(bgopacity)
+    var savebutton = document.createElement('div')
+    savebutton.id = 'mapeditorsavebutton'
+    savebutton.classList.add('roundborder','mapeditortoolsetbut')
+    savebutton.innerHTML = 'Save Map'
+    savebutton.onclick = () => {
+        mapeditor_savemap()
+    }
+    toolset.appendChild(savebutton)
 }
